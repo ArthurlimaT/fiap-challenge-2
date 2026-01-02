@@ -1,0 +1,110 @@
+/* favorites.module.scss */
+
+.container {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px dashed #e5e7eb; // Linha discreta para separar do formulário
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #9ca3af;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.list {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto; // Permite rolar para o lado se houver muitos favoritos
+  padding: 8px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #47A138 transparent;
+
+  /* Customização da barra de rolagem para Chrome/Edge/Safari */
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    border-radius: 10px;
+  }
+}
+
+.favItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-width: 65px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    
+    .avatar {
+      background: #47A138;
+      color: white;
+      box-shadow: 0 8px 15px rgba(71, 161, 56, 0.3);
+      border-color: #47A138;
+    }
+
+    span {
+      color: #004D4D;
+    }
+  }
+
+  .avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #004D4D;
+    transition: all 0.2s ease;
+  }
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 65px;
+    text-align: center;
+  }
+}
+
+.addBtn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px dashed #d1d5db;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: #47A138;
+    color: #47A138;
+    background: #f0fdf4;
+  }
+}

@@ -1,0 +1,50 @@
+/* investments.module.scss */
+
+.investmentsSection {
+  background-color: #ffffff; // Branco para ficar limpo
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f3f4f6;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  border-left: 4px solid #47A138; // Detalhe verde lateral
+  padding-left: 16px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #004D4D;
+}
+
+.topCards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.smallCard {
+  background: linear-gradient(135deg, #004D4D 0%, #003333 100%);
+  border-radius: 12px;
+  padding: 24px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 77, 77, 0.1);
+}
+
+.statsCard {
+  background-color: #ffffff; // Gráfico em fundo branco é mais legível
+  border-radius: 12px;
+  padding: 24px;
+  color: #333;
+  border: 1px solid #eee;
+}
+
+// ... manter o resto das queries e legendas

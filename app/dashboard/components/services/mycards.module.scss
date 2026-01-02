@@ -1,0 +1,146 @@
+/* mycards.module.scss */
+
+.cardsSection {
+  background-color: #ffffff; // Unificado com o resto do dashboard
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f3f4f6;
+  min-height: 500px;
+}
+
+.backBtn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+
+  &:hover { 
+    background: #f9fafb;
+    color: #004D4D;
+    border-color: #004D4D;
+  }
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #004D4D;
+  margin-bottom: 32px;
+  border-left: 4px solid #47A138;
+  padding-left: 16px;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+/* --- DESIGN DOS CARTÕES --- */
+.baseCard {
+  width: 100%;
+  aspect-ratio: 1.58 / 1;
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-8px) rotateX(5deg);
+  }
+}
+
+.cardPhysical {
+  background: linear-gradient(135deg, #004D4D 0%, #002D2D 100%);
+  color: white;
+  box-shadow: 0 20px 40px rgba(0, 77, 77, 0.2);
+
+  .chip {
+    width: 45px;
+    height: 35px;
+    background: linear-gradient(135deg, #f3d078 0%, #af8b2c 100%);
+    border-radius: 8px;
+    position: relative;
+    
+    &::after { // Linhas do chip
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-linear-gradient(90deg, transparent, transparent 14px, rgba(0,0,0,0.1) 15px);
+    }
+  }
+}
+
+.cardVirtual {
+  background: #ffffff;
+  border: 2px dashed #47A138;
+  color: #004D4D;
+  
+  .chipVirtual {
+    width: 45px;
+    height: 35px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 1.2rem;
+  font-style: italic;
+  letter-spacing: -0.5px;
+}
+
+.cardNumber {
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
+  margin: 10px 0;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .cardsSection {
+    padding: 20px;
+  }
+  .cardNumber {
+    font-size: 1.1rem;
+  }
+}

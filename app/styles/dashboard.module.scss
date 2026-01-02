@@ -1,0 +1,285 @@
+/* Variáveis de cores extraídas da imagem */
+:root {
+  --byte-dark: #004D61;       /* Azul Petróleo do Header e Cards */
+  --byte-orange: #FF5031;     /* Laranja dos detalhes e botões */
+  --byte-green: #47A138;      /* Verde do menu ativo e meses do extrato */
+  --byte-bg: #F5F5F5;         /* Fundo da página */
+  --byte-card-gray: #CBCBCB;  /* Fundo do card de nova transação */
+  --byte-text-gray: #475569;
+  --byte-border: #E2E8F0;     /* Cinza sutil para bordas minimalistas */
+}
+
+.page {
+  min-height: 100vh;
+  background-color: var(--byte-bg);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOPBAR */
+.topbar {
+  width: 100%;
+  height: 96px; 
+  background-color: var(--byte-dark);
+  display: flex;
+  align-items: center;
+}
+
+.topbarInner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.userBox {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.userName {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--byte-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--byte-orange);
+}
+
+/* LAYOUT WRAPPER */
+.wrapper {
+  display: flex;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 24px;
+  padding: 24px;
+  flex: 1;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.sideNav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sidebarItem {
+  padding: 16px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--byte-text-gray);
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+
+  &.active {
+    color: var(--byte-green);
+    border-bottom: 2px solid var(--byte-green);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+/* MAIN CONTENT */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* CARD DE SALDO (WELCOME) */
+.welcomeCard {
+  background-color: var(--byte-dark);
+  border-radius: 8px;
+  padding: 32px;
+  color: white;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.greetingTitle {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.balanceValue {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+/* CARD DE NOVA TRANSAÇÃO (REFINADO) */
+.startInner {
+  background-color: #E4E6E6;
+  border-radius: 12px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+
+  /* Restringe a largura interna dos campos para o "Look Profissional" */
+  & > div, & > form {
+    max-width: 340px; 
+    width: 100%;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-image: 
+      linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+.startTitle {
+  font-size: 1.25rem;
+  color: black;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+/* --- SELECT CUSTOMIZADO MINIMALISTA --- */
+.customSelectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.customSelectTrigger {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  font-size: 15px;
+  color: #47585b;
+  background-color: white;
+  border: 1px solid var(--byte-border);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.3s;
+
+  &:hover { border-color: var(--byte-dark); }
+
+  &[data-open="true"] {
+    border-radius: 8px 8px 0 0;
+    border-color: var(--byte-dark);
+  }
+
+  &::after {
+    content: '';
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--byte-dark);
+    transition: transform 0.3s;
+  }
+
+  &[data-open="true"]::after { transform: rotate(180deg); }
+}
+
+.customOptionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--byte-dark);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.customOption {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--byte-dark);
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+
+  &:hover { background-color: #f8fafc; font-weight: 600; }
+  &:last-child { border-bottom: none; }
+}
+
+/* --- CAMPO DE VALOR MINIMALISTA --- */
+.inputTransaction {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  font-size: 16px;
+  text-align: right; /* Alinhamento profissional à direita */
+  color: var(--byte-dark);
+  font-weight: 600;
+  background-color: white;
+  border: 1px solid var(--byte-border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus { border-color: var(--byte-dark); }
+}
+
+/* --- BOTÃO CONCLUIR --- */
+.btnSubmit {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: var(--byte-dark);
+  color: white;
+  margin-top: 12px;
+
+  &:hover:not(:disabled) { transform: translateY(-1px); background-color: #003847; }
+  &:disabled { background-color: #CBD5E1; color: #64748b; cursor: not-allowed; }
+}
+
+/* EXTRATO (COLUNA DIREITA) */
+.rightcol {
+  width: 280px;
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  align-self: flex-start;
+}

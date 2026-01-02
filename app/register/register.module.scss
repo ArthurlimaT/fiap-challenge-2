@@ -1,0 +1,91 @@
+/* app/register/register.module.scss */
+.registerContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #004D61 0%, #002d39 100%);
+  padding: 40px 20px;
+}
+
+.registerCard {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px; // Um pouco mais largo que o login
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.logoArea {
+  display: flex;
+  justify-content: center;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @media (min-width: 480px) {
+    grid-template-columns: 1fr 1fr; // Nome e CPF lado a lado em telas maiores
+  }
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  input {
+    padding: 10px;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline-color: #47A138;
+  }
+}
+
+.registerBtn {
+  background-color: #47A138; // Verde para cadastro
+  color: white;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #3e8e32;
+  }
+}
+
+.btnSecondary {
+  background: transparent;
+  border: 1px solid #CBD5E1;
+  color: #64748B;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  
+  &:hover {
+    background: #F8FAFC;
+    color: #47A138;
+  }
+}

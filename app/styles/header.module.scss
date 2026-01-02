@@ -1,0 +1,41 @@
+.header {
+  background: #000;
+  color: #fff;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.logoBox {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(180deg, #00e676, #00c853);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(2,6,4,0.12);
+}
+
+.brand {
+  color: var(--green);
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.primary {
+  background: linear-gradient(180deg, #6ef2a4, var(--green));
+  color: #042b09;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.ghost {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+}

@@ -1,0 +1,83 @@
+.container {
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  min-height: 500px;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.header {
+  margin-bottom: 24px;
+  border-left: 4px solid #47A138;
+  padding-left: 12px;
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #004D4D;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item {
+  border-bottom: 1px solid #f9fafb;
+  padding-bottom: 16px;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.date {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #9ca3af;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.type {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.target {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.value {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.positive {
+  color: #47A138;
+}
+
+.negative {
+  color: #ef4444;
+}
+
+.emptyState {
+  padding: 40px 0;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  font-style: italic;
+}

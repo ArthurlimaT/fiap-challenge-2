@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+:root {
+  --byte-green: #47A138;
+  --byte-dark: #004D61;
+  --byte-orange: #FF5031;
+}
+
+/* Seus estilos globais abaixo */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: white;
+}

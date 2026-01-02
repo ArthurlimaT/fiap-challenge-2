@@ -1,0 +1,134 @@
+.transferSection {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f3f4f6;
+  margin-top: 10px;
+}
+
+.header {
+  margin-bottom: 32px;
+  border-left: 4px solid #47A138;
+  padding-left: 16px;
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #004D4D;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 550px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  input, select {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+      border-color: #47A138;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(71, 161, 56, 0.1);
+    }
+  }
+}
+
+.radioGroup {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  cursor: pointer;
+  font-weight: 500;
+
+  input[type="radio"] {
+    accent-color: #47A138;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.valueInput {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: #004D4D;
+  text-align: right;
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+  color: #b91c1c !important;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.submitBtn {
+  background: #47A138;
+  color: white;
+  padding: 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+
+  &:hover:not(:disabled) {
+    filter: brightness(0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(71, 161, 56, 0.2);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.fadeAnim {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

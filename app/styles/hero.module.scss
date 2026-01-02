@@ -1,0 +1,25 @@
+.hero {
+  position: relative;
+  background: linear-gradient(180deg, #0c5b60 0%, #2a8a8d 30%, rgba(255,255,255,0.95) 92%);
+  padding-top: 3rem;
+  padding-bottom: 6rem;
+  overflow: hidden;
+}
+
+.illustration {
+  width: 420px;
+  height: 260px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottomFade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 90%);
+}

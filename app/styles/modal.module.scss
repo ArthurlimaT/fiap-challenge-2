@@ -1,0 +1,117 @@
+/* modal.module.scss */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.panel {
+  position: relative;
+  width: 640px;
+  max-width: calc(100% - 40px);
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 28px 32px;
+  margin: auto;
+  box-shadow: 0 30px 60px rgba(6, 10, 10, 0.35);
+  overflow: auto;
+}
+
+/* close button */
+.closeBtn {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* illustration */
+.illustration {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* headings and form */
+.heading {
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.label {
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+/* inputs */
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #e6e6e7;
+  background: #ffffff;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+/* checkbox row */
+.checkboxRow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.checkboxText {
+  font-size: 13px;
+  color: #374151;
+}
+
+/* feedback */
+.error {
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.success {
+  color: #0f5132;
+  font-size: 13px;
+}
+
+/* submit button */
+.submit {
+  background: #ff6b48;
+  border: none;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  min-width: 160px;
+}

@@ -1,0 +1,67 @@
+.servicesContainer {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); // Sombra bem sutil
+  border: 1px solid #f3f4f6;
+}
+
+.header {
+  margin-bottom: 32px;
+  border-left: 4px solid #47A138;
+  padding-left: 16px;
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #004D4D;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 colunas como na imagem
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  background: #f9fafb; // Cinza claríssimo para o card em repouso
+  border: 1px solid #f3f4f6;
+  border-radius: 12px;
+  padding: 32px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+
+  &:hover {
+    background: #ffffff;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 77, 77, 0.08);
+    border-color: #47A138;
+
+    .label { color: #47A138; }
+  }
+}
+
+.iconWrapper {
+  margin-bottom: 16px;
+  font-size: 2.5rem; // Para caso use emoji
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4b5563;
+  transition: color 0.2s;
+}

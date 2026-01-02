@@ -1,0 +1,121 @@
+/* app/landing.module.scss */
+
+.heroSection {
+  background: linear-gradient(180deg, #004D61 0%, #FFFFFF 100%);
+  min-height: 85vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+
+  /* Detalhe pixelado decorativo (opcional) */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 200px;
+    height: 200px;
+    background-image: 
+      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 0;
+  }
+}
+
+.heroContent {
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.heroTitle {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  max-width: 500px;
+
+  @media (min-width: 768px) {
+    font-size: 3rem;
+  }
+}
+
+/* Botões da Navbar */
+.navBtnPrimary {
+  background-color: #47A138;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+  
+  &:hover { opacity: 0.9; }
+}
+
+.navBtnSecondary {
+  border: 1px solid #47A138;
+  color: #47A138;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  margin-left: 16px;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(71, 161, 56, 0.1); }
+}
+
+/* Features Section */
+.featuresSection {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E4E6E6 100%);
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.featureIcon {
+  font-size: 3rem;
+  color: #47A138;
+  margin-bottom: 8px;
+}
+
+.featureTitle {
+  color: #47A138;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.featureText {
+  color: #767676;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+  background-color: #000;
+  color: white;
+  padding: 40px 24px;
+  font-size: 0.9rem;
+}
+
+.footerLink {
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.8;
+  cursor: pointer;
+  &:hover { opacity: 1; text-decoration: underline; }
+}
