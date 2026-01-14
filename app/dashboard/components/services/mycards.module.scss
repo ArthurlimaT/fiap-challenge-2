@@ -1,146 +1,100 @@
-/* mycards.module.scss */
-
-.cardsSection {
-  background-color: #ffffff; // Unificado com o resto do dashboard
+.container {
+  background: white;
   border-radius: 16px;
-  padding: 40px;
-  width: 100%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f3f4f6;
-  min-height: 500px;
+  padding: 32px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .backBtn {
-  background: transparent;
-  border: 1px solid #e5e7eb;
-  color: #6b7280;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  margin-bottom: 24px;
-  transition: all 0.2s ease;
-
-  &:hover { 
-    background: #f9fafb;
-    color: #004D4D;
-    border-color: #004D4D;
-  }
+  background: none; border: none; color: #6B7280; font-weight: 600;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  margin-bottom: 24px; transition: color 0.2s;
+  &:hover { color: #47A138; }
 }
 
-.sectionTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #004D4D;
+.header {
   margin-bottom: 32px;
-  border-left: 4px solid #47A138;
-  padding-left: 16px;
+  h2 { font-size: 1.5rem; color: #111827; margin-bottom: 16px; }
 }
 
-.cardsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-}
-
-.cardWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.cardLabel {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 700;
-  color: #9ca3af;
-}
-
-/* --- DESIGN DOS CARTÕES --- */
-.baseCard {
-  width: 100%;
-  aspect-ratio: 1.58 / 1;
-  border-radius: 20px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-8px) rotateX(5deg);
+.tabs {
+  display: flex; gap: 8px; background: #F3F4F6; padding: 4px; border-radius: 12px; width: fit-content;
+  button {
+    padding: 8px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+    background: transparent; color: #6B7280;
+    &.activeTab { background: white; color: #47A138; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
   }
 }
 
-.cardPhysical {
-  background: linear-gradient(135deg, #004D4D 0%, #002D2D 100%);
-  color: white;
-  box-shadow: 0 20px 40px rgba(0, 77, 77, 0.2);
+.cardDisplay {
+  display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 40px;
+}
 
-  .chip {
-    width: 45px;
-    height: 35px;
-    background: linear-gradient(135deg, #f3d078 0%, #af8b2c 100%);
-    border-radius: 8px;
-    position: relative;
-    
-    &::after { // Linhas do chip
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: repeating-linear-gradient(90deg, transparent, transparent 14px, rgba(0,0,0,0.1) 15px);
-    }
+.creditCard {
+  width: 100%; max-width: 380px; aspect-ratio: 1.58 / 1; border-radius: 20px; padding: 24px;
+  position: relative; display: flex; flex-direction: column; justify-content: space-between;
+  color: white; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: all 0.4s ease;
+  overflow: hidden;
+
+  &.black { background: linear-gradient(135deg, #1F2937 0%, #000000 100%); }
+  &.green { background: linear-gradient(135deg, #47A138 0%, #2D6623 100%); }
+  &.blocked { filter: grayscale(1) brightness(0.8); }
+}
+
+.cardTop {
+  display: flex; justify-content: space-between; align-items: center;
+  .brand { font-weight: 700; font-size: 1.1rem; span { font-weight: 300; opacity: 0.7; } }
+  .chip { color: #FFD700; opacity: 0.8; }
+}
+
+.number { font-size: 1.4rem; font-family: 'Courier New', monospace; letter-spacing: 2px; }
+
+.cardBottom {
+  display: flex; gap: 24px;
+  small { display: block; font-size: 0.6rem; opacity: 0.7; margin-bottom: 4px; }
+  p { font-size: 0.85rem; font-weight: 600; margin: 0; }
+}
+
+.blockedOverlay {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+  border: 4px solid white; padding: 8px 20px; font-weight: 900; font-size: 1.5rem; letter-spacing: 2px;
+}
+
+.toggleData {
+  background: #F3F4F6; border: none; padding: 10px 20px; border-radius: 8px;
+  font-weight: 600; color: #374151; cursor: pointer; display: flex; align-items: center; gap: 8px;
+  &:hover { background: #E5E7EB; }
+}
+
+.settingItem {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px; border-bottom: 1px solid #F3F4F6;
+  &:last-child { border: none; }
+}
+
+.settingInfo {
+  display: flex; gap: 16px; align-items: center;
+  .iconCircle { background: #F9FAF7; padding: 10px; border-radius: 10px; color: #47A138; }
+  strong { font-size: 0.95rem; color: #111827; }
+  p { font-size: 0.8rem; color: #6B7280; margin: 0; }
+}
+
+.configBtn {
+  background: transparent; border: 1px solid #47A138; color: #47A138;
+  padding: 6px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;
+  &:hover { background: #47A138; color: white; }
+}
+
+/* SWITCH CSS */
+.switch {
+  position: relative; width: 44px; height: 24px;
+  input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #D1D5DB; transition: .4s; border-radius: 34px;
+    &:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; }
   }
-}
-
-.cardVirtual {
-  background: #ffffff;
-  border: 2px dashed #47A138;
-  color: #004D4D;
-  
-  .chipVirtual {
-    width: 45px;
-    height: 35px;
-    background: #f3f4f6;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-  }
-}
-
-.brand {
-  font-weight: 800;
-  font-size: 1.2rem;
-  font-style: italic;
-  letter-spacing: -0.5px;
-}
-
-.cardNumber {
-  font-size: 1.4rem;
-  letter-spacing: 2px;
-  font-family: 'Courier New', monospace;
-  margin: 10px 0;
-}
-
-.cardFooter {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
-
-/* Responsividade */
-@media (max-width: 640px) {
-  .cardsSection {
-    padding: 20px;
-  }
-  .cardNumber {
-    font-size: 1.1rem;
-  }
+  input:checked + .slider { background-color: #47A138; }
+  input:checked + .slider:before { transform: translateX(20px); }
 }

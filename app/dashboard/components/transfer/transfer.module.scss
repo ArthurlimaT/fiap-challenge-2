@@ -1,134 +1,94 @@
-.transferSection {
+.container {
   background: white;
   border-radius: 16px;
-  padding: 40px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f3f4f6;
-  margin-top: 10px;
+  padding: 32px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .header {
   margin-bottom: 32px;
-  border-left: 4px solid #47A138;
-  padding-left: 16px;
+  .title { font-size: 1.5rem; color: #111827; margin-bottom: 4px; }
+  .subtitle { color: #6B7280; font-size: 0.9rem; }
+}
+
+/* SELETOR DE MÉTODO (PIX, TED, DEPÓSITO) */
+.methodSelector {
+  display: flex; gap: 12px; margin-bottom: 32px;
   
-  .title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #004D4D;
-  }
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 550px;
-}
-
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #374151;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  input, select {
-    padding: 14px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    background: #f9fafb;
-    font-size: 1rem;
-    outline: none;
+  .methodBtn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px; border-radius: 12px; border: 1px solid #E5E7EB;
+    background: white; color: #374151; font-weight: 600; cursor: pointer;
     transition: all 0.2s;
 
-    &:focus {
-      border-color: #47A138;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(71, 161, 56, 0.1);
+    &:hover { border-color: #47A138; background: #F9FAF7; }
+    &.activeMethod { background: #111827; color: white; border-color: #111827; }
+  }
+}
+
+.section {
+  margin-bottom: 40px;
+  .sectionHeader {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    h3 { font-size: 1rem; color: #111827; margin: 0; }
+    .stepNumber {
+      background: #47A138; color: white; width: 24px; height: 24px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700;
     }
   }
 }
 
-.radioGroup {
-  display: flex;
-  gap: 20px;
-  padding: 10px 0;
-}
-
-.radioLabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  color: #4b5563;
-  cursor: pointer;
-  font-weight: 500;
-
-  input[type="radio"] {
-    accent-color: #47A138;
-    width: 18px;
-    height: 18px;
+/* SELETOR DE CHAVES (CPF, TEL, EMAIL) */
+.keySelector {
+  display: flex; gap: 8px; margin-bottom: 16px;
+  .keyBtn {
+    padding: 6px 16px; border-radius: 99px; border: 1px solid #E5E7EB;
+    background: transparent; color: #6B7280; font-size: 0.75rem; font-weight: 700;
+    cursor: pointer; transition: 0.2s;
+    &.activeKey { background: rgba(71, 161, 56, 0.1); color: #47A138; border-color: #47A138; }
   }
 }
 
-.valueInput {
-  font-size: 1.5rem !important;
-  font-weight: 700;
-  color: #004D4D;
-  text-align: right;
-}
-
-.inputError {
-  border-color: #ef4444 !important;
-  background-color: #fef2f2 !important;
-  color: #b91c1c !important;
-}
-
-.errorText {
-  color: #ef4444;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.submitBtn {
-  background: #47A138;
-  color: white;
-  padding: 18px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 10px;
-
-  &:hover:not(:disabled) {
-    filter: brightness(0.9);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(71, 161, 56, 0.2);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.inputWrapper {
+  margin-bottom: 24px;
+  input {
+    width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #E5E7EB;
+    font-size: 1rem; outline: none; transition: 0.2s;
+    &:focus { border-color: #47A138; box-shadow: 0 0 0 4px rgba(71, 161, 56, 0.05); }
+    &.inputError { border-color: #EF4444; }
   }
 }
 
-.fadeAnim {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  animation: fadeIn 0.4s ease-out;
+/* ÁREA DO VALOR */
+.valueContainer {
+  background: #F9FAF7; padding: 32px; border-radius: 16px; text-align: center;
+  border: 1px solid transparent; transition: 0.2s;
+
+  .mainValueInput {
+    background: transparent; border: none; text-align: center; width: 100%;
+    font-size: 2.5rem; font-weight: 800; color: #111827; outline: none;
+  }
+
+  &.valueError {
+    background: #FEF2F2; border-color: #FEE2E2;
+    .mainValueInput { color: #B91C1C; }
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.balanceWarning {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 12px; color: #B91C1C; font-size: 0.85rem; font-weight: 500;
+}
+
+.errorMsg { color: #EF4444; font-size: 0.8rem; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+
+.confirmBtn {
+  width: 100%; padding: 18px; border-radius: 12px; border: none;
+  background: #47A138; color: white; font-size: 1.1rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+  
+  &:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+  &:disabled { background: #E5E7EB; color: #9CA3AF; cursor: not-allowed; }
 }

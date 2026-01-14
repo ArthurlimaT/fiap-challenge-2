@@ -1,117 +1,135 @@
-/* balanceHero.module.scss */
+/* app/dashboard/components/start/balancehero.module.scss */
 
-.heroContainer {
-  background: linear-gradient(135deg, #004D4D 0%, #002D2D 100%);
-  border-radius: 16px; // Bordas arredondadas padronizadas
+.heroCard {
+  background-color: #FFFFFF;
+  border-radius: 16px;
   padding: 32px;
-  color: white;
-  box-shadow: 0 10px 30px rgba(0, 77, 77, 0.15);
-  position: relative;
-  overflow: hidden;
+  /* Sombra suave e elegante usada em bancos modernos */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #E5E7EB; /* Borda bem sutil */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; // Distribui o conteúdo para preencher o espaço vertical
-  
-  /* Tamanho padronizado igual ao de investimentos */
-  width: 100%;
-  min-height: 240px; 
-  transition: transform 0.3s ease;
-
-  // Detalhe decorativo minimalista de fundo
-  &::after {
-    content: "";
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-  }
+  gap: 24px;
 }
 
 .header {
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-bottom: 4px;
-  }
-
-  p {
-    font-size: 0.85rem;
-    opacity: 0.7;
-    text-transform: capitalize;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.balanceContent {
+.greeting h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827; /* Preto suave */
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+.dateBadge {
+  font-size: 0.875rem;
+  color: #6B7280; /* Cinza médio */
+  text-transform: capitalize;
+}
+
+.accountBadge {
+  background-color: #F3F4F6;
+  color: #374151;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 99px;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+/* Área do Saldo */
+.balanceContainer {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
 
-  .labelGroup {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    
-    span {
-      font-size: 0.9rem;
-      font-weight: 300;
-      opacity: 0.8;
-      letter-spacing: 0.5px;
-    }
-
-    .eyeBtn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.1rem;
-      padding: 0;
-      transition: transform 0.2s;
-
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
-  }
-
-  .value {
-    font-size: 2.5rem; 
-    font-weight: 700;
-    margin: 4px 0;
-    display: block;
-    letter-spacing: -1px;
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #6B7280;
   }
 }
 
-.divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.15);
-  width: 100%;
-  margin: 8px 0;
+.eyeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #47A138; /* Verde Bytebank para ação */
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: rgba(71, 161, 56, 0.1);
+  }
 }
 
-.accountType {
-  font-size: 0.85rem;
-  font-weight: 400;
-  opacity: 0.9;
+.amountWrapper {
+  height: 48px; /* Altura fixa para evitar pulo de layout */
+  display: flex;
+  align-items: center;
 }
 
+.valueGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.currency {
+  font-size: 1.25rem;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+
+.value {
+  font-size: 2.5rem; /* Tamanho grande e impactante */
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -1px; /* Tracking apertado estilo financeiro */
+}
+
+/* Estado Oculto (Barrinha cinza) */
+.hiddenBalance {
+  width: 180px;
+  height: 32px;
+  background-color: #E5E7EB;
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+/* Skeleton Loader (Carregando) */
 .skeletonLoader {
-  width: 100%;
-  max-width: 200px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  animation: pulse 1.5s infinite;
+  width: 120px;
+  height: 32px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
 }
 
-@keyframes pulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 0.7; }
-  100% { opacity: 0.4; }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Responsivo para celular */
+@media (max-width: 640px) {
+  .heroCard { padding: 24px; }
+  .value { font-size: 2rem; }
+  .header { flex-direction: column; gap: 12px; }
 }

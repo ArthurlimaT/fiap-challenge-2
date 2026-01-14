@@ -1,15 +1,25 @@
 @import "tailwindcss";
 
+/* Suas customizações globais aqui */
 :root {
-  --byte-green: #47A138;
-  --byte-dark: #004D61;
-  --byte-orange: #FF5031;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
 }
 
-/* Seus estilos globais abaixo */
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: white;
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+}
+
+/* Scrollbar personalizada para o Bytebank */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #47A138;
+  border-radius: 10px;
 }

@@ -2,65 +2,125 @@
 import React, { useState } from 'react';
 import styles from './mycards.module.scss';
 import startStyles from '../start/start.module.scss';
-import BalanceHero from '../start/balancehero';
 import Extrato from '../extrato/extrato';
+import { 
+  ArrowLeft, Eye, EyeOff, Lock, Unlock, 
+  Settings, ShieldCheck, Cpu 
+} from 'lucide-react';
 
-interface MyCardsProps {
-  onBack: () => void;
-}
+export default function MyCards({ onBack }: { onBack: () => void }) {
+  const [activeTab, setActiveTab] = useState<'fisico' | 'virtual'>('fisico');
+  const [showData, setShowData] = useState(false);
+  const [blockedFisico, setBlockedFisico] = useState(false);
+  const [blockedVirtual, setBlockedVirtual] = useState(false);
 
-export default function MyCards({ onBack }: MyCardsProps) {
-  const [isLocked, setIsLocked] = useState(false);
+  const isCurrentBlocked = activeTab === 'fisico' ? blockedFisico : blockedVirtual;
 
   return (
-    <div className={startStyles.container}>
-      <div className={startStyles.mainContent}>
-        <BalanceHero />
-        
-        <div className={styles.cardsSection}>
-          <button className={styles.backBtn} onClick={onBack}>
-            <span>←</span> Voltar para Serviços
+    <div className={startStyles.dashboardGrid}>
+      <div className={startStyles.mainColumn}>
+        <div className={styles.container}>
+          <button onClick={onBack} className={styles.backBtn}>
+            <ArrowLeft size={18} /> Voltar para serviços
           </button>
 
-          <h2 className={styles.sectionTitle}>Meus cartões</h2>
+          <header className={styles.header}>
+            <h2>Meus Cartões</h2>
+            <div className={styles.tabs}>
+              <button 
+                className={activeTab === 'fisico' ? styles.activeTab : ''} 
+                onClick={() => {setActiveTab('fisico'); setShowData(false);}}
+              >
+                Cartão Físico
+              </button>
+              <button 
+                className={activeTab === 'virtual' ? styles.activeTab : ''} 
+                onClick={() => setActiveTab('virtual')}
+              >
+                Cartão Virtual
+              </button>
+            </div>
+          </header>
 
-          <div className={styles.cardsGrid}>
-            {/* Cartão Físico */}
-            <div className={styles.cardWrapper}>
-              <label className={styles.cardLabel}>Cartão Físico</label>
-              <div className={`${styles.baseCard} ${styles.cardPhysical}`}>
-                <div className={styles.cardHeader}>
-                  <div className={styles.chip} />
-                  <span className={styles.brand}>ByteBank</span>
-                </div>
-                <span className={styles.cardNumber}>**** **** **** 4589</span>
-                <div className={styles.cardFooter}>
-                  <span>João da Silva</span>
-                  <span>12/29</span>
-                </div>
+          <div className={styles.cardDisplay}>
+            {/* Visual do Cartão */}
+            <div className={`
+              ${styles.creditCard} 
+              ${activeTab === 'fisico' ? styles.black : styles.green}
+              ${isCurrentBlocked ? styles.blocked : ''}
+            `}>
+              <div className={styles.cardTop}>
+                <span className={styles.brand}>Bytebank <span>• Premium</span></span>
+                <Cpu size={32} className={styles.chip} />
               </div>
+              
+              <div className={styles.number}>
+                {activeTab === 'virtual' && showData ? '4502 8812 0093 7741' : '•••• •••• •••• 7741'}
+              </div>
+
+              <div className={styles.cardBottom}>
+                <div>
+                  <small>TITULAR</small>
+                  <p>JOANA DA SILVA</p>
+                </div>
+                <div>
+                  <small>VALIDADE</small>
+                  <p>12/29</p>
+                </div>
+                {activeTab === 'virtual' && (
+                  <div>
+                    <small>CVV</small>
+                    <p>{showData ? '123' : '•••'}</p>
+                  </div>
+                )}
+              </div>
+              {isCurrentBlocked && <div className={styles.blockedOverlay}>BLOQUEADO</div>}
             </div>
 
-            {/* Cartão Virtual */}
-            <div className={styles.cardWrapper}>
-              <label className={styles.cardLabel}>Cartão Virtual</label>
-              <div className={`${styles.baseCard} ${styles.cardVirtual}`}>
-                <div className={styles.cardHeader}>
-                  <div className={styles.chipVirtual} />
-                  <span className={styles.brand}>ByteBank</span>
-                </div>
-                <span className={styles.cardNumber}>**** **** **** 9901</span>
-                <div className={styles.cardFooter}>
-                  <span>João da Silva</span>
-                  <span>08/30</span>
-                </div>
-              </div>
-            </div>
+            {activeTab === 'virtual' && (
+              <button className={styles.toggleData} onClick={() => setShowData(!showData)}>
+                {showData ? <><EyeOff size={16}/> Ocultar dados</> : <><Eye size={16}/> Ver dados do cartão</>}
+              </button>
+            )}
           </div>
+
+          {/* Configurações */}
+          <section className={styles.settings}>
+            <h3>Configurações de segurança</h3>
+            
+            <div className={styles.settingItem}>
+              <div className={styles.settingInfo}>
+                <div className={styles.iconCircle}><Lock size={20}/></div>
+                <div>
+                  <strong>Bloqueio temporário</strong>
+                  <p>Bloqueie o uso do seu cartão num clique</p>
+                </div>
+              </div>
+              <label className={styles.switch}>
+                <input 
+                  type="checkbox" 
+                  checked={isCurrentBlocked}
+                  onChange={() => activeTab === 'fisico' ? setBlockedFisico(!blockedFisico) : setBlockedVirtual(!blockedVirtual)}
+                />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+
+            <div className={styles.settingItem}>
+              <div className={styles.settingInfo}>
+                <div className={styles.iconCircle}><Settings size={20}/></div>
+                <div>
+                  <strong>Ajuste de limite</strong>
+                  <p>Seu limite atual é R$ 5.000,00</p>
+                </div>
+              </div>
+              <button className={styles.configBtn}>Ajustar</button>
+            </div>
+          </section>
         </div>
       </div>
 
-      <aside className={startStyles.extratoAside}>
+      <aside className={startStyles.sideColumn}>
         <Extrato />
       </aside>
     </div>

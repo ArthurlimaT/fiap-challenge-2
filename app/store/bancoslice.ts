@@ -1,19 +1,19 @@
-// app/store/bancoslice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Favorito {
+export interface Favorito {
   id: string;
   nome: string;
   chave: string;
   inicial: string;
 }
 
-interface Transacao {
+export interface Transacao {
   id: string;
   tipo: string;
   valor: number;
   favorecido: string;
-  data: string; // Removi o '?' para garantir que sempre exista no Extrato
+  data: string;
+  hora: string;
 }
 
 interface BancoState {
@@ -35,31 +35,35 @@ const bancoSlice = createSlice({
   name: 'banco',
   initialState,
   reducers: {
-    // Usamos Omit para dizer: "Receba tudo da Transacao, MENOS o id e a data"
-    adicionarTransacao: (state, action: PayloadAction<Omit<Transacao, 'id' | 'data'>>) => {
+    adicionarTransacao: (state, action: PayloadAction<Omit<Transacao, 'id' | 'data' | 'hora'>>) => {
       const { tipo, valor, favorecido } = action.payload;
+      const agora = new Date();
       
-      // Criamos o objeto completo com ID único
       const novaTransacao: Transacao = {
-        id: Math.random().toString(36).substr(2, 9), // Gera ID aleatório
+        id: Math.random().toString(36).substring(2, 11).toUpperCase(),
         tipo,
         valor,
         favorecido,
-        data: new Date().toLocaleDateString('pt-BR'),
+        data: agora.toLocaleDateString('pt-BR'),
+        hora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       };
 
-      // Atualiza o saldo
+      // --- PROTEÇÃO CONTRA ESTADO CORROMPIDO (LOCALSTORAGE) ---
+      if (!state.transacoes) state.transacoes = [];
+      
       if (tipo === 'deposito') {
         state.saldo += valor;
       } else {
         state.saldo -= valor;
       }
 
-      // Adiciona ao início da lista (as mais recentes primeiro no extrato)
       state.transacoes.unshift(novaTransacao);
     },
 
     salvarFavorito: (state, action: PayloadAction<{ nome: string; chave: string }>) => {
+      // Proteção para o array de favoritos também
+      if (!state.favoritos) state.favoritos = [];
+
       const existe = state.favoritos.find(f => f.chave === action.payload.chave);
       if (!existe) {
         state.favoritos.push({

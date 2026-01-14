@@ -1,45 +1,53 @@
-.container {
+/* app/dashboard/components/start/start.module.scss */
+
+.dashboardGrid {
   display: grid;
-  grid-template-columns: 1fr 320px; // Espaço fixo elegante para o extrato
-  gap: 2.5rem;
-  padding: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  /* O segredo do layout: 
+     1fr (uma fração do espaço livre) para o conteúdo principal
+     320px (fixo) para o extrato lateral
+  */
+  grid-template-columns: 1fr 320px; 
+  gap: 24px;
+  width: 100%;
+  animation: slideIn 0.5s ease-out;
 }
 
-.mainContent {
+.mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 24px;
 }
 
-.formSection {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 2.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f3f4f6;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
+/* Containers para dar o fundo branco e sombra suave nos componentes */
+.heroSection, .operationsSection {
+  /* Se os componentes filhos (BalanceHero/NovaOperacao) já tiverem card, 
+     podemos remover o background daqui. 
+     Mas por segurança, definimos o espaçamento aqui.
+  */
+  display: flex;
+  flex-direction: column;
 }
 
-.extratoAside {
-  background: #f8f9fa; // Fundo levemente diferente para o extrato
-  border-radius: 16px;
-  padding: 1.5rem;
-  height: fit-content;
-  position: sticky;
-  top: 2rem;
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
+/* RESPONSIVIDADE (Mobile First) */
 @media (max-width: 1024px) {
-  .container {
-    grid-template-columns: 1fr;
+  .dashboardGrid {
+    /* No tablet/celular, vira uma coluna só */
+    grid-template-columns: 1fr; 
   }
-  .extratoAside {
-    position: static;
+
+  .sideColumn {
+    /* O extrato vai para baixo do saldo no mobile */
+    margin-top: 16px;
   }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

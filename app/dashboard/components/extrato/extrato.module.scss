@@ -1,83 +1,75 @@
-.container {
-  background: white;
-  border-radius: 16px;
-  padding: 32px 24px;
+.extratoContainer {
+  background: #f8f8f8;
+  padding: 24px;
+  border-radius: 8px;
+  height: 100%;
   min-height: 500px;
-  border: 1px solid #f3f4f6;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #111;
   margin-bottom: 24px;
-  border-left: 4px solid #47A138;
-  padding-left: 12px;
-
-  .title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #004D4D;
-  }
+  border-bottom: 2px solid #47A138;
+  padding-bottom: 8px;
+  h2 { font-size: 1.25rem; font-weight: 700; }
 }
 
-.list {
+.lista {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-.item {
-  border-bottom: 1px solid #f9fafb;
+.itemTransacao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+
+  &:last-child { border: none; }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .data { font-size: 0.75rem; color: #666; font-weight: 600; }
+  .tipo { font-size: 0.9rem; color: #333; }
+  .favorecido { font-size: 0.8rem; color: #888; margin: 0; }
   
-  &:last-child {
-    border-bottom: none;
+  .valor {
+    font-size: 1rem;
+    font-weight: 700;
+    &.positivo { color: #47A138; }
+    &.negativo { color: #000; } // No extrato real, gastos costumam ser pretos ou vermelhos
   }
 }
 
-.date {
-  font-size: 10px;
-  text-transform: uppercase;
-  color: #9ca3af;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-}
-
-.details {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.type {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #374151;
-  text-transform: capitalize;
-}
-
-.target {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.value {
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.positive {
+.downloadBtn {
+  background: transparent;
+  border: 1px solid #e0e0e0;
   color: #47A138;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #47A138;
+    color: white;
+    border-color: #47A138;
+  }
 }
 
-.negative {
-  color: #ef4444;
-}
-
-.emptyState {
-  padding: 40px 0;
+.empty {
   text-align: center;
-  color: #9ca3af;
-  font-size: 0.85rem;
+  color: #999;
+  margin-top: 40px;
   font-style: italic;
 }

@@ -1,12 +1,11 @@
-/* investments.module.scss */
+/* app/dashboard/components/investment/investment.module.scss */
 
-.investmentsSection {
-  background-color: #ffffff; // Branco para ficar limpo
+.investmentCard {
+  background: white;
   border-radius: 16px;
   padding: 32px;
-  width: 100%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f3f4f6;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .headerRow {
@@ -14,37 +13,105 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
-  border-left: 4px solid #47A138; // Detalhe verde lateral
-  padding-left: 16px;
 }
 
-.title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #004D4D;
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  .iconTitle { color: #47A138; }
+  .title { font-size: 1.25rem; font-weight: 700; color: #111827; margin: 0; }
 }
 
-.topCards {
+.totalBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  .totalLabel { font-size: 0.75rem; color: #6B7280; text-transform: uppercase; font-weight: 600; }
+  .totalValue { font-size: 1.5rem; font-weight: 800; color: #111827; }
+}
+
+.cardsGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-bottom: 32px;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
 .smallCard {
-  background: linear-gradient(135deg, #004D4D 0%, #003333 100%);
-  border-radius: 12px;
+  background: #F9FAF7; // Um tom bem leve de verde/cinza
   padding: 24px;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 77, 77, 0.1);
+  border-radius: 16px;
+  border: 1px solid #F3F4F6;
+  transition: transform 0.2s;
+
+  &:hover { transform: translateY(-4px); }
 }
 
-.statsCard {
-  background-color: #ffffff; // Gráfico em fundo branco é mais legível
-  border-radius: 12px;
-  padding: 24px;
-  color: #333;
-  border: 1px solid #eee;
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  .growth {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #47A138;
+    background: rgba(71, 161, 56, 0.1);
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
 }
 
-// ... manter o resto das queries e legendas
+.iconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.blue { background: #E0F2FE; color: #0369A1; }
+  &.green { background: #DCFCE7; color: #166534; }
+}
+
+.smallCardTitle { font-size: 0.875rem; color: #6B7280; font-weight: 500; }
+.smallCardValue { font-size: 1.5rem; font-weight: 700; color: #111827; margin: 4px 0 12px 0; }
+
+.progressBar {
+  height: 6px;
+  background: #E5E7EB;
+  border-radius: 99px;
+  overflow: hidden;
+  .progressInner { height: 100%; background: #0369A1; border-radius: 99px; }
+}
+
+.statsSection {
+  padding-top: 32px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.statsHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  color: #374151;
+  .statsTitle { font-size: 1rem; font-weight: 700; margin: 0; }
+}
+
+.chartContainer {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FAFAFA;
+  border-radius: 12px;
+}
+
+@media (max-width: 640px) {
+  .cardsGrid { grid-template-columns: 1fr; }
+  .headerRow { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .totalBadge { align-items: flex-start; }
+}

@@ -1,29 +1,35 @@
 'use client';
 import React from 'react';
-import styles from './start.module.scss'; // Usaremos apenas 'styles' aqui
+import styles from './start.module.scss'; 
 import BalanceHero from './balancehero';
 import Extrato from '../extrato/extrato';
 import NovaOperacao from '../novaoperacao/novaoperacao';
 
 export default function StartDashboard() {
   return (
-    <div className={styles.container}>
-      {/* Lado Esquerdo: Conteúdo Principal */}
-      <div className={styles.mainContent}>
+    <div className={styles.dashboardGrid}>
+      {/* Coluna Principal (Esquerda) - Saldo, Ações e Widgets futuros */}
+      <section className={styles.mainColumn}>
         
-        {/* 1. Boas-vindas e Saldo */}
-        <BalanceHero />
+        {/* Componente de Saldo (Vamos estilizá-lo a seguir) */}
+        <div className={styles.heroSection}>
+          <BalanceHero />
+        </div>
         
-        {/* 2. O novo componente de Operação (Estilo Abas) */}
-        <section className={styles.formSection}>
-          <NovaOperacao />
-        </section>
+        {/* Área de Operações (Transferir/Depositar) */}
+        <div className={styles.operationsSection}>
+           <NovaOperacao />
+        </div>
 
-      </div>
+        {/* Aqui entrarão seus Widgets Personalizáveis no futuro */}
+        
+      </section>
 
-      {/* Lado Direito: Extrato Lateral Fixo */}
-      <aside className={styles.extratoAside}>
+      {/* Coluna Lateral (Direita) - Extrato e Comprovantes */}
+      <aside className={styles.sideColumn}>
         <Extrato />
+        
+        {/* Botão de baixar comprovantes pode ficar aqui futuramente */}
       </aside>
     </div>
   );

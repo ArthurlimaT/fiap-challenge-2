@@ -4,38 +4,29 @@ import styles from './landing.module.scss';
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen flex flex-col font-sans">
+    <main className="min-h-screen flex flex-col bg-black">
       
       {/* --- NAVBAR --- */}
-      <nav className="bg-black py-5 px-6 md:px-12 flex justify-between items-center w-full">
-        <div className="flex items-center gap-12">
-          {/* Logo Simulado */}
+      <nav className="bg-black py-6 px-6 md:px-12 flex justify-between items-center w-full sticky top-0 z-50 border-b border-gray-800">
+        <div className="flex items-center gap-10">
           <div className="flex items-center gap-2">
-             <div className="w-6 h-6 bg-[#47A138] rounded-sm grid grid-cols-2 gap-0.5 p-0.5">
-               <div className="bg-black opacity-20 rounded-sm"></div>
-               <div className="bg-white opacity-80 rounded-sm"></div>
-               <div className="bg-white opacity-80 rounded-sm"></div>
-               <div className="bg-black opacity-20 rounded-sm"></div>
-             </div>
-             <span className="text-white font-bold text-xl tracking-tight">Bytebank</span>
+             <div className="w-8 h-8 bg-[#47A138] rounded-lg flex items-center justify-center font-bold text-white italic">B</div>
+             <span className="text-white font-bold text-2xl tracking-tighter">Bytebank</span>
           </div>
 
-          <div className="hidden md:flex gap-6 text-white text-sm font-medium">
-            <a href="#" className="hover:text-[#47A138] transition-colors">Sobre</a>
-            <a href="#" className="hover:text-[#47A138] transition-colors">Serviços</a>
+          <div className="hidden md:flex gap-8 text-gray-400 text-sm font-semibold">
+            <a href="#" className="hover:text-white transition-colors">Vantagens</a>
+            <a href="#" className="hover:text-white transition-colors">Segurança</a>
           </div>
         </div>
 
-        <div className="flex items-center">
-          <Link href="/register">
-          <button className={styles.navBtnPrimary}>
-            Abrir minha conta
-          </button>
-          </Link>
-
-          <Link href="/login">
-            <button className="border border-[#47A138] text-[#47A138] px-5 py-2 rounded font-semibold text-sm">
+        <div className="flex items-center gap-4">
+          <Link href="/login" className="text-white font-semibold text-sm hover:text-[#47A138] transition-colors pr-4">
             Já tenho conta
+          </Link>
+          <Link href="/register">
+            <button className="bg-[#47A138] text-white px-6 py-2.5 rounded-full font-bold text-sm hover:brightness-110 transition-all shadow-lg shadow-green-900/20">
+              Abrir conta
             </button>
           </Link>
         </div>
@@ -43,115 +34,101 @@ export default function LandingPage() {
 
       {/* --- HERO SECTION --- */}
       <section className={styles.heroSection}>
-        <div className={`${styles.heroContent} flex flex-col md:flex-row items-center justify-between`}>
-          
-          {/* Texto Hero */}
-          <div className="md:w-1/2 mb-10 md:mb-0">
-            <h1 className={styles.heroTitle}>
-              Experimente mais liberdade no controle da sua vida financeira.
-              Crie sua conta com a gente!
-            </h1>
-            {/* Imagem Mobile Placeholder se necessário */}
-          </div>
+        <div className={styles.heroContent}>
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-3/5 text-center md:text-left">
+              <h1 className={styles.heroTitle}>
+                O banco digital que entende sua <span>liberdade.</span>
+              </h1>
+              <p className={styles.heroSubtitle}>
+                Gerencie seus gastos, faça investimentos e controle sua vida financeira sem taxas abusivas e com a segurança que você merece.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Link href="/register">
+                  <button className="bg-[#47A138] text-white px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform">
+                    Começar agora
+                  </button>
+                </Link>
+                <button className="border border-gray-700 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 transition-colors">
+                  Saiba mais
+                </button>
+              </div>
+            </div>
 
-          {/* Ilustração (Simulação CSS para substituir a imagem da mulher e gráficos) */}
-          <div className="md:w-1/2 flex justify-center relative">
-             <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
-                {/* Barras do Gráfico */}
-                <div className="absolute bottom-0 left-0 w-12 h-32 bg-[#47A138] rounded-t-lg z-10 border-r-2 border-black"></div>
-                <div className="absolute bottom-0 left-20 w-12 h-48 bg-[#47A138] rounded-t-lg z-10 border-r-2 border-black"></div>
-                <div className="absolute bottom-0 left-40 w-12 h-64 bg-[#47A138] rounded-t-lg z-10 border-r-2 border-black"></div>
-                
-                {/* Linhas Tracejadas */}
-                <div className="absolute top-20 left-0 w-full border-t-2 border-dashed border-white opacity-50"></div>
-                <div className="absolute top-40 left-0 w-full border-t-2 border-dashed border-white opacity-50"></div>
-                
-                {/* Pessoa (Simplificada) */}
-                <div className="absolute bottom-0 right-10 w-24 h-56 bg-gray-300 rounded-t-full z-20 flex items-center justify-center">
-                   <span className="text-4xl">🧍‍♀️</span>
+            {/* Ilustração Representativa */}
+            <div className="md:w-2/5 hidden md:flex justify-center">
+              <div className="relative p-8 bg-gray-900/50 rounded-3xl border border-gray-800 backdrop-blur-sm">
+                <div className="text-[#47A138] text-6xl font-bold opacity-20 absolute -top-4 -left-4">“</div>
+                <p className="text-white text-xl italic relative z-10">
+                  A melhor experiência em banco digital que já utilizei para meu controle diário.
+                </p>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-700 rounded-full"></div>
+                  <div>
+                    <p className="text-white font-bold text-sm">Arthur Silva</p>
+                    <p className="text-gray-500 text-xs">Cliente Bytebank</p>
+                  </div>
                 </div>
-             </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* --- VANTAGENS SECTION --- */}
       <section className={styles.featuresSection}>
-        <h2 className="text-2xl font-bold text-black mb-12">Vantagens do nosso banco:</h2>
-        
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto">
+          <span className="text-[#47A138] font-bold tracking-widest uppercase text-sm">Por que nós?</span>
+          <h2 className="text-4xl font-black text-black mt-4 mb-16">Vantagens de ser Bytebank</h2>
           
-          {/* Card 1 */}
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>🎁</div>
-            <h3 className={styles.featureTitle}>Conta e cartão gratuitos</h3>
-            <p className={styles.featureText}>
-              Isso mesmo, nossa conta é digital, sem custo fixo e mais que isso: sem tarifa de manutenção.
-            </p>
+          <div className={styles.featuresGrid}>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>💳</span>
+              <h3 className={styles.featureTitle}>Anuidade Zero</h3>
+              <p className={styles.featureText}>Conta digital sem custos e cartão de crédito sem anuidade para sempre.</p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>📈</span>
+              <h3 className={styles.featureTitle}>Rendimento Real</h3>
+              <p className={styles.featureText}>Seu dinheiro no porquinho rende 100% do CDI desde o primeiro dia.</p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🛡️</span>
+              <h3 className={styles.featureTitle}>Segurança Total</h3>
+              <p className={styles.featureText}>Proteção biométrica e criptografia de ponta para seus dados e saldo.</p>
+            </div>
           </div>
-
-          {/* Card 2 */}
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>💸</div>
-            <h3 className={styles.featureTitle}>Saques sem custo</h3>
-            <p className={styles.featureText}>
-              Você pode sacar gratuitamente 4x por mês de qualquer Banco 24h.
-            </p>
-          </div>
-
-          {/* Card 3 */}
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>⭐</div>
-            <h3 className={styles.featureTitle}>Programa de pontos</h3>
-            <p className={styles.featureText}>
-              Você pode acumular pontos com suas compras no crédito sem pagar mensalidade!
-            </p>
-          </div>
-
-          {/* Card 4 */}
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>💻</div>
-            <h3 className={styles.featureTitle}>Seguro Dispositivos</h3>
-            <p className={styles.featureText}>
-              Seus dispositivos móveis (computador e laptop) protegidos por uma mensalidade simbólica.
-            </p>
-          </div>
-
         </div>
       </section>
 
       {/* --- FOOTER --- */}
       <footer className={styles.footer}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+               <div className="w-6 h-6 bg-[#47A138] rounded flex items-center justify-center font-bold text-white text-xs">B</div>
+               <span className="font-bold text-xl">Bytebank</span>
+            </div>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              O Bytebank é uma instituição autorizada pelo Banco Central do Brasil.
+            </p>
+          </div>
           
           <div>
-            <h4 className="font-bold mb-4">Serviços</h4>
-            <span className={styles.footerLink}>Conta corrente</span>
-            <span className={styles.footerLink}>Conta PJ</span>
-            <span className={styles.footerLink}>Cartão de crédito</span>
+            <h4 className="font-bold mb-6 text-white">Links Rápidos</h4>
+            <a href="#" className={styles.footerLink}>Privacidade</a>
+            <a href="#" className={styles.footerLink}>Trabalhe Conosco</a>
+            <a href="#" className={styles.footerLink}>Investidores</a>
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Contato</h4>
-            <span className={styles.footerLink}>0800 004 250 08</span>
-            <span className={styles.footerLink}>meajuda@bytebank.com.br</span>
-            <span className={styles.footerLink}>ouvidoria@bytebank.com.br</span>
+            <h4 className="font-bold mb-6 text-white">Canais de Atendimento</h4>
+            <p className="text-gray-400 text-sm mb-2">meajuda@bytebank.com.br</p>
+            <p className="text-[#47A138] font-bold text-lg">0800 555 1234</p>
           </div>
-
-          <div>
-            <h4 className="font-bold mb-4">Desenvolvido por Alura</h4>
-            <div className="flex items-center gap-2 mb-4">
-               {/* Logo Bytebank Footer */}
-               <div className="w-5 h-5 bg-white rounded-sm"></div>
-               <span className="font-bold text-lg">Bytebank</span>
-            </div>
-            <div className="flex gap-4 text-xl">
-              <span>📷</span> {/* Instagram Icon Placeholder */}
-              <span>💬</span> {/* Whatsapp Icon Placeholder */}
-              <span>▶️</span> {/* Youtube Icon Placeholder */}
-            </div>
-          </div>
-
+        </div>
+        <div className="max-w-6xl mx-auto mt-16 pt-8 border-t border-gray-900 text-center text-gray-600 text-xs">
+          © 2026 Bytebank - Todos os direitos reservados.
         </div>
       </footer>
 
