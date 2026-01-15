@@ -4,8 +4,8 @@ import styles from './mycards.module.scss';
 import startStyles from '../start/start.module.scss';
 import Extrato from '../extrato/extrato';
 import { 
-  ArrowLeft, Eye, EyeOff, Lock, Unlock, 
-  Settings, ShieldCheck, Cpu 
+  ArrowLeft, Eye, EyeOff, Lock, 
+  Settings, Cpu, Check, X 
 } from 'lucide-react';
 
 export default function MyCards({ onBack }: { onBack: () => void }) {
@@ -13,8 +13,19 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
   const [showData, setShowData] = useState(false);
   const [blockedFisico, setBlockedFisico] = useState(false);
   const [blockedVirtual, setBlockedVirtual] = useState(false);
+  
+  // Estados para o Limite (Slider)
+  const [limit, setLimit] = useState(5000);
+  const [isEditingLimit, setIsEditingLimit] = useState(false);
+  const [tempLimit, setTempLimit] = useState(5000);
+  const maxLimit = 10000; // Valor máximo que o cliente pode arrastar
 
   const isCurrentBlocked = activeTab === 'fisico' ? blockedFisico : blockedVirtual;
+
+  const handleSaveLimit = () => {
+    setLimit(tempLimit);
+    setIsEditingLimit(false);
+  };
 
   return (
     <div className={startStyles.dashboardGrid}>
@@ -43,7 +54,6 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
           </header>
 
           <div className={styles.cardDisplay}>
-            {/* Visual do Cartão */}
             <div className={`
               ${styles.creditCard} 
               ${activeTab === 'fisico' ? styles.black : styles.green}
@@ -84,7 +94,6 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
             )}
           </div>
 
-          {/* Configurações */}
           <section className={styles.settings}>
             <h3>Configurações de segurança</h3>
             
@@ -106,15 +115,52 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
               </label>
             </div>
 
-            <div className={styles.settingItem}>
+            <div className={`${styles.settingItem} ${isEditingLimit ? styles.editing : ''}`}>
               <div className={styles.settingInfo}>
                 <div className={styles.iconCircle}><Settings size={20}/></div>
-                <div>
+                <div className={styles.limitContent}>
                   <strong>Ajuste de limite</strong>
-                  <p>Seu limite atual é R$ 5.000,00</p>
+                  {isEditingLimit ? (
+                    <div className={styles.sliderContainer}>
+                      <div className={styles.sliderHeader}>
+                        <span className={styles.tempValue}>
+                          R$ {tempLimit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        </span>
+                        <div className={styles.actions}>
+                           <button onClick={handleSaveLimit} className={styles.confirmBtn}><Check size={16} /></button>
+                           <button onClick={() => setIsEditingLimit(false)} className={styles.cancelBtn}><X size={16} /></button>
+                        </div>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max={maxLimit} 
+                        step="100"
+                        value={tempLimit}
+                        onChange={(e) => setTempLimit(Number(e.target.value))}
+                        className={styles.rangeInput}
+                      />
+                      <div className={styles.rangeLabels}>
+                        <span>R$ 0</span>
+                        <span>R$ {maxLimit.toLocaleString('pt-BR')}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <p>Seu limite atual é <strong>R$ {limit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong></p>
+                  )}
                 </div>
               </div>
-              <button className={styles.configBtn}>Ajustar</button>
+              {!isEditingLimit && (
+                <button 
+                  className={styles.configBtn}
+                  onClick={() => {
+                    setTempLimit(limit);
+                    setIsEditingLimit(true);
+                  }}
+                >
+                  Ajustar
+                </button>
+              )}
             </div>
           </section>
         </div>

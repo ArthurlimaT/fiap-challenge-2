@@ -5,12 +5,11 @@ import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// METADADOS: Isso ajuda muito na nota de "Profissionalismo" da FIAP
 export const metadata: Metadata = {
   title: "Bytebank | Seu banco digital",
   description: "A melhor experiência em controle financeiro com taxa zero e segurança total.",
   icons: {
-    icon: "/favicon.ico", // Se tiver um ícone, ele aparece aqui
+    icon: "/favicon.ico", 
   }
 };
 

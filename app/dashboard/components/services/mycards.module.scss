@@ -70,15 +70,51 @@
 .settingItem {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px; border-bottom: 1px solid #F3F4F6;
+  &.editing { align-items: flex-start; }
   &:last-child { border: none; }
 }
 
 .settingInfo {
-  display: flex; gap: 16px; align-items: center;
-  .iconCircle { background: #F9FAF7; padding: 10px; border-radius: 10px; color: #47A138; }
+  display: flex; gap: 16px; align-items: center; width: 100%;
+  .iconCircle { background: #F9FAF7; padding: 10px; border-radius: 10px; color: #47A138; flex-shrink: 0; }
+  .limitContent { flex-grow: 1; }
   strong { font-size: 0.95rem; color: #111827; }
   p { font-size: 0.8rem; color: #6B7280; margin: 0; }
 }
+
+// ESTILOS DO SLIDER (ARRASTAR)
+.sliderContainer {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.sliderHeader {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+  .tempValue { font-weight: 700; color: #47A138; font-size: 1rem; }
+  .actions { display: flex; gap: 8px; }
+}
+
+.rangeInput {
+  width: 100%;
+  cursor: pointer;
+  accent-color: #47A138; // Define a cor da "bolinha" e do preenchimento nos browsers modernos
+  height: 6px;
+  border-radius: 5px;
+  background: #E5E7EB;
+}
+
+.rangeLabels {
+  display: flex; justify-content: space-between; margin-top: 4px;
+  span { font-size: 0.7rem; color: #9CA3AF; }
+}
+
+.confirmBtn, .cancelBtn {
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
+}
+.confirmBtn { background: #47A138; color: white; }
+.cancelBtn { background: #F3F4F6; color: #6B7280; }
 
 .configBtn {
   background: transparent; border: 1px solid #47A138; color: #47A138;
@@ -88,7 +124,7 @@
 
 /* SWITCH CSS */
 .switch {
-  position: relative; width: 44px; height: 24px;
+  position: relative; width: 44px; height: 24px; flex-shrink: 0;
   input { opacity: 0; width: 0; height: 0; }
   .slider {
     position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
