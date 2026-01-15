@@ -6,6 +6,7 @@ import StartDashboard from './components/start/startdashboard';
 import ServicesDashboard from './components/services/servicesDashboard';
 import InvestmentsDashboard from './components/investments/investmentsDashboard';
 import TransferDashboard from './components/transfer/transferdashboard';
+import DashboardCharts from './components/DashboardCharts'; // Importe o componente de gráficos
 
 export default function DashboardPage() {
   const [currentView, setCurrentView] = useState('start');
@@ -14,7 +15,6 @@ export default function DashboardPage() {
     <div className={styles.page}>
       <header className={styles.topbar}>
         <div className={styles.topbarInner}>
-          {/* Logo no Dashboard para manter a marca presente */}
           <div className={styles.logoArea}>
             <div className="w-6 h-6 bg-[#47A138] rounded flex items-center justify-center text-white text-[10px]">B</div>
             Byte<span>bank</span>
@@ -33,9 +33,9 @@ export default function DashboardPage() {
         </aside>
 
         <main className={styles.main}>
-          {/* Renderização Condicional com transição visual */}
           <div className={styles.cardBase}>
             {currentView === 'start' && <StartDashboard />}
+            {currentView === 'dashboard' && <DashboardCharts />} {/* Nova View */}
             {currentView === 'transfer' && <TransferDashboard />}
             {currentView === 'investments' && <InvestmentsDashboard />}
             {currentView === 'services' && <ServicesDashboard />}

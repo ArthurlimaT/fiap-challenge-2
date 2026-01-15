@@ -6,15 +6,17 @@ import {
   ArrowLeftRight, 
   TrendingUp, 
   Grid2X2, 
-  LogOut 
+  LogOut,
+  PieChart // Ícone novo para o Dashboard
 } from 'lucide-react'; 
-import styles from './sidebar.module.scss'; // Criaremos um arquivo específico para ela
+import styles from './sidebar.module.scss';
 
 export default function Sidebar({ activeView, setActiveView }: any) {
   const router = useRouter();
 
   const menuItems = [
     { id: 'start', label: 'Início', icon: <LayoutDashboard size={20} /> },
+    { id: 'dashboard', label: 'Dashboard', icon: <PieChart size={20} /> }, // Novo Link
     { id: 'transfer', label: 'Transferências', icon: <ArrowLeftRight size={20} /> },
     { id: 'investments', label: 'Investimentos', icon: <TrendingUp size={20} /> },
     { id: 'services', label: 'Outros serviços', icon: <Grid2X2 size={20} /> },
@@ -38,13 +40,11 @@ export default function Sidebar({ activeView, setActiveView }: any) {
             >
               <span className={styles.icon}>{item.icon}</span>
               <span className={styles.label}>{item.label}</span>
-              {/* Indicador visual de item ativo (barrinha lateral) */}
               {activeView === item.id && <div className={styles.indicator} />}
             </li>
           ))}
         </ul>
 
-        {/* Botão de Sair fixado no rodapé da Sidebar */}
         <button className={styles.logoutBtn} onClick={handleLogout}>
           <LogOut size={20} />
           <span>Sair da conta</span>
