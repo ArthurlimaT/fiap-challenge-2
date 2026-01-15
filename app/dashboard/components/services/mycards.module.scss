@@ -1,9 +1,6 @@
 .container {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  background: white; border-radius: 16px; padding: 32px;
+  border: 1px solid #E5E7EB; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .backBtn {
@@ -82,11 +79,8 @@
   p { font-size: 0.8rem; color: #6B7280; margin: 0; }
 }
 
-// ESTILOS DO SLIDER (ARRASTAR)
 .sliderContainer {
-  margin-top: 12px;
-  width: 100%;
-  max-width: 300px;
+  margin-top: 12px; width: 100%; max-width: 300px;
 }
 
 .sliderHeader {
@@ -96,12 +90,7 @@
 }
 
 .rangeInput {
-  width: 100%;
-  cursor: pointer;
-  accent-color: #47A138; // Define a cor da "bolinha" e do preenchimento nos browsers modernos
-  height: 6px;
-  border-radius: 5px;
-  background: #E5E7EB;
+  width: 100%; cursor: pointer; accent-color: #47A138; height: 6px; border-radius: 5px; background: #E5E7EB;
 }
 
 .rangeLabels {
@@ -122,7 +111,6 @@
   &:hover { background: #47A138; color: white; }
 }
 
-/* SWITCH CSS */
 .switch {
   position: relative; width: 44px; height: 24px; flex-shrink: 0;
   input { opacity: 0; width: 0; height: 0; }

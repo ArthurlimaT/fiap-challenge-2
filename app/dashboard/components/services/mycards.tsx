@@ -18,7 +18,7 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
   const [limit, setLimit] = useState(5000);
   const [isEditingLimit, setIsEditingLimit] = useState(false);
   const [tempLimit, setTempLimit] = useState(5000);
-  const maxLimit = 10000; // Valor máximo que o cliente pode arrastar
+  const maxLimit = 10000;
 
   const isCurrentBlocked = activeTab === 'fisico' ? blockedFisico : blockedVirtual;
 
@@ -46,7 +46,7 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
               </button>
               <button 
                 className={activeTab === 'virtual' ? styles.activeTab : ''} 
-                onClick={() => setActiveTab('virtual')}
+                onClick={() => {setActiveTab('virtual'); setShowData(false);}}
               >
                 Cartão Virtual
               </button>
@@ -54,6 +54,7 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
           </header>
 
           <div className={styles.cardDisplay}>
+            {/* Visual do Cartão */}
             <div className={`
               ${styles.creditCard} 
               ${activeTab === 'fisico' ? styles.black : styles.green}
@@ -65,7 +66,9 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
               </div>
               
               <div className={styles.number}>
-                {activeTab === 'virtual' && showData ? '4502 8812 0093 7741' : '•••• •••• •••• 7741'}
+                {showData 
+                  ? (activeTab === 'fisico' ? '4502 1234 5678 7741' : '4502 8812 0093 7741') 
+                  : '•••• •••• •••• 7741'}
               </div>
 
               <div className={styles.cardBottom}>
@@ -77,21 +80,18 @@ export default function MyCards({ onBack }: { onBack: () => void }) {
                   <small>VALIDADE</small>
                   <p>12/29</p>
                 </div>
-                {activeTab === 'virtual' && (
-                  <div>
-                    <small>CVV</small>
-                    <p>{showData ? '123' : '•••'}</p>
-                  </div>
-                )}
+                <div>
+                  <small>CVV</small>
+                  <p>{showData ? (activeTab === 'fisico' ? '889' : '123') : '•••'}</p>
+                </div>
               </div>
               {isCurrentBlocked && <div className={styles.blockedOverlay}>BLOQUEADO</div>}
             </div>
 
-            {activeTab === 'virtual' && (
-              <button className={styles.toggleData} onClick={() => setShowData(!showData)}>
-                {showData ? <><EyeOff size={16}/> Ocultar dados</> : <><Eye size={16}/> Ver dados do cartão</>}
-              </button>
-            )}
+            {/* Botão Ver Dados agora disponível para ambos */}
+            <button className={styles.toggleData} onClick={() => setShowData(!showData)}>
+              {showData ? <><EyeOff size={16}/> Ocultar dados</> : <><Eye size={16}/> Ver dados do cartão</>}
+            </button>
           </div>
 
           <section className={styles.settings}>
