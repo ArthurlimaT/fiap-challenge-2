@@ -1,0 +1,140 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  h2 { font-size: 1.5rem; color: #111827; margin-bottom: 4px; }
+  p { color: #6B7280; font-size: 0.9rem; }
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .searchBar {
+    flex: 1;
+    min-width: 300px;
+    background: #F3F4F6;
+    padding: 10px 16px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #6B7280;
+
+    input {
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+      color: #111827;
+      font-size: 0.95rem;
+    }
+  }
+
+  .filterGroup {
+    display: flex;
+    gap: 12px;
+  }
+}
+
+.selectWrapper, .dateWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #D1D5DB;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #47A138;
+
+  select, input {
+    border: none;
+    outline: none;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+  }
+}
+
+.tableResponsive {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    background: #F9FAF7;
+    text-align: left;
+    padding: 16px;
+    font-size: 0.8rem;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    padding: 16px;
+    border-bottom: 1px solid #F3F4F6;
+    font-size: 0.9rem;
+    vertical-align: middle;
+
+    .title { display: block; font-weight: 600; color: #111827; }
+    .category { font-size: 0.75rem; color: #9CA3AF; }
+  }
+}
+
+.tagIn, .tagOut {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.tagIn { background: #DCFCE7; color: #166534; }
+.tagOut { background: #FEE2E2; color: #991B1B; }
+
+.priceIn { color: #166534; font-weight: 700; }
+.priceOut { color: #991B1B; font-weight: 700; }
+
+.noResults { text-align: center; padding: 40px; color: #9CA3AF; }
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  color: #6B7280;
+  font-size: 0.85rem;
+
+  .pageControls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    button {
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid #D1D5DB;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      &:disabled { opacity: 0.3; cursor: not-allowed; }
+      &:hover:not(:disabled) { border-color: #47A138; color: #47A138; }
+    }
+  }
+}

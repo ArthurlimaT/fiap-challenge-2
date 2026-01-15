@@ -6,7 +6,8 @@ import StartDashboard from './components/start/startdashboard';
 import ServicesDashboard from './components/services/servicesDashboard';
 import InvestmentsDashboard from './components/investments/investmentsDashboard';
 import TransferDashboard from './components/transfer/transferdashboard';
-import DashboardCharts from './components/DashboardCharts'; // Importe o componente de gráficos
+import DashboardCharts from './components/DashboardCharts'; 
+import TransactionsView from './components/TransactionsView';
 
 export default function DashboardPage() {
   const [currentView, setCurrentView] = useState('start');
@@ -35,7 +36,8 @@ export default function DashboardPage() {
         <main className={styles.main}>
           <div className={styles.cardBase}>
             {currentView === 'start' && <StartDashboard />}
-            {currentView === 'dashboard' && <DashboardCharts />} {/* Nova View */}
+            {currentView === 'dashboard' && <DashboardCharts />}
+            {currentView === 'transactions' && <TransactionsView />} {/* NOVA PÁGINA */}
             {currentView === 'transfer' && <TransferDashboard />}
             {currentView === 'investments' && <InvestmentsDashboard />}
             {currentView === 'services' && <ServicesDashboard />}

@@ -7,7 +7,8 @@ import {
   TrendingUp, 
   Grid2X2, 
   LogOut,
-  PieChart // Ícone novo para o Dashboard
+  PieChart,
+  FileText // Importação adicionada aqui
 } from 'lucide-react'; 
 import styles from './sidebar.module.scss';
 
@@ -16,13 +17,15 @@ export default function Sidebar({ activeView, setActiveView }: any) {
 
   const menuItems = [
     { id: 'start', label: 'Início', icon: <LayoutDashboard size={20} /> },
-    { id: 'dashboard', label: 'Dashboard', icon: <PieChart size={20} /> }, // Novo Link
+    { id: 'dashboard', label: 'Dashboard', icon: <PieChart size={20} /> },
+    { id: 'transactions', label: 'Extrato', icon: <FileText size={20} /> },
     { id: 'transfer', label: 'Transferências', icon: <ArrowLeftRight size={20} /> },
     { id: 'investments', label: 'Investimentos', icon: <TrendingUp size={20} /> },
     { id: 'services', label: 'Outros serviços', icon: <Grid2X2 size={20} /> },
   ];
 
   const handleLogout = () => {
+    // Limpa o cookie de autenticação
     document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     router.push('/'); 
     router.refresh();
@@ -40,6 +43,7 @@ export default function Sidebar({ activeView, setActiveView }: any) {
             >
               <span className={styles.icon}>{item.icon}</span>
               <span className={styles.label}>{item.label}</span>
+              {/* Indicador lateral verde para o item ativo */}
               {activeView === item.id && <div className={styles.indicator} />}
             </li>
           ))}
