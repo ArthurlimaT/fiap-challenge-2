@@ -13,7 +13,9 @@ export interface Transacao {
   valor: number;
   favorecido: string;
   data: string;
-  hora: string;
+  hora?: string;      // O ? indica que é opcional
+  categoria?: string; // O ? indica que é opcional
+  titulo?: string;    // Adicionado para compatibilidade com o mock
 }
 
 interface BancoState {
