@@ -1,200 +1,257 @@
+/* app/dashboard/components/transfer/transfer.module.scss */
+
 .container {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  min-height: 500px;
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.header {
-  margin-bottom: 24px;
-  .title { font-size: 1.5rem; color: #111827; font-weight: 700; }
-  .subtitle { color: #6B7280; font-size: 0.9rem; margin-top: 4px; }
-}
-
-/* Seletor de Métodos (Pix, TED, etc) */
-.methodSelector {
+/* NAVEGAÇÃO SUPERIOR (PILLS) */
+.navHeader {
   display: flex;
-  gap: 12px;
-  margin-bottom: 32px;
+  background: #f3f4f6;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
 
-  .methodBtn {
+  button {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #E5E7EB;
-    background: white;
-    color: #374151;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover { border-color: #47A138; background: #f0fdf4; }
-    &.activeMethod { background: #111827; color: white; border-color: #111827; }
-  }
-}
-
-/* Estrutura de Inputs e Labels */
-.inputWrapper {
-  margin-bottom: 24px;
-  .label {
-    display: block;
+    padding: 12px 8px;
+    border: none;
+    border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 700;
-    color: #374151;
-    margin-bottom: 8px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: 1px solid #E5E7EB;
-    outline: none;
-    transition: 0.2s;
-    &:focus { border-color: #47A138; box-shadow: 0 0 0 3px rgba(71, 161, 56, 0.1); }
-  }
-}
-
-/* Autocomplete e Inputs com Ícone (Mensagem) */
-.inputIconWrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  border: 1px solid #E5E7EB;
-  border-radius: 10px;
-  background: #fff;
-  transition: 0.2s;
-
-  &:focus-within { border-color: #47A138; box-shadow: 0 0 0 3px rgba(71, 161, 56, 0.1); }
-
-  svg { color: #9CA3AF; }
-  
-  input {
-    border: none;
-    padding: 14px 0;
-    flex: 1;
-    outline: none;
+    color: #6b7280;
     background: transparent;
-  }
-}
-
-.autocompleteWrapper {
-  position: relative;
-  margin-bottom: 24px;
-  .label { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; display: block; }
-}
-
-.suggestions {
-  position: absolute;
-  top: 100%; left: 0; right: 0;
-  background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  margin-top: 5px;
-  z-index: 20;
-  list-style: none;
-  padding: 0;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  
-  li {
-    padding: 12px 16px;
     cursor: pointer;
-    &:hover { background: #f0fdf4; color: #47A138; }
+    transition: 0.2s;
+
+    &.active {
+      background: white;
+      color: #47A138;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
   }
 }
 
-/* Container de Valor Gigante */
-.valueContainer {
-  background: #F9FAF7;
-  padding: 32px;
-  border-radius: 16px;
-  text-align: center;
-  margin: 24px 0;
-  border: 1px solid transparent;
-
-  .mainValueInput {
-    background: transparent;
-    border: none;
-    text-align: center;
-    width: 100%;
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #111827;
-    outline: none;
-  }
-
-  &.valueError {
-    background: #fef2f2;
-    border-color: #fee2e2;
-    .mainValueInput { color: #b91c1c; }
-  }
-}
-
-/* Erros e Alertas */
-.errorMsg { color: #ef4444; font-size: 0.75rem; font-weight: 600; margin-top: 4px; display: block; }
-.balanceWarning { display: flex; align-items: center; justify-content: center; gap: 6px; color: #b91c1c; font-size: 0.85rem; margin-top: 8px; }
-
-/* Botões Principais */
-.confirmBtn {
-  width: 100%;
-  padding: 18px;
-  background: #47A138;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: all 0.2s;
-
-  &:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
-  &:disabled { background: #E5E7EB; cursor: not-allowed; }
-}
-
-.secondaryBtn {
-  width: 100%;
-  padding: 16px;
+/* ÁREA DE CONTEÚDO BRANCA */
+.mainContent {
   background: white;
-  color: #374151;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: 0.2s;
-  &:hover { background: #F9FAF7; border-color: #47A138; }
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 24px;
 }
 
-/* Tela de Sucesso */
-.successScreen {
+.tabsRow {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f3f4f6;
+
+  button {
+    background: none;
+    border: none;
+    padding-bottom: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #9ca3af;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &.activeTab {
+      color: #111827;
+      border-bottom: 2px solid #47A138;
+    }
+  }
+}
+
+/* FORMULÁRIOS E LISTAS */
+.fieldGroup {
+  margin-bottom: 20px;
+  label { display: block; font-size: 0.8rem; font-weight: 700; color: #374151; margin-bottom: 8px; }
+  input, textarea {
+    width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e5e7eb;
+    background: #f9fafb; font-size: 0.9rem; outline: none;
+    &:focus { border-color: #47A138; background: white; }
+  }
+  textarea { height: 100px; resize: none; }
+}
+
+.searchBox {
+  display: flex; align-items: center; gap: 10px; background: #f9fafb;
+  border: 1px solid #e5e7eb; padding: 0 16px; border-radius: 12px; margin-bottom: 16px;
+  color: #9ca3af;
+  input { border: none; background: transparent; padding: 14px 0; width: 100%; outline: none; font-size: 0.9rem; }
+}
+
+.scroller {
+  max-height: 250px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  gap: 8px;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+
+  .item {
+    display: flex; align-items: center; gap: 14px; padding: 12px;
+    border-radius: 14px; cursor: pointer; border: 1px solid transparent; transition: 0.2s;
+    &:hover { background: #f9fafb; }
+    &.selected { background: #f0fdf4; border-color: #47A138; }
+
+    .avatar {
+      width: 40px; height: 40px; background: #47A138; color: white;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9rem;
+    }
+
+    .info {
+      flex: 1;
+      strong { display: block; font-size: 0.95rem; color: #111827; }
+      span { font-size: 0.8rem; color: #6b7280; }
+    }
+  }
+}
+
+/* ✅ DEPÓSITO CENTRALIZADO */
+.accountBox {
+  padding: 48px 24px;
   text-align: center;
-  flex: 1;
-  animation: fadeIn 0.4s ease-out;
-
-  h2 { font-size: 1.8rem; margin: 24px 0 8px; color: #111827; }
-  p { color: #6B7280; margin-bottom: 40px; }
-}
-
-.actionButtons {
+  background: #f9fafb;
+  border-radius: 20px;
+  border: 2px dashed #e5e7eb;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 320px;
+  align-items: center;    // Centraliza horizontalmente
+  justify-content: center; // Centraliza verticalmente
+  gap: 16px;
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #111827;
+    strong { display: block; }
+  }
+
+  span {
+    display: block;
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-family: monospace;
+    background: #fff;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+  }
+}
+
+/* RODAPÉ ESCURO (INPUT DE VALOR) */
+.footer {
+  background: #111827; border-radius: 24px; padding: 32px; color: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+  .amountInput {
+    margin-bottom: 24px;
+    position: relative;
+    label { font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .inputFlex {
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #374151;
+      transition: 0.2s;
+      &:focus-within { border-color: #47A138; }
+      
+      input {
+        background: transparent; border: none;
+        width: 100%; font-size: 2.5rem; font-weight: 800; color: white; outline: none;
+        padding: 10px 0;
+        &.inputError { color: #ef4444; }
+      }
+      
+      .clearVal { 
+        background: none; border: none; color: #4b5563; cursor: pointer; 
+        &:hover { color: white; } 
+      }
+    }
+
+    .errorText {
+      color: #ef4444; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
+      margin-top: 8px; font-weight: 600;
+    }
+  }
+
+  .stats {
+    display: flex; justify-content: space-between; margin-bottom: 24px;
+    .stat { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; strong { color: white; } }
+  }
+
+  .mainBtn {
+    width: 100%; padding: 18px; background: #47A138; color: white;
+    border: none; border-radius: 14px; font-weight: 700; font-size: 1rem; cursor: pointer;
+    transition: 0.2s;
+    &:hover:not(:disabled) { background: #3d8a2f; transform: translateY(-2px); }
+    &:disabled { background: #374151; opacity: 0.5; cursor: not-allowed; }
+  }
+}
+
+/* RECIBO / TELA DE SUCESSO */
+.successWrapper { display: flex; justify-content: center; padding: 20px 0; }
+
+.receiptCard {
+  background: white; border-radius: 28px; border: 1px solid #e5e7eb;
+  width: 100%; max-width: 420px; overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.receiptHeader {
+  padding: 40px 24px; text-align: center;
+  .checkIcon { color: #47A138; margin-bottom: 16px; display: flex; justify-content: center; }
+  h2 { font-size: 1.4rem; color: #111827; margin-bottom: 6px; }
+  .date { font-size: 0.85rem; color: #6b7280; }
+}
+
+.receiptDivider {
+  display: flex; align-items: center; position: relative; height: 24px;
+  .circleLeft, .circleRight { width: 24px; height: 24px; background: #F9FAFB; border: 1px solid #e5e7eb; border-radius: 50%; position: absolute; }
+  .circleLeft { left: -12px; } .circleRight { right: -12px; }
+  .dashedLine { flex: 1; border-top: 2px dashed #e5e7eb; margin: 0 20px; }
+}
+
+.receiptBody {
+  padding: 32px; display: flex; flex-direction: column; gap: 20px;
+  .receiptRow {
+    display: flex; justify-content: space-between; font-size: 0.9rem;
+    span { color: #6b7280; } 
+    strong { color: #111827; text-align: right; }
+    .value { font-size: 1.4rem; color: #47A138; font-weight: 800; }
+    .transactionId { font-family: monospace; font-size: 0.8rem; background: #f3f4f6; padding: 4px 8px; border-radius: 6px; }
+  }
+}
+
+.receiptActions {
+  padding: 24px; background: #f9fafb; display: flex; flex-direction: column; gap: 14px;
+  .actionGroup { display: flex; gap: 12px; }
+  .secondaryBtn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px; background: white; border: 1px solid #e5e7eb; border-radius: 12px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    &:hover { border-color: #47A138; color: #47A138; }
+  }
+  .primaryBtn {
+    width: 100%; padding: 16px; background: #111827; color: white;
+    border: none; border-radius: 12px; font-weight: 700; display: flex;
+    align-items: center; justify-content: center; gap: 10px; cursor: pointer;
+  }
 }
 
 @keyframes fadeIn {
