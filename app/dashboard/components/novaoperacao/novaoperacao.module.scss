@@ -1,18 +1,16 @@
-/* app/dashboard/components/novaoperacao/novaoperacao.module.scss */
-
 .container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 600px;
+  gap: 16px;
 }
 
-.methodToggle {
+// Nav Header - Botões superiores
+.navHeader {
   display: flex;
   background: #f3f4f6;
-  padding: 6px;
-  border-radius: 14px;
-  gap: 8px;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
 
   button {
     flex: 1;
@@ -20,167 +18,212 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 12px;
+    padding: 12px 8px;
     border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    background: transparent;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
     color: #6b7280;
-    transition: all 0.2s;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap; // Impede quebra de linha
 
-    &.activeMethod {
+    &.active {
       background: white;
       color: #47A138;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
   }
 }
 
-.cardMain {
+// Card Principal
+.mainContent {
   background: white;
-  border-radius: 20px;
-  padding: 24px;
   border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 20px;
 }
 
-.tabs {
+.tabsRow {
   display: flex;
-  gap: 24px;
+  gap: 12px;
   margin-bottom: 20px;
   border-bottom: 1px solid #f3f4f6;
+  overflow-x: auto; // Garante que não quebre em telas pequenas
 
   button {
     background: none;
     border: none;
     padding-bottom: 12px;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     color: #9ca3af;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    position: relative;
+    gap: 6px;
+    white-space: nowrap;
 
     &.activeTab {
       color: #111827;
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: #47A138;
-        border-radius: 10px;
-      }
+      border-bottom: 2px solid #47A138;
     }
   }
 }
 
-.searchBar {
-  display: flex;
-  align-items: center;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 0 16px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-
-  input {
-    background: transparent;
-    border: none;
-    padding: 14px;
-    width: 100%;
-    outline: none;
-    color: #374151;
+.fieldGroup {
+  margin-bottom: 16px;
+  label { display: block; font-size: 0.75rem; font-weight: 700; color: #374151; margin-bottom: 8px; }
+  input, textarea {
+    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e5e7eb;
+    background: #f9fafb; font-size: 0.85rem; outline: none;
+    &:focus { border-color: #47A138; }
   }
-  .searchIcon { color: #9ca3af; }
+  textarea { height: 90px; resize: none; }
 }
 
-.scrollArea {
-  max-height: 250px;
+.searchBox {
+  display: flex; align-items: center; gap: 10px; background: #f9fafb;
+  border: 1px solid #e5e7eb; padding: 0 12px; border-radius: 10px; margin-bottom: 12px;
+  color: #9ca3af;
+  input { border: none; background: transparent; padding: 12px 0; width: 100%; outline: none; font-size: 0.85rem; }
+}
+
+.scroller {
+  max-height: 200px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-right: 8px;
-}
+  gap: 8px;
 
-.contactItem {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border-radius: 12px;
-  transition: background 0.2s;
-  cursor: pointer;
+  .item {
+    display: flex; align-items: center; gap: 12px; padding: 10px;
+    border-radius: 12px; cursor: pointer; transition: 0.2s;
+    &:hover { background: #f9fafb; }
+    &.selected { background: #f0fdf4; border: 1px solid #47A138; }
 
-  &:hover { background: #f9fafb; }
+    .avatar {
+      width: 36px; height: 36px; background: #47A138; color: white;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.8rem;
+    }
 
-  .avatar {
-    width: 44px;
-    height: 44px;
-    background: #47A138;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-right: 16px;
-  }
+    .info {
+      flex: 1;
+      strong { display: block; font-size: 0.9rem; color: #111827; }
+      span { font-size: 0.75rem; color: #6b7280; }
+    }
 
-  .contactInfo {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    .name { font-weight: 600; color: #111827; }
-    .bank { font-size: 0.8rem; color: #6b7280; }
-  }
-
-  .starBtn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #d1d5db;
-    &.isFav { color: #47A138; }
+    .star { background: none; border: none; cursor: pointer; color: #d1d5db; &.isFav { color: #47A138; } }
   }
 }
 
-.actionFooter {
-  background: #111827; // Fundo escuro para destacar a ação final
-  padding: 24px;
-  border-radius: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.accountBox {
+  padding: 30px; text-align: center; background: #f9fafb; border-radius: 16px;
+  p { margin: 12px 0 4px; }
+  span { font-size: 0.8rem; color: #6b7280; }
+}
 
-  label { font-size: 0.8rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
+// Footer Dark
+.footer {
+  background: #111827; border-radius: 20px; padding: 24px; color: white;
 
-  .mainInput {
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #374151;
-    width: 100%;
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
-    outline: none;
-    padding: 8px 0;
-    &:focus { border-color: #47A138; }
+  .amountInput {
+    margin-bottom: 20px;
+    label { font-size: 0.7rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; }
+    input {
+      background: transparent; border: none; border-bottom: 2px solid #374151;
+      width: 100%; font-size: 2rem; font-weight: 800; color: white; outline: none;
+      padding: 10px 0; &:focus { border-color: #47A138; }
+    }
   }
 
-  .confirmBtn {
-    background: #47A138;
-    color: white;
-    border: none;
-    padding: 16px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s;
-    &:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .stats {
+    display: flex; justify-content: space-between; margin-bottom: 20px;
+    .stat { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #9ca3af; strong { color: white; } }
+  }
+
+  .mainBtn {
+    width: 100%; padding: 16px; background: #47A138; color: white;
+    border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
+    &:hover { background: #3d8a2f; }
+  }
+}
+
+// Tela de Sucesso (Comprovante)
+.successWrapper { display: flex; justify-content: center; padding: 10px 0; }
+
+.receiptCard {
+  background: white; border-radius: 24px; border: 1px solid #e5e7eb;
+  width: 100%; max-width: 400px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.receiptHeader {
+  padding: 32px 20px; text-align: center;
+  .checkIcon { color: #47A138; margin-bottom: 16px; display: flex; justify-content: center; }
+  h2 { font-size: 1.2rem; color: #111827; margin-bottom: 4px; }
+  .date { font-size: 0.8rem; color: #6b7280; }
+}
+
+.receiptDivider {
+  display: flex; align-items: center; position: relative; height: 20px;
+  .circleLeft, .circleRight { width: 20px; height: 20px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 50%; position: absolute; }
+  .circleLeft { left: -10px; } .circleRight { right: -10px; }
+  .dashedLine { flex: 1; border-top: 2px dashed #e5e7eb; margin: 0 15px; }
+}
+
+.receiptBody {
+  padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  .receiptRow {
+    display: flex; justify-content: space-between; font-size: 0.85rem;
+    span { color: #6b7280; } strong { color: #111827; }
+    .value { font-size: 1.2rem; color: #47A138; font-weight: 800; }
+    .transactionId { font-family: monospace; font-size: 0.75rem; background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+  }
+}
+
+.receiptActions {
+  padding: 20px; background: #f9fafb; display: flex; flex-direction: column; gap: 12px;
+  .actionGroup { display: flex; gap: 10px; }
+  .secondaryBtn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px; background: white; border: 1px solid #e5e7eb; border-radius: 10px;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    &:hover { border-color: #47A138; color: #47A138; }
+  }
+  .primaryBtn {
+    width: 100%; padding: 14px; background: #111827; color: white;
+    border: none; border-radius: 10px; font-weight: 700; display: flex;
+    align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+  }
+}
+
+.accountBox {
+  display: flex;
+  flex-direction: column; // Empilha os itens verticalmente
+  align-items: center;    // Centraliza horizontalmente
+  justify-content: center; // Centraliza verticalmente (se houver altura fixa)
+  padding: 32px;
+  background: #f9fafb;
+  border-radius: 16px;
+  border: 1px dashed #e5e7eb; // Estilo opcional de "caixa de info"
+  text-align: center;      // Garante que o texto interno também centralize
+
+  svg {
+    margin-bottom: 12px;   // Dá um respiro entre o ícone e o texto
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #111827;
+  }
+
+  span {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 4px;
   }
 }

@@ -1,53 +1,118 @@
-/* app/dashboard/components/start/start.module.scss */
-
 .dashboardGrid {
   display: grid;
-  /* O segredo do layout: 
-     1fr (uma fração do espaço livre) para o conteúdo principal
-     320px (fixo) para o extrato lateral
-  */
-  grid-template-columns: 1fr 320px; 
-  gap: 24px;
-  width: 100%;
-  animation: slideIn 0.5s ease-out;
+  grid-template-columns: 1fr 350px;
+  gap: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
-/* Containers para dar o fundo branco e sombra suave nos componentes */
-.heroSection, .operationsSection {
-  /* Se os componentes filhos (BalanceHero/NovaOperacao) já tiverem card, 
-     podemos remover o background daqui. 
-     Mas por segurança, definimos o espaçamento aqui.
-  */
+.headerSimples {
+  .dateText {
+    color: #6B7280;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    font-weight: 500;
+  }
+}
+
+.abaSection {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
-.sideColumn {
+.abaHeader {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 12px;
+
+  .abaTitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    h2 { font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0; }
+    .iconVerde { color: #47A138; }
+  }
 }
 
-/* RESPONSIVIDADE (Mobile First) */
+.personalizarBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f9fafb;
+  border: 1px solid #E5E7EB;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4B5563;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &.btnAtivo { background: #111827; color: white; border-color: #111827; }
+}
+
+.menuConfig {
+  background: #f9fafb;
+  border: 2px dashed #D1D5DB;
+  border-radius: 16px;
+  padding: 16px;
+
+  .configOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    button {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; background: white; border: 1px solid #E5E7EB;
+      border-radius: 50px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      &.optAtiva { background: #47A138; color: white; border-color: #47A138; }
+    }
+  }
+}
+
+.widgetsGrid {
+  display: grid;
+  // Aqui voltamos ao minmax maior para eles ficarem retangulares
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.widgetCard {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  
+  .cardTop {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    h3 { font-size: 0.85rem; font-weight: 700; color: #374151; margin: 0; }
+  }
+
+  .progressBar {
+    height: 6px; background: #f3f4f6; border-radius: 10px; margin-bottom: 8px;
+    .progressFill { height: 100%; background: #47A138; border-radius: 10px; }
+  }
+
+  p { font-size: 0.8rem; color: #6B7280; margin: 0; }
+}
+
+.alerta { border-left: 4px solid #F59E0B; }
+
+.sideColumn .sticky {
+  position: sticky;
+  top: 24px;
+}
+
 @media (max-width: 1024px) {
-  .dashboardGrid {
-    /* No tablet/celular, vira uma coluna só */
-    grid-template-columns: 1fr; 
-  }
-
-  .sideColumn {
-    /* O extrato vai para baixo do saldo no mobile */
-    margin-top: 16px;
-  }
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  .dashboardGrid { grid-template-columns: 1fr; }
 }

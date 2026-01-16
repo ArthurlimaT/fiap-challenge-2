@@ -7,8 +7,6 @@ import { Download, ReceiptText } from 'lucide-react';
 import { Transacao } from '@/app/store/bancoslice';
 
 export default function Extrato() {
-  // Garantimos que buscamos 'state.banco.transacoes' conforme configurado no store.ts
-  // Adicionamos um fallback '|| []' para evitar o erro de .length
   const transacoes = useSelector((state: RootState) => state.banco?.transacoes) || [];
 
   const handleDownload = (t: Transacao) => {
