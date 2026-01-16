@@ -14,9 +14,8 @@ const initialPortfolio = [
   { id: 'tesouro', name: 'Tesouro', value: 35, amount: 17500, color: '#47A138', icon: <Landmark /> },
   { id: 'acoes', name: 'Ações', value: 25, amount: 12500, color: '#6366F1', icon: <TrendingUp /> },
   { id: 'fiis', name: 'FIIs', value: 20, amount: 10000, color: '#F59E0B', icon: <Coins /> },
-  { id: 'cripto', name: 'Cripto', value: 20, amount: 10000, color: '#E11D48', icon: <Bitcoin /> },
+  { id: 'cripto', name: 'Cripto', value: 20, amount: 10000, color: '#8B5CF6', icon: <Bitcoin /> }, 
 ];
-
 export default function InvestmentsDashboard() {
   const dispatch = useDispatch();
   const saldoContaCorrente = useSelector((state: RootState) => state.banco.saldo);
