@@ -263,3 +263,47 @@ $shadow-compact: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transition: all 0.2s;
   }
 }
+.tabsContainer {
+  display: flex;
+  background: #F1F5F9;
+  padding: 4px;
+  border-radius: 10px;
+  gap: 4px;
+}
+
+.chartTab {
+  border: none;
+  background: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+
+  &:hover { color: #0F172A; }
+
+  &.active {
+    background: white;
+    color: #0F172A;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+}
+
+.miniLegend {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+
+  .legendItem {
+    display: flex; align-items: center; gap: 6px;
+    span { width: 8px; height: 8px; border-radius: 50%; display: block; }
+    small { font-size: 0.7rem; color: #64748B; }
+  }
+}

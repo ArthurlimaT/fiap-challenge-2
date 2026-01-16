@@ -2,19 +2,77 @@
 import React, { useState, useEffect } from 'react';
 import { 
   AreaChart, Area, XAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, PieChart, Pie, Cell, Sector 
+  ResponsiveContainer, PieChart, Pie, Cell, Sector, Legend
 } from 'recharts';
-import { ArrowUpRight, RefreshCcw } from 'lucide-react';
+import { TrendingUp, ArrowRightLeft, RefreshCcw } from 'lucide-react';
 import styles from './investment.module.scss';
 
-// Dados estáticos apenas para a evolução (simulação)
+// --- MOCK DATA: EVOLUÇÃO (Patrimônio Total ao longo do tempo) ---
 const evolutionDataMap: any = {
   'Total': [
     { month: 'Jan', value: 42000 }, { month: 'Fev', value: 43500 },
     { month: 'Mar', value: 43100 }, { month: 'Abr', value: 45800 },
     { month: 'Mai', value: 48000 }, { month: 'Jun', value: 50000 },
   ],
-  // ... (outros mocks de evolução se quiser manter)
+  'Tesouro': [
+    { month: 'Jan', value: 15000 }, { month: 'Fev', value: 15200 },
+    { month: 'Mar', value: 15500 }, { month: 'Abr', value: 16000 },
+    { month: 'Mai', value: 16800 }, { month: 'Jun', value: 17500 },
+  ],
+  'Ações': [
+    { month: 'Jan', value: 10000 }, { month: 'Fev', value: 11000 },
+    { month: 'Mar', value: 9500 },  { month: 'Abr', value: 11500 },
+    { month: 'Mai', value: 12000 }, { month: 'Jun', value: 12500 },
+  ],
+  'FIIs': [
+    { month: 'Jan', value: 8000 },  { month: 'Fev', value: 8200 },
+    { month: 'Mar', value: 8500 },  { month: 'Abr', value: 9000 },
+    { month: 'Mai', value: 9500 },  { month: 'Jun', value: 10000 },
+  ],
+  'Cripto': [
+    { month: 'Jan', value: 9000 },  { month: 'Fev', value: 9100 },
+    { month: 'Mar', value: 9600 },  { month: 'Abr', value: 9300 },
+    { month: 'Mai', value: 9700 },  { month: 'Jun', value: 10000 },
+  ]
+};
+
+// --- MOCK DATA: FLUXO (Entradas vs Saídas por categoria) ---
+const flowDataMap: any = {
+  'Total': [
+    { month: 'Jan', aporte: 2500, resgate: 200 },
+    { month: 'Fev', aporte: 1000, resgate: 500 },
+    { month: 'Mar', aporte: 3000, resgate: 100 },
+    { month: 'Abr', aporte: 1500, resgate: 2000 },
+    { month: 'Mai', aporte: 4000, resgate: 300 },
+  ],
+  'Tesouro': [
+    { month: 'Jan', aporte: 1000, resgate: 0 },
+    { month: 'Fev', aporte: 500, resgate: 0 },
+    { month: 'Mar', aporte: 500, resgate: 0 },
+    { month: 'Abr', aporte: 1000, resgate: 0 },
+    { month: 'Mai', aporte: 800, resgate: 0 },
+  ],
+  'Ações': [
+    { month: 'Jan', aporte: 1000, resgate: 0 },
+    { month: 'Fev', aporte: 0, resgate: 500 }, // Resgatou em Fev
+    { month: 'Mar', aporte: 1000, resgate: 0 },
+    { month: 'Abr', aporte: 500, resgate: 1000 }, // Resgatou em Abr
+    { month: 'Mai', aporte: 1200, resgate: 0 },
+  ],
+  'FIIs': [
+    { month: 'Jan', aporte: 500, resgate: 0 },
+    { month: 'Fev', aporte: 500, resgate: 0 },
+    { month: 'Mar', aporte: 500, resgate: 0 },
+    { month: 'Abr', aporte: 0, resgate: 200 },
+    { month: 'Mai', aporte: 1000, resgate: 0 },
+  ],
+  'Cripto': [
+    { month: 'Jan', aporte: 0, resgate: 200 },
+    { month: 'Fev', aporte: 0, resgate: 0 },
+    { month: 'Mar', aporte: 1000, resgate: 100 },
+    { month: 'Abr', aporte: 0, resgate: 800 },
+    { month: 'Mai', aporte: 1000, resgate: 300 },
+  ]
 };
 
 const renderActiveShape = (props: any) => {
@@ -27,157 +85,213 @@ const renderActiveShape = (props: any) => {
   );
 };
 
-// Componente de Tooltip Customizado para a Pizza
-const CustomPieTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    const data = payload[0].payload;
-    return (
-      <div style={{
-        background: 'white', 
-        padding: '10px', 
-        border: '1px solid #E5E7EB', 
-        borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-      }}>
-        <p style={{margin:0, fontSize:'12px', fontWeight:'bold', color: data.color}}>{data.name}</p>
-        <p style={{margin:0, fontSize:'14px'}}>R$ {data.amount.toLocaleString()}</p>
-        <p style={{margin:0, fontSize:'11px', color:'#6B7280'}}>{data.value}% da carteira</p>
-      </div>
-    );
-  }
-  return null;
-};
-
-// Agora aceita props
 interface Props {
   data: any[];
+  currentSessionFlow: { invested: number; redeemed: number };
 }
 
-export default function InvestmentStats({ data }: Props) {
+export default function InvestmentStats({ data, currentSessionFlow }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState('Total');
-
-  // Reseta seleção se os dados mudarem drasticamente (opcional)
-  useEffect(() => {
-    // Pode recalcular algo aqui se necessário
-  }, [data]);
-
-  const onPieEnter = (_: any, index: number) => {
-    setActiveIndex(index);
-  };
-
-  const handlePieClick = (entry: any, index: number) => {
-    if (selectedCategory === entry.name) {
-      setSelectedCategory('Total');
-      setActiveIndex(undefined);
-    } else {
-      setSelectedCategory(entry.name);
-      setActiveIndex(index);
-    }
-  };
+  const [chartView, setChartView] = useState<'evolution' | 'flow'>('evolution'); 
 
   const resetView = () => {
     setSelectedCategory('Total');
     setActiveIndex(undefined);
   };
 
-  // Encontra os detalhes do item selecionado na lista "data" que veio via props
-  const currentDetails = data.find(item => item.name === selectedCategory);
+  const handlePieClick = (entry: any, index: number) => {
+    if (selectedCategory === entry.name) {
+      resetView();
+    } else {
+      setSelectedCategory(entry.name);
+      setActiveIndex(index);
+    }
+  };
+
+  const onPieEnter = (_: any, index: number) => setActiveIndex(index);
+
+  // --- SELEÇÃO DOS DADOS PARA O GRÁFICO ---
   
-  // Para simplificar a evolução, usamos o mock estático, mas a cor muda dinamicamente
-  const currentChartData = evolutionDataMap['Total']; 
+  // 1. Dados de Evolução (Seleciona do Map com fallback para Total)
+  const currentEvolutionData = evolutionDataMap[selectedCategory] || evolutionDataMap['Total'];
+
+  // 2. Dados de Fluxo (Seleciona do Map com fallback para Total)
+  const baseFlowData = flowDataMap[selectedCategory] || flowDataMap['Total'];
+  
+  // Adiciona o mês "Atual" com os dados da sessão
+  // Nota: Idealmente a sessão também seria filtrada por ID, mas para efeito visual, 
+  // aplicaremos o fluxo da sessão ao gráfico que estiver aberto.
+  const currentFlowData = [
+    ...baseFlowData,
+    { 
+      month: 'Atual', 
+      aporte: (selectedCategory === 'Total' ? 2000 : 500) + currentSessionFlow.invested, 
+      resgate: (selectedCategory === 'Total' ? 500 : 0) + currentSessionFlow.redeemed 
+    }
+  ];
 
   return (
     <div className={styles.statsWrapper}>
       
-      {/* Gráfico de Área */}
+      {/* GRÁFICO PRINCIPAL (ESQUERDA) */}
       <div className={styles.mainChart}>
+        
+        {/* Header com Abas e Botão Reset */}
         <div className={styles.chartTitleRow}>
-          <h4>
-            {selectedCategory === 'Total' ? 'Evolução Patrimonial Total' : `Performance: ${selectedCategory}`}
-          </h4>
-          {selectedCategory !== 'Total' && (
-             <button onClick={resetView} className={styles.resetBtn}>
-               <RefreshCcw size={14}/> Ver Geral
-             </button>
-          )}
+          <div className={styles.titleWithReset}>
+            <h4>{selectedCategory === 'Total' ? 'Visão Geral' : selectedCategory}</h4>
+            {selectedCategory !== 'Total' && (
+              <button onClick={resetView} className={styles.resetBtn}>
+                <RefreshCcw size={12}/> Voltar
+              </button>
+            )}
+          </div>
+
+          <div className={styles.tabsContainer}>
+            <button 
+              className={`${styles.chartTab} ${chartView === 'evolution' ? styles.active : ''}`}
+              onClick={() => setChartView('evolution')}
+            >
+              <TrendingUp size={14}/> Evolução
+            </button>
+            <button 
+              className={`${styles.chartTab} ${chartView === 'flow' ? styles.active : ''}`}
+              onClick={() => setChartView('flow')}
+            >
+              <ArrowRightLeft size={14}/> Fluxo
+            </button>
+          </div>
         </div>
         
-        <ResponsiveContainer width="100%" height={220}> 
-          <AreaChart data={currentChartData}>
-            <defs>
-              <linearGradient id="colorDynamic" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={currentDetails?.color || '#47A138'} stopOpacity={0.3}/>
-                <stop offset="95%" stopColor={currentDetails?.color || '#47A138'} stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
-            <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontSize: '12px' }}
-              formatter={(value: number | undefined) => [`R$ ${Number(value).toLocaleString()}`, selectedCategory]}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="value" 
-              stroke={currentDetails?.color || '#47A138'} 
-              strokeWidth={3}
-              fillOpacity={1} 
-              fill="url(#colorDynamic)" 
-              animationDuration={500}
-            />
-          </AreaChart>
+        <ResponsiveContainer width="100%" height={240}> 
+          {chartView === 'evolution' ? (
+            // GRÁFICO DE EVOLUÇÃO (VERDE ÚNICO)
+            <AreaChart data={currentEvolutionData}>
+              <defs>
+                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#47A138" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#47A138" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
+              <Tooltip 
+                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                formatter={(value: any) => [`R$ ${Number(value).toLocaleString()}`, 'Patrimônio']}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#47A138" 
+                strokeWidth={3} 
+                fillOpacity={1} 
+                fill="url(#colorTotal)" 
+                animationDuration={800}
+              />
+            </AreaChart>
+          ) : (
+            // GRÁFICO DE FLUXO EM ONDAS (VERDE E VERMELHO)
+            <AreaChart data={currentFlowData}>
+              <defs>
+                <linearGradient id="colorAporte" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#47A138" stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor="#47A138" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorResgate" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#E11D48" stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor="#E11D48" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
+              
+              <Tooltip 
+                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                formatter={(value: any, name: any) => [
+                  `R$ ${Number(value).toLocaleString()}`, 
+                  name === 'aporte' ? 'Entradas' : 'Saídas'
+                ]}
+              />
+              <Legend iconType="circle" wrapperStyle={{fontSize: '12px', paddingTop: '10px'}}/>
+              
+              {/* ONDA VERDE (ENTRADAS) */}
+              <Area 
+                type="monotone" 
+                dataKey="aporte" 
+                name="aporte" 
+                stroke="#47A138" 
+                strokeWidth={2} 
+                fillOpacity={1} 
+                fill="url(#colorAporte)"
+                animationDuration={800} 
+              />
+              
+              {/* ONDA VERMELHA (SAÍDAS) */}
+              <Area 
+                type="monotone" 
+                dataKey="resgate" 
+                name="resgate" 
+                stroke="#E11D48" 
+                strokeWidth={2} 
+                fillOpacity={1} 
+                fill="url(#colorResgate)"
+                animationDuration={800} 
+              />
+            </AreaChart>
+          )}
         </ResponsiveContainer>
       </div>
 
-      {/* Gráfico de Pizza */}
+      {/* PIZZA */}
       <div className={styles.interactivePanel}>
-        <p className={styles.instruction}>Clique para filtrar</p>
-        
+        <p className={styles.instruction}>
+          {selectedCategory === 'Total' ? 'Alocação Geral' : `Detalhe: ${selectedCategory}`}
+        </p>
         <div className={styles.pieContainer}>
           <ResponsiveContainer width="100%" height={160}>
             <PieChart>
-              <Tooltip content={<CustomPieTooltip />} /> {/* AQUI ESTÁ O TOOLTIP NOVO */}
               <Pie
                 // @ts-ignore
                 activeIndex={activeIndex}
                 activeShape={renderActiveShape}
-                data={data} // Usa os dados dinâmicos
+                data={data}
                 innerRadius={50}
                 outerRadius={65}
                 paddingAngle={4}
-                dataKey="amount" // Usa o valor financeiro real
+                dataKey="amount"
                 onClick={handlePieClick}
                 onMouseEnter={onPieEnter}
                 cursor="pointer"
               >
                 {data.map((entry: any, index: number) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.color} 
+                    stroke="none" 
+                    fillOpacity={selectedCategory === 'Total' || selectedCategory === entry.name ? 1 : 0.3} // Efeito de foco visual
+                  />
                 ))}
               </Pie>
+              <Tooltip 
+                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                 formatter={(value: any) => [`R$ ${Number(value).toLocaleString()}`, '']}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Detalhes Dinâmicos */}
-        <div className={styles.detailsBox}>
-          {selectedCategory === 'Total' ? (
-             <div className={styles.summaryInfo}>
-               <span>Patrimônio Total</span>
-               <strong>R$ {data.reduce((acc, cur) => acc + cur.amount, 0).toLocaleString()}</strong>
+        
+        <div className={styles.miniLegend}>
+           {data.map((item: any) => (
+             <div 
+                key={item.id} 
+                className={styles.legendItem} 
+                style={{opacity: selectedCategory === 'Total' || selectedCategory === item.name ? 1 : 0.4}}
+             >
+               <span style={{background: item.color}}></span>
+               <small>{item.name} ({item.value}%)</small>
              </div>
-          ) : (
-            <div className={styles.categoryInfo} style={{borderColor: currentDetails?.color}}>
-              <span style={{color: currentDetails?.color}}>{currentDetails?.name}</span>
-              <div className={styles.catValue}>
-                 <strong>R$ {currentDetails?.amount.toLocaleString()}</strong>
-                 <small>{currentDetails?.value}%</small>
-              </div>
-              <div className={styles.catTrend}>
-                <ArrowUpRight size={12}/> +1.2% este mês
-              </div>
-            </div>
-          )}
+           ))}
         </div>
       </div>
     </div>

@@ -9,13 +9,13 @@ export interface Favorito {
 
 export interface Transacao {
   id: string;
-  tipo: string;
+  tipo: string; // 'entrada', 'saida', 'Investimento', 'Resgate'
   valor: number;
-  favorecido: string;
+  favorecido: string; // No caso de investimento, será o nome do ativo (ex: "Tesouro")
   data: string;
-  hora?: string;      // O ? indica que é opcional
-  categoria?: string; // O ? indica que é opcional
-  titulo?: string;    // Adicionado para compatibilidade com o mock
+  hora?: string;
+  categoria?: string;
+  titulo?: string;
 }
 
 interface BancoState {
@@ -37,8 +37,9 @@ const bancoSlice = createSlice({
   name: 'banco',
   initialState,
   reducers: {
+    // --- 1. Transações Normais (Pix, Transferência) ---
     adicionarTransacao: (state, action: PayloadAction<Omit<Transacao, 'id' | 'data' | 'hora'>>) => {
-      const { tipo, valor, favorecido } = action.payload;
+      const { tipo, valor, favorecido, categoria, titulo } = action.payload;
       const agora = new Date();
       
       const novaTransacao: Transacao = {
@@ -48,12 +49,13 @@ const bancoSlice = createSlice({
         favorecido,
         data: agora.toLocaleDateString('pt-BR'),
         hora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        categoria: categoria || 'Geral',
+        titulo: titulo || 'Transação',
       };
 
-      // --- PROTEÇÃO CONTRA ESTADO CORROMPIDO (LOCALSTORAGE) ---
       if (!state.transacoes) state.transacoes = [];
       
-      if (tipo === 'deposito') {
+      if (tipo === 'deposito' || tipo === 'entrada') {
         state.saldo += valor;
       } else {
         state.saldo -= valor;
@@ -62,8 +64,8 @@ const bancoSlice = createSlice({
       state.transacoes.unshift(novaTransacao);
     },
 
+    // --- 2. Salvar Contatos ---
     salvarFavorito: (state, action: PayloadAction<{ nome: string; chave: string }>) => {
-      // Proteção para o array de favoritos também
       if (!state.favoritos) state.favoritos = [];
 
       const existe = state.favoritos.find(f => f.chave === action.payload.chave);
@@ -76,8 +78,63 @@ const bancoSlice = createSlice({
         });
       }
     },
+
+    // --- 3. NOVO: Realizar Investimento (Tira do Saldo) ---
+    realizarInvestimento: (state, action: PayloadAction<{ valor: number; nomeInvestimento: string }>) => {
+      const { valor, nomeInvestimento } = action.payload;
+      const agora = new Date();
+
+      // Debita do saldo
+      state.saldo -= valor;
+
+      // Registra no extrato
+      const novaTransacao: Transacao = {
+        id: Math.random().toString(36).substring(2, 11).toUpperCase(),
+        tipo: 'saida', // Marca como saída para aparecer vermelho no extrato
+        valor: valor,
+        favorecido: nomeInvestimento, // Ex: "Tesouro Direto"
+        data: agora.toLocaleDateString('pt-BR'),
+        hora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        categoria: 'Investimentos',
+        titulo: 'Aporte Financeiro'
+      };
+
+      if (!state.transacoes) state.transacoes = [];
+      state.transacoes.unshift(novaTransacao);
+    },
+
+    // --- 4. NOVO: Resgatar Investimento (Volta para o Saldo) ---
+    resgatarInvestimento: (state, action: PayloadAction<{ valor: number; nomeInvestimento: string }>) => {
+      const { valor, nomeInvestimento } = action.payload;
+      const agora = new Date();
+
+      // Credita no saldo
+      state.saldo += valor;
+
+      // Registra no extrato
+      const novaTransacao: Transacao = {
+        id: Math.random().toString(36).substring(2, 11).toUpperCase(),
+        tipo: 'entrada', // Marca como entrada para aparecer verde
+        valor: valor,
+        favorecido: nomeInvestimento,
+        data: agora.toLocaleDateString('pt-BR'),
+        hora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        categoria: 'Resgate',
+        titulo: 'Resgate de Aplicação'
+      };
+
+      if (!state.transacoes) state.transacoes = [];
+      state.transacoes.unshift(novaTransacao);
+    }
   },
 });
 
-export const { adicionarTransacao, salvarFavorito } = bancoSlice.actions;
+// Exportar todas as ações, incluindo as novas
+export const { 
+  adicionarTransacao, 
+  salvarFavorito, 
+  realizarInvestimento, 
+  resgatarInvestimento 
+} = bancoSlice.actions;
+
 export default bancoSlice.reducer;

@@ -1,0 +1,82 @@
+.overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6); // Fundo escuro
+  backdrop-filter: blur(4px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
+}
+
+.modalCard {
+  background: white;
+  width: 90%; max-width: 400px;
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.closeBtn {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: none; cursor: pointer;
+  color: #9CA3AF;
+  &:hover { color: #111827; }
+}
+
+.header {
+  text-align: center; margin-bottom: 24px;
+  .iconBox { 
+    width: 56px; height: 56px; border-radius: 16px; 
+    display: flex; align-items: center; justify-content: center; 
+    margin: 0 auto 16px; 
+  }
+  h3 { font-size: 1.25rem; font-weight: 800; color: #111827; margin: 0 0 4px; }
+  p { font-size: 0.9rem; color: #6B7280; }
+}
+
+.tabs {
+  display: flex; background: #F3F4F6; padding: 4px; border-radius: 12px; margin-bottom: 24px;
+  .tab {
+    flex: 1; border: none; background: none; padding: 10px;
+    border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+    color: #6B7280; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.2s;
+    
+    &.active { background: white; color: #111827; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  }
+}
+
+.inputSection {
+  margin-bottom: 24px;
+  label { font-size: 0.85rem; font-weight: 600; color: #374151; display: block; margin-bottom: 8px; }
+  
+  .currencyInput {
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 2px solid #E5E7EB; padding-bottom: 8px;
+    span { font-size: 1.5rem; color: #9CA3AF; font-weight: 500; }
+    input {
+      border: none; outline: none; font-size: 2rem; font-weight: 800; color: #111827; width: 100%;
+      &::placeholder { color: #E5E7EB; }
+      /* Remove setas do input number */
+      appearance: textfield;
+      -moz-appearance: textfield;
+      &::-webkit-outer-spin-button, &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    }
+  }
+
+  .helperText { font-size: 0.75rem; color: #6B7280; margin-top: 8px; display: block; }
+}
+
+.confirmBtn {
+  width: 100%; padding: 16px; border: none; border-radius: 16px;
+  color: white; font-weight: 700; font-size: 1rem; cursor: pointer;
+  transition: transform 0.2s;
+  &:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  &:active { transform: scale(0.98); }
+}
