@@ -73,9 +73,9 @@ $color-border: #E5E7EB;
       border: none; outline: none; font-size: 2rem; font-weight: 800; color: $color-text-dark; width: 100%; background: transparent;
       &::placeholder { color: $color-border; }
       
-      /* --- CORREÇÃO AQUI --- */
-      appearance: textfield;       /* Propriedade Padrão (Adicionar esta linha) */
-      -moz-appearance: textfield;  /* Firefox */
+      /* Propriedades para remover setas e avisos de compatibilidade */
+      appearance: textfield;      
+      -moz-appearance: textfield;
       
       &::-webkit-outer-spin-button, 
       &::-webkit-inner-spin-button { 

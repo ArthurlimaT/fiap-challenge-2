@@ -2,7 +2,7 @@
   background: white;
   border-radius: 16px;
   padding: 40px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); // Sombra bem sutil
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); 
   border: 1px solid #f3f4f6;
 }
 
@@ -20,7 +20,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); // 3 colunas como na imagem
+  grid-template-columns: repeat(3, 1fr); 
   gap: 24px;
 
   @media (max-width: 768px) {
@@ -29,7 +29,8 @@
 }
 
 .card {
-  background: #f9fafb; // Cinza claríssimo para o card em repouso
+  position: relative; // Para posicionar o cadeado
+  background: #f9fafb; 
   border: 1px solid #f3f4f6;
   border-radius: 12px;
   padding: 32px 16px;
@@ -37,26 +38,57 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: all 0.25s ease-in-out;
 
-  &:hover {
-    background: #ffffff;
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 77, 77, 0.08);
-    border-color: #47A138;
-
-    .label { color: #47A138; }
+  // --- ESTILO PARA ATIVOS (Meus Cartões) ---
+  &.activeCard {
+    background: white;
+    border-color: #E5E7EB;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(71, 161, 56, 0.15); // Sombra verde suave
+      border-color: #47A138;
+      
+      .iconWrapper { color: #47A138; transform: scale(1.1); }
+      .label { color: #47A138; font-weight: 700; }
+    }
   }
+
+  // --- ESTILO PARA INATIVOS (Bloqueados) ---
+  &.disabled {
+    opacity: 0.6;
+    background: #F3F4F6;
+    cursor: not-allowed;
+    
+    .iconWrapper { color: #9CA3AF; } // Cinza
+    .label { color: #9CA3AF; }
+    
+    &:hover {
+      background: #F3F4F6; // Não muda cor
+      transform: none;      // Não move
+    }
+  }
+}
+
+.lockIcon {
+  position: absolute;
+  top: 12px; right: 12px;
+  color: #9CA3AF;
+  background: rgba(0,0,0,0.05);
+  padding: 4px;
+  border-radius: 50%;
 }
 
 .iconWrapper {
   margin-bottom: 16px;
-  font-size: 2.5rem; // Para caso use emoji
+  color: #4b5563;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 60px;
+  transition: all 0.2s;
 }
 
 .label {
@@ -64,4 +96,17 @@
   font-weight: 600;
   color: #4b5563;
   transition: color 0.2s;
+  text-align: center;
+}
+
+.badge {
+  margin-top: 8px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #9CA3AF;
+  background: #E5E7EB;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
 }

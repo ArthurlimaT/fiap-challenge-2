@@ -110,15 +110,31 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
 
   const onPieEnter = (_: any, index: number) => setActiveIndex(index);
 
-  // --- LÓGICA DE CORES DINÂMICA ---
-  // Se for "Total", usa Verde padrão. Se for categoria, usa a cor da categoria.
+  // --- CORES DINÂMICA ---
   const activeItem = data.find(item => item.name === selectedCategory);
   const activeColor = activeItem ? activeItem.color : '#47A138'; 
 
+  const getColorByName = (name: string) => {
+    const item = data.find(d => d.name === name);
+    return item ? item.color : '#9CA3AF';
+  };
+
   // --- PREPARAÇÃO DOS DADOS ---
-  const currentEvolutionData = evolutionDataMap[selectedCategory] || evolutionDataMap['Total'];
+  const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+  const stackedEvolutionData = months.map((month, index) => {
+    return {
+      month,
+      Tesouro: evolutionDataMap['Tesouro'][index].value,
+      Ações: evolutionDataMap['Ações'][index].value,
+      FIIs: evolutionDataMap['FIIs'][index].value,
+      Cripto: evolutionDataMap['Cripto'][index].value,
+      total: evolutionDataMap['Total'][index].value
+    };
+  });
+
+  const currentEvolutionData = evolutionDataMap[selectedCategory];
+
   const baseFlowData = flowDataMap[selectedCategory] || flowDataMap['Total'];
-  
   const currentFlowData = [
     ...baseFlowData,
     { 
@@ -135,9 +151,8 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
         
         <div className={styles.chartTitleRow}>
           <div className={styles.titleWithReset}>
-            {/* O Título agora também pega a cor da categoria */}
             <h4 style={{color: selectedCategory === 'Total' ? '#0F172A' : activeColor}}>
-              {selectedCategory === 'Total' ? 'Visão Geral' : selectedCategory}
+              {selectedCategory === 'Total' ? 'Composição Patrimonial' : selectedCategory}
             </h4>
             {selectedCategory !== 'Total' && (
               <button onClick={resetView} className={styles.resetBtn}>
@@ -166,43 +181,59 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
           {chartView === 'evolution' ? (
             
             // --- GRÁFICO DE EVOLUÇÃO ---
-            <AreaChart data={currentEvolutionData}>
-              <defs>
-                {/* Gradiente Dinâmico baseado na ActiveColor */}
-                <linearGradient id="colorEvolution" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={activeColor} stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor={activeColor} stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
-              <Tooltip 
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                formatter={(value: any) => [`R$ ${Number(value).toLocaleString()}`, 'Patrimônio']}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="value" 
-                stroke={activeColor} // Cor da linha muda
-                strokeWidth={3} 
-                fillOpacity={1} 
-                fill="url(#colorEvolution)" // Gradiente muda
-                animationDuration={800}
-              />
-            </AreaChart>
+            selectedCategory === 'Total' ? (
+              // 1. VISÃO EMPILHADA (TODAS AS CATEGORIAS) - APENAS LINHAS
+              <AreaChart data={stackedEvolutionData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
+                <Tooltip 
+                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  formatter={(value: any, name: any) => [`R$ ${Number(value).toLocaleString()}`, name]}
+                />
+                <Legend iconType="circle" wrapperStyle={{fontSize: '11px', paddingTop: '10px'}}/>
+                
+                {/* MUDANÇA AQUI: fill="transparent" para mostrar apenas as linhas empilhadas */}
+                <Area type="monotone" dataKey="Cripto" stackId="1" stroke={getColorByName('Cripto')} strokeWidth={2} fill="transparent" />
+                <Area type="monotone" dataKey="FIIs" stackId="1" stroke={getColorByName('FIIs')} strokeWidth={2} fill="transparent" />
+                <Area type="monotone" dataKey="Ações" stackId="1" stroke={getColorByName('Ações')} strokeWidth={2} fill="transparent" />
+                <Area type="monotone" dataKey="Tesouro" stackId="1" stroke={getColorByName('Tesouro')} strokeWidth={2} fill="transparent" />
+              </AreaChart>
+            ) : (
+              // 2. VISÃO INDIVIDUAL (CATEGORIA SELECIONADA) - COM GRADIENTE
+              <AreaChart data={currentEvolutionData}>
+                <defs>
+                  <linearGradient id="colorEvolution" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={activeColor} stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor={activeColor} stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
+                <Tooltip 
+                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  formatter={(value: any) => [`R$ ${Number(value).toLocaleString()}`, 'Patrimônio']}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke={activeColor} 
+                  strokeWidth={3} 
+                  fillOpacity={1} 
+                  fill="url(#colorEvolution)"
+                  animationDuration={800}
+                />
+              </AreaChart>
+            )
 
           ) : (
 
             // --- GRÁFICO DE FLUXO (ENTRADAS VS SAÍDAS) ---
             <AreaChart data={currentFlowData}>
               <defs>
-                {/* Aporte usa a cor da categoria (activeColor) */}
                 <linearGradient id="colorAporte" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor={activeColor} stopOpacity={0.4}/>
                   <stop offset="95%" stopColor={activeColor} stopOpacity={0}/>
                 </linearGradient>
-                
-                {/* Resgate continua sempre Vermelho (#E11D48) */}
                 <linearGradient id="colorResgate" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#E11D48" stopOpacity={0.4}/>
                   <stop offset="95%" stopColor="#E11D48" stopOpacity={0}/>
@@ -220,23 +251,20 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
               />
               <Legend iconType="circle" wrapperStyle={{fontSize: '12px', paddingTop: '10px'}}/>
               
-              {/* ONDA DE ENTRADA (Cor Dinâmica) */}
               <Area 
                 type="monotone" 
                 dataKey="aporte" 
-                name="aporte" 
+                name="Entrada" 
                 stroke={activeColor} 
                 strokeWidth={2} 
                 fillOpacity={1} 
                 fill="url(#colorAporte)"
                 animationDuration={800} 
               />
-              
-              {/* ONDA DE SAÍDA (Sempre Vermelha) */}
               <Area 
                 type="monotone" 
                 dataKey="resgate" 
-                name="resgate" 
+                name="Saída" 
                 stroke="#E11D48" 
                 strokeWidth={2} 
                 fillOpacity={1} 

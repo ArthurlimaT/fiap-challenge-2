@@ -7,24 +7,24 @@ import Extrato from '../extrato/extrato';
 import MyCards from './mycards';
 import { 
   Banknote, CreditCard, HeartHandshake, 
-  QrCode, ShieldCheck, Smartphone 
+  PiggyBank, ShieldCheck, Smartphone, Lock // Adicionei Lock e PiggyBank
 } from 'lucide-react';
 
 export default function ServicesDashboard() {
   const [currentView, setCurrentView] = useState<'menu' | 'cards'>('menu');
 
-  // Se o usuário clicar em "Meus Cartões", renderizamos o componente de detalhe
   if (currentView === 'cards') {
     return <MyCards onBack={() => setCurrentView('menu')} />;
   }
 
   const services = [
     { id: 'emprestimo', label: 'Empréstimo', icon: <Banknote size={32} />, active: false },
-    { id: 'cartoes', label: 'Meus cartões', icon: <CreditCard size={32} />, active: true },
+    { id: 'cartoes', label: 'Meus Cartões', icon: <CreditCard size={32} />, active: true },
     { id: 'doacoes', label: 'Doações', icon: <HeartHandshake size={32} />, active: false },
-    { id: 'pix', label: 'Pix', icon: <QrCode size={32} />, active: false },
+    // Alterado de Pix para Poupança
+    { id: 'poupanca', label: 'Poupança', icon: <PiggyBank size={32} />, active: false },
     { id: 'seguros', label: 'Seguros', icon: <ShieldCheck size={32} />, active: false },
-    { id: 'celular', label: 'Crédito celular', icon: <Smartphone size={32} />, active: false },
+    { id: 'celular', label: 'Crédito Celular', icon: <Smartphone size={32} />, active: false },
   ];
 
   return (
@@ -41,13 +41,26 @@ export default function ServicesDashboard() {
             {services.map((service) => (
               <div 
                 key={service.id}
-                className={`${styles.card} ${!service.active ? styles.disabled : ''}`}
+                className={`
+                  ${styles.card} 
+                  ${!service.active ? styles.disabled : styles.activeCard}
+                `}
                 onClick={() => service.active && setCurrentView('cards')}
+                style={{cursor: service.active ? 'pointer' : 'not-allowed'}} // Cursores explícitos
               >
+                {/* Ícone de Cadeado para itens inativos */}
+                {!service.active && (
+                  <div className={styles.lockIcon}>
+                    <Lock size={14} />
+                  </div>
+                )}
+
                 <div className={styles.iconWrapper}>
                   {service.icon}
                 </div>
                 <span className={styles.label}>{service.label}</span>
+                
+                {/* Badge visível */}
                 {!service.active && <span className={styles.badge}>Em breve</span>}
               </div>
             ))}

@@ -22,7 +22,7 @@ export default function InvestmentModal({
   // Referência para focar no input automaticamente
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // --- CORREÇÃO: Reseta o estado e foca no input ao abrir ---
+  // Reseta o estado e foca no input ao abrir
   useEffect(() => {
     if (isOpen) {
       setRawValue(''); // Limpa o valor anterior
@@ -43,7 +43,7 @@ export default function InvestmentModal({
     // 1. Remove tudo que não for número
     const numeric = e.target.value.replace(/\D/g, '');
     
-    // 2. Limita o tamanho para evitar números gigantescos (opcional, mas bom)
+    // 2. Limita o tamanho para evitar números gigantescos
     if (numeric.length > 12) return;
 
     // 3. Remove zeros à esquerda
@@ -109,7 +109,7 @@ export default function InvestmentModal({
           <div className={styles.currencyInput}>
             <span>R$</span>
             <input 
-              ref={inputRef} // Adicionamos a referência aqui
+              ref={inputRef} 
               type="text"
               inputMode="numeric"
               placeholder="0,00" 
@@ -135,7 +135,7 @@ export default function InvestmentModal({
             cursor: !rawValue ? 'not-allowed' : 'pointer'
           }}
         >
-          Confirmar {tipoOperacao === 'investir' ? 'Aporte' : 'Resgate'}
+          Confirmar {tipoOperacao === 'investir' ? 'Operação' : 'Resgate'}
         </button>
       </div>
     </div>
