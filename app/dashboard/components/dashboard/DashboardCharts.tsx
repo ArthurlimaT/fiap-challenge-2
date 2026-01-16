@@ -167,9 +167,7 @@ export default function DashboardCharts() {
             {isExporting ? ' Gerando...' : ' Exportar PDF'}
           </button>
 
-          <button className={styles.logoutBtn} onClick={handleLogout} title="Sair da conta">
-            <LogOut size={18} />
-          </button>
+        
         </div>
       </header>
 

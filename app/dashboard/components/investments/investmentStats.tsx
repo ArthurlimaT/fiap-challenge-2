@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   AreaChart, Area, XAxis, CartesianGrid, Tooltip, 
   ResponsiveContainer, PieChart, Pie, Cell, Sector, Legend
@@ -7,7 +7,7 @@ import {
 import { TrendingUp, ArrowRightLeft, RefreshCcw } from 'lucide-react';
 import styles from './investment.module.scss';
 
-// --- MOCK DATA: EVOLUÇÃO (Patrimônio Total ao longo do tempo) ---
+// --- MOCK DATA ---
 const evolutionDataMap: any = {
   'Total': [
     { month: 'Jan', value: 42000 }, { month: 'Fev', value: 43500 },
@@ -36,7 +36,6 @@ const evolutionDataMap: any = {
   ]
 };
 
-// --- MOCK DATA: FLUXO (Entradas vs Saídas por categoria) ---
 const flowDataMap: any = {
   'Total': [
     { month: 'Jan', aporte: 2500, resgate: 200 },
@@ -54,9 +53,9 @@ const flowDataMap: any = {
   ],
   'Ações': [
     { month: 'Jan', aporte: 1000, resgate: 0 },
-    { month: 'Fev', aporte: 0, resgate: 500 }, // Resgatou em Fev
+    { month: 'Fev', aporte: 0, resgate: 500 },
     { month: 'Mar', aporte: 1000, resgate: 0 },
-    { month: 'Abr', aporte: 500, resgate: 1000 }, // Resgatou em Abr
+    { month: 'Abr', aporte: 500, resgate: 1000 },
     { month: 'Mai', aporte: 1200, resgate: 0 },
   ],
   'FIIs': [
@@ -111,17 +110,15 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
 
   const onPieEnter = (_: any, index: number) => setActiveIndex(index);
 
-  // --- SELEÇÃO DOS DADOS PARA O GRÁFICO ---
-  
-  // 1. Dados de Evolução (Seleciona do Map com fallback para Total)
-  const currentEvolutionData = evolutionDataMap[selectedCategory] || evolutionDataMap['Total'];
+  // --- LÓGICA DE CORES DINÂMICA ---
+  // Se for "Total", usa Verde padrão. Se for categoria, usa a cor da categoria.
+  const activeItem = data.find(item => item.name === selectedCategory);
+  const activeColor = activeItem ? activeItem.color : '#47A138'; 
 
-  // 2. Dados de Fluxo (Seleciona do Map com fallback para Total)
+  // --- PREPARAÇÃO DOS DADOS ---
+  const currentEvolutionData = evolutionDataMap[selectedCategory] || evolutionDataMap['Total'];
   const baseFlowData = flowDataMap[selectedCategory] || flowDataMap['Total'];
   
-  // Adiciona o mês "Atual" com os dados da sessão
-  // Nota: Idealmente a sessão também seria filtrada por ID, mas para efeito visual, 
-  // aplicaremos o fluxo da sessão ao gráfico que estiver aberto.
   const currentFlowData = [
     ...baseFlowData,
     { 
@@ -134,13 +131,14 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
   return (
     <div className={styles.statsWrapper}>
       
-      {/* GRÁFICO PRINCIPAL (ESQUERDA) */}
       <div className={styles.mainChart}>
         
-        {/* Header com Abas e Botão Reset */}
         <div className={styles.chartTitleRow}>
           <div className={styles.titleWithReset}>
-            <h4>{selectedCategory === 'Total' ? 'Visão Geral' : selectedCategory}</h4>
+            {/* O Título agora também pega a cor da categoria */}
+            <h4 style={{color: selectedCategory === 'Total' ? '#0F172A' : activeColor}}>
+              {selectedCategory === 'Total' ? 'Visão Geral' : selectedCategory}
+            </h4>
             {selectedCategory !== 'Total' && (
               <button onClick={resetView} className={styles.resetBtn}>
                 <RefreshCcw size={12}/> Voltar
@@ -166,12 +164,14 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
         
         <ResponsiveContainer width="100%" height={240}> 
           {chartView === 'evolution' ? (
-            // GRÁFICO DE EVOLUÇÃO (VERDE ÚNICO)
+            
+            // --- GRÁFICO DE EVOLUÇÃO ---
             <AreaChart data={currentEvolutionData}>
               <defs>
-                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#47A138" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#47A138" stopOpacity={0}/>
+                {/* Gradiente Dinâmico baseado na ActiveColor */}
+                <linearGradient id="colorEvolution" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={activeColor} stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor={activeColor} stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
@@ -183,21 +183,26 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
               <Area 
                 type="monotone" 
                 dataKey="value" 
-                stroke="#47A138" 
+                stroke={activeColor} // Cor da linha muda
                 strokeWidth={3} 
                 fillOpacity={1} 
-                fill="url(#colorTotal)" 
+                fill="url(#colorEvolution)" // Gradiente muda
                 animationDuration={800}
               />
             </AreaChart>
+
           ) : (
-            // GRÁFICO DE FLUXO EM ONDAS (VERDE E VERMELHO)
+
+            // --- GRÁFICO DE FLUXO (ENTRADAS VS SAÍDAS) ---
             <AreaChart data={currentFlowData}>
               <defs>
+                {/* Aporte usa a cor da categoria (activeColor) */}
                 <linearGradient id="colorAporte" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#47A138" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#47A138" stopOpacity={0}/>
+                  <stop offset="5%" stopColor={activeColor} stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor={activeColor} stopOpacity={0}/>
                 </linearGradient>
+                
+                {/* Resgate continua sempre Vermelho (#E11D48) */}
                 <linearGradient id="colorResgate" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#E11D48" stopOpacity={0.4}/>
                   <stop offset="95%" stopColor="#E11D48" stopOpacity={0}/>
@@ -215,19 +220,19 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
               />
               <Legend iconType="circle" wrapperStyle={{fontSize: '12px', paddingTop: '10px'}}/>
               
-              {/* ONDA VERDE (ENTRADAS) */}
+              {/* ONDA DE ENTRADA (Cor Dinâmica) */}
               <Area 
                 type="monotone" 
                 dataKey="aporte" 
                 name="aporte" 
-                stroke="#47A138" 
+                stroke={activeColor} 
                 strokeWidth={2} 
                 fillOpacity={1} 
                 fill="url(#colorAporte)"
                 animationDuration={800} 
               />
               
-              {/* ONDA VERMELHA (SAÍDAS) */}
+              {/* ONDA DE SAÍDA (Sempre Vermelha) */}
               <Area 
                 type="monotone" 
                 dataKey="resgate" 
@@ -243,10 +248,9 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
         </ResponsiveContainer>
       </div>
 
-      {/* PIZZA */}
       <div className={styles.interactivePanel}>
         <p className={styles.instruction}>
-          {selectedCategory === 'Total' ? 'Alocação Geral' : `Detalhe: ${selectedCategory}`}
+          {selectedCategory === 'Total' ? 'Selecionar Categoria' : `Detalhe: ${selectedCategory}`}
         </p>
         <div className={styles.pieContainer}>
           <ResponsiveContainer width="100%" height={160}>
@@ -269,7 +273,7 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                     key={`cell-${index}`} 
                     fill={entry.color} 
                     stroke="none" 
-                    fillOpacity={selectedCategory === 'Total' || selectedCategory === entry.name ? 1 : 0.3} // Efeito de foco visual
+                    fillOpacity={selectedCategory === 'Total' || selectedCategory === entry.name ? 1 : 0.3} 
                   />
                 ))}
               </Pie>
