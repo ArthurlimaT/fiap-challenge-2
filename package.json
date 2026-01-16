@@ -16,7 +16,8 @@
     "react-dom": "^19.2.3",
     "react-redux": "^9.2.0",
     "recharts": "^3.6.0",
-    "sass": "^1.97.1"
+    "sass": "^1.97.1",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

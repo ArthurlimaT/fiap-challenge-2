@@ -6,8 +6,8 @@ import StartDashboard from './components/start/startdashboard';
 import ServicesDashboard from './components/services/servicesDashboard';
 import InvestmentsDashboard from './components/investments/investmentsDashboard';
 import TransferDashboard from './components/transfer/transferdashboard';
-import DashboardCharts from './components/DashboardCharts'; 
-import TransactionsView from './components/TransactionsView';
+import DashboardCharts from './components/dashboard/DashboardCharts'; 
+import TransactionsView from './components/PesquisaExtrato/TransactionsView';
 
 export default function DashboardPage() {
   const [currentView, setCurrentView] = useState('start');
