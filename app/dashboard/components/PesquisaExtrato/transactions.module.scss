@@ -2,11 +2,22 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 8px;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .header {
-  h2 { font-size: 1.5rem; color: #111827; margin-bottom: 4px; }
-  p { color: #6B7280; font-size: 0.9rem; }
+  h2 {
+    font-size: 1.5rem;
+    color: #111827;
+    font-weight: 700;
+    margin: 0;
+  }
+  p {
+    color: #6B7280;
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
 }
 
 .toolbar {
@@ -14,17 +25,25 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+  align-items: center;
 
   .searchBar {
     flex: 1;
-    min-width: 300px;
-    background: #F3F4F6;
-    padding: 10px 16px;
-    border-radius: 10px;
+    min-width: 280px;
+    background: #f3f4f6;
+    padding: 12px 16px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #6B7280;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:focus-within {
+      border-color: #47a138;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(71, 161, 56, 0.1);
+    }
 
     input {
       background: transparent;
@@ -33,108 +52,248 @@
       width: 100%;
       color: #111827;
       font-size: 0.95rem;
+
+      &::placeholder {
+        color: #9ca3af;
+      }
     }
   }
 
   .filterGroup {
     display: flex;
     gap: 12px;
+    flex-wrap: wrap;
   }
 }
 
-.selectWrapper, .dateWrapper {
+.dateField, .selectWrapper {
   display: flex;
   align-items: center;
   gap: 8px;
   background: white;
-  border: 1px solid #D1D5DB;
-  padding: 8px 12px;
-  border-radius: 8px;
-  color: #47A138;
+  border: 1px solid #e5e7eb;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #47a138;
+  transition: border-color 0.2s;
 
-  select, input {
+  &:hover {
+    border-color: #47a138;
+  }
+
+  input, select {
     border: none;
     outline: none;
+    font-family: inherit;
+    font-size: 0.85rem;
     font-weight: 600;
     color: #374151;
     cursor: pointer;
+    background: transparent;
+  }
+}
+
+.dateField {
+  position: relative;
+
+  .clearDate {
+    background: #f3f4f6;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    margin-left: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #e11d48;
+      color: white;
+    }
   }
 }
 
 .tableResponsive {
   background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  overflow-x: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 650px;
 
   th {
-    background: #F9FAF7;
+    background: #f9faf7;
     text-align: left;
-    padding: 16px;
-    font-size: 0.8rem;
-    color: #6B7280;
+    padding: 18px;
+    font-size: 0.75rem;
+    color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 700;
   }
 
   td {
-    padding: 16px;
-    border-bottom: 1px solid #F3F4F6;
-    font-size: 0.9rem;
+    padding: 16px 18px;
+    border-bottom: 1px solid #f8f9fa;
     vertical-align: middle;
+  }
 
-    .title { display: block; font-weight: 600; color: #111827; }
-    .category { font-size: 0.75rem; color: #9CA3AF; }
+  tbody tr:last-child td {
+    border-bottom: none;
   }
 }
 
-.tagIn, .tagOut {
-  display: inline-flex;
+.transactionInfo {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  gap: 14px;
+
+  .iconBox {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &.iconIn {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    &.iconOut {
+      background: #f3f4f6;
+      color: #374151;
+    }
+  }
+
+  .title {
+    display: block;
+    font-weight: 700;
+    color: #111827;
+    font-size: 0.95rem;
+  }
+
+  .category {
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
 }
 
-.tagIn { background: #DCFCE7; color: #166534; }
-.tagOut { background: #FEE2E2; color: #991B1B; }
+.methodBadge {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-block;
+}
 
-.priceIn { color: #166534; font-weight: 700; }
-.priceOut { color: #991B1B; font-weight: 700; }
+.dateTime {
+  display: flex;
+  flex-direction: column;
 
-.noResults { text-align: center; padding: 40px; color: #9CA3AF; }
+  span {
+    font-size: 0.85rem;
+    color: #374151;
+    font-weight: 600;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
+}
+
+.priceIn {
+  color: #166534;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.priceOut {
+  color: #b91c1c;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.noResults {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+  font-weight: 500;
+}
 
 .pagination {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  color: #6B7280;
+  padding: 16px 4px;
+  color: #6b7280;
   font-size: 0.85rem;
 
   .pageControls {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
 
     button {
-      padding: 6px;
-      border-radius: 8px;
-      border: 1px solid #D1D5DB;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
       background: white;
       cursor: pointer;
       display: flex;
       align-items: center;
+      transition: all 0.2s;
 
-      &:disabled { opacity: 0.3; cursor: not-allowed; }
-      &:hover:not(:disabled) { border-color: #47A138; color: #47A138; }
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        border-color: #47a138;
+        color: #47a138;
+        background: #f9faf7;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Responsividade para telas muito pequenas
+@media (max-width: 640px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .searchBar {
+      min-width: 100%;
+    }
+    
+    .filterGroup {
+      width: 100%;
+      justify-content: space-between;
+      
+      .dateField, .selectWrapper {
+        flex: 1;
+      }
     }
   }
 }
