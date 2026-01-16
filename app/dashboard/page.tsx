@@ -18,20 +18,16 @@ export default function DashboardPage() {
   const [userInitials, setUserInitials] = useState('U');
 
   useEffect(() => {
-    // Busca o usuário no localStorage para tornar o nome dinâmico
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
         if (user && user.name) {
           setUserName(user.name);
-
-          // Lógica para gerar as iniciais (Ex: Bruna Eduarda -> BE)
           const names = user.name.trim().split(' ');
           const initials = names.length > 1 
             ? (names[0][0] + names[names.length - 1][0]).toUpperCase()
             : names[0][0].toUpperCase();
-          
           setUserInitials(initials);
         }
       } catch (error) {
@@ -42,32 +38,25 @@ export default function DashboardPage() {
 
   return (
     <div className={styles.page}>
-      {/* --- HEADER / TOPBAR PREMIUM --- */}
       <header className={styles.topbar}>
         <div className={styles.topbarInner}>
-          
-          {/* Lado Esquerdo: Logo e Busca */}
           <div className={styles.leftSection}>
             <div className={styles.logoArea}>
               <div className={styles.logoBadge}>B</div>
               <span className={styles.logoText}>Byte<span>bank</span></span>
             </div>
-            
             <div className={styles.headerSearch}>
               <Search size={16} />
               <input type="text" placeholder="Buscar transação ou serviço..." />
             </div>
           </div>
 
-          {/* Lado Direito: Notificações e Perfil */}
           <div className={styles.rightSection}>
             <button className={styles.notifBtn} title="Notificações">
               <Bell size={20} />
               <span className={styles.notifDot}></span>
             </button>
-
             <div className={styles.divider}></div>
-
             <div className={styles.userProfile}>
               <div className={styles.userInfo}>
                 <span className={styles.userName}>{userName}</span>
@@ -80,11 +69,9 @@ export default function DashboardPage() {
               <ChevronDown size={16} className={styles.chevron} />
             </div>
           </div>
-
         </div>
       </header>
 
-      {/* --- CONTEÚDO PRINCIPAL --- */}
       <div className={styles.wrapper}>
         <aside className={styles.sidebar}>
           <Sidebar activeView={currentView} setActiveView={setCurrentView} />
@@ -92,7 +79,9 @@ export default function DashboardPage() {
 
         <main className={styles.main}>
           <div className={styles.cardBase}>
-            {currentView === 'start' && <StartDashboard />}
+            {/* INJEÇÃO DA FUNÇÃO DE NAVEGAÇÃO NO STARTDASHBOARD */}
+            {currentView === 'start' && <StartDashboard setActiveView={setCurrentView} />}
+            
             {currentView === 'dashboard' && <DashboardCharts />}
             {currentView === 'transactions' && <TransactionsView />}
             {currentView === 'transfer' && <TransferDashboard />}

@@ -2,136 +2,116 @@
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: 32px;
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
 }
 
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .headerSimples {
-  .dateText {
-    color: #6B7280;
-    font-size: 0.9rem;
-    text-transform: capitalize;
-    font-weight: 500;
-  }
+  margin-bottom: -16px;
+  h1 { font-size: 1.8rem; color: #111827; font-weight: 800; margin-bottom: 2px; }
+  .dateText { color: #6B7280; font-size: 0.9rem; font-weight: 500; }
 }
 
-.abaSection {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.abaHeader {
+/* ATALHOS RÁPIDOS (ESTILO EXTRATO) */
+.quickActions {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #f3f4f6;
-  padding-bottom: 12px;
+  gap: 12px;
+  padding: 8px 0;
+  overflow-x: auto;
+  &::-webkit-scrollbar { display: none; }
 
-  .abaTitle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    h2 { font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0; }
-    .iconVerde { color: #47A138; }
+  .actionItem {
+    display: flex; flex-direction: column; align-items: center; gap: 8px; 
+    cursor: pointer; transition: 0.2s; min-width: 70px;
+    text-decoration: none; color: inherit;
+    &:hover { 
+      transform: translateY(-3px); 
+      .iconCircle { background: #E5E7EB; }
+    }
+    span { font-size: 0.7rem; font-weight: 700; color: #4B5563; text-align: center; }
+  }
+
+  .iconCircle {
+    width: 56px; height: 56px; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center;
+    background: #F3F4F6; // Cor de fundo suave igual ao extrato
+    color: #111827;      // Ícone escuro para contraste
+    border: 1px solid #E5E7EB;
+    transition: 0.2s;
   }
 }
 
-.personalizarBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #f9fafb;
-  border: 1px solid #E5E7EB;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #4B5563;
-  cursor: pointer;
-  transition: 0.2s;
+/* CAMPANHAS MERCHANDISE */
+.merchContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.merchCard {
+  padding: 18px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; color: white; cursor: pointer; transition: 0.3s;
+  &:hover { filter: brightness(1.1); transform: scale(1.01); }
+  .merchBadge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+  h4 { font-size: 0.9rem; font-weight: 800; margin: 0; }
+  p { font-size: 0.75rem; opacity: 0.85; margin: 2px 0 0; }
+}
+.bgGradientGreen { background: linear-gradient(135deg, #47A138 0%, #22c55e 100%); }
+.bgGradientDark { background: linear-gradient(135deg, #111827 0%, #374151 100%); }
 
-  &.btnAtivo { background: #111827; color: white; border-color: #111827; }
+/* CARTÃO DE CRÉDITO */
+.creditInfoCard {
+  background: white; border-radius: 16px; border: 1px solid #E5E7EB; padding: 24px;
+  .cardHeader {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+    .cardTitle { display: flex; align-items: center; gap: 8px; h3 { font-size: 0.9rem; font-weight: 700; color: #374151; margin: 0; } }
+    .vencimento { font-size: 0.75rem; color: #6B7280; font-weight: 600; }
+  }
+  .faturaInfo {
+    display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;
+    .labelFatura { font-size: 0.8rem; color: #6B7280; margin: 0; }
+    .valorFatura { font-size: 1.8rem; font-weight: 800; color: #111827; margin: 4px 0 0; }
+    .faturaBtn { background: #f3f4f6; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+  }
+  .barBackground { height: 8px; background: #F3F4F6; border-radius: 10px; overflow: hidden; margin-bottom: 8px;
+    .barFill { height: 100%; background: #47A138; border-radius: 10px; } }
+  .barLabels { display: flex; justify-content: space-between; span { font-size: 0.7rem; color: #9CA3AF; font-weight: 600; } }
 }
 
+/* WIDGETS E MENU CONFIG (ESTILO ORIGINAL) */
+.abaSection { display: flex; flex-direction: column; gap: 20px; }
+.abaHeader {
+  display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px;
+  .abaTitle { display: flex; align-items: center; gap: 10px; h2 { font-size: 1.1rem; font-weight: 700; color: #111827; } .iconVerde { color: #47A138; } }
+}
+.personalizarBtn {
+  display: flex; align-items: center; gap: 6px; background: #f9fafb; border: 1px solid #E5E7EB; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: #4B5563;
+  cursor: pointer; transition: 0.2s; &.btnAtivo { background: #111827; color: white; border-color: #111827; }
+}
 .menuConfig {
-  background: #f9fafb;
-  border: 2px dashed #D1D5DB;
-  border-radius: 16px;
-  padding: 16px;
-
+  background: #f9fafb; border: 2px dashed #D1D5DB; border-radius: 16px; padding: 16px;
   .configOptions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-
+    display: flex; flex-wrap: wrap; gap: 10px;
     button {
-      display: flex; align-items: center; gap: 6px;
-      padding: 8px 14px; background: white; border: 1px solid #E5E7EB;
+      display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: white; border: 1px solid #E5E7EB;
       border-radius: 50px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
       &.optAtiva { background: #47A138; color: white; border-color: #47A138; }
     }
   }
 }
-
-.widgetsGrid {
-  display: grid;
-  // Aqui voltamos ao minmax maior para eles ficarem retangulares
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-}
-
+.widgetsGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .widgetCard {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid #E5E7EB;
-  
-  .cardTop {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
-    h3 { font-size: 0.85rem; font-weight: 700; color: #374151; margin: 0; }
-  }
-
-  .progressBar {
-    height: 6px; background: #f3f4f6; border-radius: 10px; margin-bottom: 8px;
-    .progressFill { height: 100%; background: #47A138; border-radius: 10px; }
-  }
-
-  p { font-size: 0.8rem; color: #6B7280; margin: 0; }
+  background: white; padding: 20px; border-radius: 16px; border: 1px solid #E5E7EB;
+  .cardTop { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; h3 { font-size: 0.85rem; font-weight: 700; color: #374151; } }
+  .progressBar { height: 6px; background: #f3f4f6; border-radius: 10px; margin-bottom: 8px; .progressFill { height: 100%; background: #47A138; border-radius: 10px; } }
+  p { font-size: 0.8rem; color: #6B7280; }
 }
-
 .alerta { border-left: 4px solid #F59E0B; }
 
-.sideColumn .sticky {
-  position: sticky;
-  top: 24px;
-}
-
-.headerSimples {
-  margin-bottom: 24px;
-  
-  .welcomeText {
-    h1 {
-      font-size: 1.8rem;
-      color: #111827;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-  }
-
-  .dateText {
-    color: #6B7280;
-    font-size: 0.95rem;
-    text-transform: capitalize;
-  }
-}
+.sideColumn .sticky { position: sticky; top: 24px; }
 
 @media (max-width: 1024px) {
   .dashboardGrid { grid-template-columns: 1fr; }
+  .merchContainer { grid-template-columns: 1fr; }
 }

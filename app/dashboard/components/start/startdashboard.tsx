@@ -3,23 +3,19 @@ import React, { useState, useEffect } from 'react';
 import styles from './start.module.scss'; 
 import BalanceHero from './balancehero';
 import Extrato from '../extrato/extrato';
-import NovaOperacao from '../novaoperacao/novaoperacao';
+
+
 import { 
-  Target, 
-  AlertTriangle, 
-  Settings2, 
-  TrendingUp, 
-  ShieldCheck, 
-  Plus, 
-  Check, 
-  LayoutGrid, 
-  ArrowRightLeft 
+  Target, AlertTriangle, Settings2, TrendingUp, ShieldCheck, 
+  Plus, Check, LayoutGrid, ArrowRightLeft, Receipt, 
+  CreditCard, Smartphone, ShieldAlert, Sparkles, ChevronRight,
+  Banknote, Phone, Box
 } from 'lucide-react';
 
-export default function StartDashboard() {
+export default function StartDashboard({ setActiveView }: any) {
   const [mounted, setMounted] = useState(false);
   const [dataAtual, setDataAtual] = useState('');
-  const [userName, setUserName] = useState(''); // Estado para guardar o nome
+  const [userName, setUserName] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   
   const [activeWidgets, setActiveWidgets] = useState({
@@ -31,22 +27,15 @@ export default function StartDashboard() {
 
   useEffect(() => {
     setMounted(true);
-    
-    // 1. Busca o nome do usuário no localStorage
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       const user = JSON.parse(storedUser);
-      // Pega apenas o primeiro nome para ficar mais elegante
-      const primeiroNome = user.name.split(' ')[0];
-      setUserName(primeiroNome);
+      setUserName(user.name.split(' ')[0]);
     }
 
     const agora = new Date();
     setDataAtual(agora.toLocaleDateString('pt-BR', {
-      weekday: 'long', 
-      day: 'numeric', 
-      month: 'long',
-      year: 'numeric'
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
     }));
   }, []);
 
@@ -60,10 +49,9 @@ export default function StartDashboard() {
     <div className={styles.dashboardGrid}>
       <main className={styles.mainColumn}>
         
-        {/* HEADER ATUALIZADO COM NOME */}
         <header className={styles.headerSimples}>
           <div className={styles.welcomeText}>
-            <h1>Olá, {userName || 'Usuário'}! 👋</h1>
+            <h1>Olá, {userName || 'Bruna'}! 👋</h1>
             <p className={styles.dateText}>{dataAtual}</p>
           </div>
         </header>
@@ -72,7 +60,94 @@ export default function StartDashboard() {
           <BalanceHero />
         </section>
 
-        {/* ... restante do código permanece igual ... */}
+        {/* 1. ATALHOS RÁPIDOS - CORES DO EXTRATO + CLIQUES */}
+        <section className={styles.quickActions}>
+          <div className={styles.actionItem} onClick={() => setActiveView?.('transfer')}>
+            <div className={styles.iconCircle}><ArrowRightLeft size={24} /></div>
+            <span>Transferir</span>
+          </div>
+
+          <div className={styles.actionItem} onClick={() => setActiveView?.('transfer')}>
+            <div className={styles.iconCircle}><Receipt size={24} /></div>
+            <span>Pagar</span>
+          </div>
+
+          <div className={styles.actionItem} onClick={() => setActiveView?.('transfer')}>
+            <div className={styles.iconCircle}><Plus size={24} /></div>
+            <span>Depositar</span>
+          </div>
+
+          <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
+            <div className={styles.iconCircle}><Smartphone size={24} /></div>
+            <span>Virtual</span>
+          </div>
+
+          <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
+            <div className={styles.iconCircle}><Banknote size={24} /></div>
+            <span>Empréstimo</span>
+          </div>
+
+          <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
+            <div className={styles.iconCircle}><Phone size={24} /></div>
+            <span>Recarga</span>
+          </div>
+
+          <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
+            <div className={styles.iconCircle}><Box size={24} /></div>
+            <span>Caixinha</span>
+          </div>
+        </section>
+
+        {/* 2. CAMPANHAS DE SEGURO */}
+        <section className={styles.merchContainer}>
+          <div className={`${styles.merchCard} ${styles.bgGradientGreen}`} onClick={() => setActiveView?.('services')}>
+            <div className={styles.merchInfo}>
+              <div className={styles.merchBadge}><Sparkles size={12} /> Sugestão</div>
+              <h4>Seguro Vida Byte</h4>
+              <p>Proteção por R$ 9,90/mês.</p>
+            </div>
+            <ChevronRight size={20} />
+          </div>
+          <div className={`${styles.merchCard} ${styles.bgGradientDark}`} onClick={() => setActiveView?.('services')}>
+            <div className={styles.merchInfo}>
+              <div className={styles.merchBadge}><ShieldAlert size={12} /> Segurança</div>
+              <h4>Seguro Transações</h4>
+              <p>Proteja seu Pix e cartões.</p>
+            </div>
+            <ChevronRight size={20} />
+          </div>
+        </section>
+
+        {/* 3. CARTÃO DE CRÉDITO */}
+        <section className={styles.creditInfoCard}>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardTitle}>
+              <CreditCard size={18} color="#47A138" />
+              <h3>Cartão de Crédito</h3>
+            </div>
+            <span className={styles.vencimento}>Vence em 15/02</span>
+          </div>
+          <div className={styles.cardBody}>
+            <div className={styles.faturaInfo}>
+              <div>
+                <p className={styles.labelFatura}>Fatura atual</p>
+                <h2 className={styles.valorFatura}>R$ 1.420,50</h2>
+              </div>
+              <button className={styles.faturaBtn} onClick={() => setActiveView?.('services')}>Meus Cartões</button>
+            </div>
+            <div className={styles.limitUsage}>
+              <div className={styles.barBackground}>
+                <div className={styles.barFill} style={{ width: '65%' }}></div>
+              </div>
+              <div className={styles.barLabels}>
+                <span>Limite usado: R$ 1.420</span>
+                <span>Disponível: R$ 850,00</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. MEUS WIDGETS */}
         <section className={styles.abaSection}>
           <div className={styles.abaHeader}>
             <div className={styles.abaTitle}>
@@ -155,18 +230,6 @@ export default function StartDashboard() {
                 <p>Sua conta e cartões estão protegidos.</p>
               </div>
             )}
-          </div>
-        </section>
-
-        <section className={styles.abaSection}>
-          <div className={styles.abaHeader}>
-            <div className={styles.abaTitle}>
-              <ArrowRightLeft size={20} className={styles.iconVerde} />
-              <h2>Nova Transação</h2>
-            </div>
-          </div>
-          <div className={styles.containerImportado}>
-            <NovaOperacao />
           </div>
         </section>
       </main>
