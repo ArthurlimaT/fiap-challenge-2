@@ -1,117 +1,265 @@
 /* app/dashboard/components/investment/investment.module.scss */
 
-.investmentCard {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
+$color-bg-main: #F8FAFC;
+$color-text-dark: #0F172A;
+$color-text-muted: #64748B;
+$color-green-byte: #47A138;
+$shadow-compact: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 
-.headerRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-}
-
-.titleGroup {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  .iconTitle { color: #47A138; }
-  .title { font-size: 1.25rem; font-weight: 700; color: #111827; margin: 0; }
-}
-
-.totalBadge {
+.premiumContainer {
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  .totalLabel { font-size: 0.75rem; color: #6B7280; text-transform: uppercase; font-weight: 600; }
-  .totalValue { font-size: 1.5rem; font-weight: 800; color: #111827; }
+  gap: 16px; 
+  padding-bottom: 24px;
 }
 
-.cardsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 40px;
+.heroSection { width: 100%; }
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
 }
 
-.smallCard {
-  background: #F9FAF7; // Um tom bem leve de verde/cinza
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid #F3F4F6;
-  transition: transform 0.2s;
-
-  &:hover { transform: translateY(-4px); }
-}
-
-.cardHeader {
+/* --- HEADER COMPACTO --- */
+.premiumHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  align-items: center; 
+  background: white;
+  padding: 20px 24px; 
+  border-radius: 16px; 
+  box-shadow: $shadow-compact;
+  border: 1px solid #E5E7EB;
 
-  .growth {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #47A138;
-    background: rgba(71, 161, 56, 0.1);
-    padding: 2px 8px;
-    border-radius: 99px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
 }
 
-.iconCircle {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &.blue { background: #E0F2FE; color: #0369A1; }
-  &.green { background: #DCFCE7; color: #166534; }
+.headerLabelGroup {
+  display: flex; align-items: center; gap: 12px;
+  .headerIcon { 
+    color: $color-green-byte; background: rgba($color-green-byte, 0.1); 
+    padding: 6px; border-radius: 8px; width: 36px; height: 36px; 
+  }
+  .mainTitle { font-size: 1.25rem; font-weight: 800; color: $color-text-dark; margin: 0; } 
+  .subTitle { display: none; } 
 }
 
-.smallCardTitle { font-size: 0.875rem; color: #6B7280; font-weight: 500; }
-.smallCardValue { font-size: 1.5rem; font-weight: 700; color: #111827; margin: 4px 0 12px 0; }
+.patrimonioHero {
+  text-align: right;
+  display: flex; align-items: center; gap: 24px; 
 
-.progressBar {
-  height: 6px;
-  background: #E5E7EB;
-  border-radius: 99px;
-  overflow: hidden;
-  .progressInner { height: 100%; background: #0369A1; border-radius: 99px; }
+  @media (max-width: 768px) { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  .patrimonioInfo {
+    text-align: right;
+    @media (max-width: 768px) { text-align: left; }
+  }
+
+  .patrimonioLabel { 
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase; 
+    color: $color-text-muted; display: block;
+  }
+  
+  .patrimonioValueGroup {
+    display: flex; align-items: baseline; gap: 4px; justify-content: flex-end;
+    @media (max-width: 768px) { justify-content: flex-start; }
+    .currency { font-size: 1rem; color: $color-text-muted; }
+    .bigValue { font-size: 2rem; font-weight: 800; color: $color-text-dark; line-height: 1; } 
+  }
+
+  .rentabilidadeGeral {
+    display: flex; flex-direction: column; align-items: flex-end;
+    font-size: 0.8rem; font-weight: 600; color: $color-green-byte;
+    @media (max-width: 768px) { align-items: flex-start; }
+    span { background: rgba($color-green-byte, 0.1); padding: 2px 8px; border-radius: 12px; }
+  }
 }
 
-.statsSection {
-  padding-top: 32px;
-  border-top: 1px solid #F3F4F6;
+/* --- CARDS COMPACTOS --- */
+.cardsSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
 }
 
-.statsHeader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 24px;
-  color: #374151;
-  .statsTitle { font-size: 1rem; font-weight: 700; margin: 0; }
+.premiumCard {
+  background: white;
+  padding: 20px; 
+  border-radius: 16px;
+  box-shadow: $shadow-compact;
+  border: 1px solid #F3F4F6;
+  display: flex; flex-direction: column; justify-content: space-between;
+  
+  .cardTop { margin-bottom: 12px; }
+  .iconBox { width: 36px; height: 36px; border-radius: 10px; svg { width: 18px; height: 18px; } }
+  .cardTitle { font-size: 0.9rem; margin-bottom: 4px; }
+  .cardValue { font-size: 1.5rem; margin-bottom: 12px; }
 }
 
-.chartContainer {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* --- GRÁFICOS & INTERATIVIDADE --- */
+.chartsSection {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  box-shadow: $shadow-compact;
+  overflow: hidden; 
+}
+
+.statsWrapper {
+  display: grid;
+  grid-template-columns: 65% 35%; 
+  align-items: stretch;
+  
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.mainChart {
+  padding: 20px;
+  border-right: 1px solid #F3F4F6;
+  @media (max-width: 900px) { border-right: none; border-bottom: 1px solid #F3F4F6; }
+
+  .chartTitleRow {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+    h4 { margin: 0; font-size: 1rem; color: $color-text-dark; }
+    .resetBtn {
+      display: flex; align-items: center; gap: 6px;
+      background: #F1F5F9; border: none; padding: 4px 10px; border-radius: 6px;
+      font-size: 0.75rem; color: $color-text-muted; cursor: pointer;
+      &:hover { background: #E2E8F0; color: $color-text-dark; }
+    }
+  }
+}
+
+.interactivePanel {
+  padding: 20px;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: flex-start; 
   background: #FAFAFA;
-  border-radius: 12px;
+  height: 100%; 
+
+  .instruction { font-size: 0.75rem; color: #9CA3AF; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
 }
 
-@media (max-width: 640px) {
-  .cardsGrid { grid-template-columns: 1fr; }
-  .headerRow { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .totalBadge { align-items: flex-start; }
+/* --- AQUI ESTA A CORREÇÃO CRUCIAL PARA O GRÁFICO APARECER --- */
+.pieContainer {
+  width: 100%;       /* Força ocupar a largura do painel */
+  min-height: 160px; /* Garante altura para o gráfico ser desenhado */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.detailsBox {
+  margin-top: 16px;
+  width: 100%;
+  
+  .summaryInfo { text-align: center; color: $color-text-muted; font-size: 0.85rem; }
+  
+  .categoryInfo {
+    background: white;
+    border-left: 4px solid; 
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 4px; }
+    
+    .catValue { 
+      display: flex; justify-content: space-between; align-items: baseline;
+      strong { font-size: 1.25rem; color: $color-text-dark; }
+      small { color: $color-text-muted; }
+    }
+
+    .catTrend {
+      margin-top: 4px; display: flex; align-items: center; gap: 4px;
+      font-size: 0.75rem; color: $color-green-byte; font-weight: 600;
+    }
+  }
+}
+
+/* ... (Seu CSS anterior continua igual) ... */
+
+/* --- NOVA SEÇÃO: CAIXINHAS --- */
+.caixinhasSection {
+  h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: $color-text-muted;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+    letter-spacing: 0.05em;
+  }
+}
+
+.caixinhasGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr; // 2 por linha no celular
+  }
+}
+
+.caixinhaCard {
+  background: white;
+  border: 1px solid transparent; /* A cor vem do inline style */
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    background: #FAFAFA;
+    
+    .addHover { opacity: 1; transform: scale(1); }
+  }
+
+  .iconBox {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    
+    svg { width: 20px; height: 20px; }
+  }
+
+  .caixinhaInfo {
+    display: flex; flex-direction: column; align-items: flex-start;
+    .caixinhaName { font-size: 0.85rem; font-weight: 700; color: $color-text-dark; }
+    .caixinhaValue { font-size: 0.75rem; color: $color-text-muted; }
+  }
+
+  // O botãozinho de "+" que aparece no hover
+  .addHover {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: $color-text-dark;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s;
+  }
 }
