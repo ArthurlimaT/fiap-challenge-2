@@ -113,6 +113,25 @@
   top: 24px;
 }
 
+.headerSimples {
+  margin-bottom: 24px;
+  
+  .welcomeText {
+    h1 {
+      font-size: 1.8rem;
+      color: #111827;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+  }
+
+  .dateText {
+    color: #6B7280;
+    font-size: 0.95rem;
+    text-transform: capitalize;
+  }
+}
+
 @media (max-width: 1024px) {
   .dashboardGrid { grid-template-columns: 1fr; }
 }

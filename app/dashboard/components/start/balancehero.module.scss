@@ -6,7 +6,7 @@
   padding: 32px;
   /* Sombra suave e elegante usada em bancos modernos */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid #E5E7EB; /* Borda bem sutil */
+  border: 1px solid #E5E7EB; 
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -15,31 +15,31 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center; // Centraliza verticalmente a data com o badge da conta
 }
 
-.greeting h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #111827; /* Preto suave */
-  margin: 0;
-  margin-bottom: 4px;
+/* Ajuste na área da data agora que o h1 saiu */
+.greeting {
+  display: flex;
+  flex-direction: column;
 }
 
 .dateBadge {
-  font-size: 0.875rem;
-  color: #6B7280; /* Cinza médio */
+  font-size: 0.95rem; // Aumentado levemente por ser o foco principal do topo
+  font-weight: 600; // Mais peso para substituir visualmente o h1
+  color: #111827; // Cor mais forte (preto suave) para dar autoridade
   text-transform: capitalize;
+  margin: 0;
 }
 
 .accountBadge {
   background-color: #F3F4F6;
   color: #374151;
   font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 12px;
+  font-weight: 700; // Mais negrito para clareza
+  padding: 6px 14px; // Padding levemente maior
   border-radius: 99px;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -47,7 +47,7 @@
 .balanceContainer {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px; // Espaçamento levemente maior entre label e valor
 }
 
 .labelRow {
@@ -66,20 +66,21 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #47A138; /* Verde Bytebank para ação */
-  padding: 4px;
-  border-radius: 4px;
+  color: #47A138;
+  padding: 6px; // Área de clique maior
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
 
   &:hover {
     background-color: rgba(71, 161, 56, 0.1);
+    transform: scale(1.05); // Leve feedback visual
   }
 }
 
 .amountWrapper {
-  height: 48px; /* Altura fixa para evitar pulo de layout */
+  height: 52px; // Ajustado para a nova fonte de 2.5rem
   display: flex;
   align-items: center;
 }
@@ -87,39 +88,40 @@
 .valueGroup {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 6px;
 }
 
 .currency {
   font-size: 1.25rem;
-  color: #9CA3AF;
-  font-weight: 500;
+  color: #6B7280; // Cinza um pouco mais escuro para contraste
+  font-weight: 600;
 }
 
 .value {
-  font-size: 2.5rem; /* Tamanho grande e impactante */
-  font-weight: 700;
+  font-size: 2.75rem; // Aumentado levemente para impacto
+  font-weight: 800; // Extra Bold para estilo de App Bancário
   color: #111827;
-  letter-spacing: -1px; /* Tracking apertado estilo financeiro */
+  letter-spacing: -1.5px;
+  line-height: 1;
 }
 
 /* Estado Oculto (Barrinha cinza) */
 .hiddenBalance {
-  width: 180px;
-  height: 32px;
-  background-color: #E5E7EB;
-  border-radius: 4px;
-  opacity: 0.5;
+  width: 220px;
+  height: 36px;
+  background: linear-gradient(90deg, #F3F4F6 0%, #E5E7EB 100%);
+  border-radius: 6px;
+  opacity: 0.8;
 }
 
 /* Skeleton Loader (Carregando) */
 .skeletonLoader {
-  width: 120px;
-  height: 32px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  width: 140px;
+  height: 40px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e6e6e6 50%, #f0f0f0 75%);
   background-size: 200% 100%;
-  border-radius: 4px;
-  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+  animation: shimmer 1.5s infinite linear;
 }
 
 @keyframes shimmer {
@@ -129,7 +131,14 @@
 
 /* Responsivo para celular */
 @media (max-width: 640px) {
-  .heroCard { padding: 24px; }
-  .value { font-size: 2rem; }
-  .header { flex-direction: column; gap: 12px; }
+  .heroCard { 
+    padding: 24px; 
+    gap: 20px;
+  }
+  .value { font-size: 2.2rem; }
+  .header { 
+    flex-direction: row; // Mantém em linha no mobile para poupar espaço vertical
+    justify-content: space-between; 
+  }
+  .dateBadge { font-size: 0.85rem; }
 }

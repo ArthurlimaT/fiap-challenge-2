@@ -19,6 +19,7 @@ import {
 export default function StartDashboard() {
   const [mounted, setMounted] = useState(false);
   const [dataAtual, setDataAtual] = useState('');
+  const [userName, setUserName] = useState(''); // Estado para guardar o nome
   const [showSettings, setShowSettings] = useState(false);
   
   const [activeWidgets, setActiveWidgets] = useState({
@@ -30,6 +31,16 @@ export default function StartDashboard() {
 
   useEffect(() => {
     setMounted(true);
+    
+    // 1. Busca o nome do usuário no localStorage
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      // Pega apenas o primeiro nome para ficar mais elegante
+      const primeiroNome = user.name.split(' ')[0];
+      setUserName(primeiroNome);
+    }
+
     const agora = new Date();
     setDataAtual(agora.toLocaleDateString('pt-BR', {
       weekday: 'long', 
@@ -49,15 +60,19 @@ export default function StartDashboard() {
     <div className={styles.dashboardGrid}>
       <main className={styles.mainColumn}>
         
+        {/* HEADER ATUALIZADO COM NOME */}
         <header className={styles.headerSimples}>
-          <p className={styles.dateText}>{dataAtual}</p>
+          <div className={styles.welcomeText}>
+            <h1>Olá, {userName || 'Usuário'}! 👋</h1>
+            <p className={styles.dateText}>{dataAtual}</p>
+          </div>
         </header>
 
         <section className={styles.heroSection}>
           <BalanceHero />
         </section>
 
-        {/* SEÇÃO MEUS WIDGETS (ESTILO ORIGINAL RETANGULAR) */}
+        {/* ... restante do código permanece igual ... */}
         <section className={styles.abaSection}>
           <div className={styles.abaHeader}>
             <div className={styles.abaTitle}>
@@ -143,7 +158,6 @@ export default function StartDashboard() {
           </div>
         </section>
 
-        {/* SEÇÃO NOVA TRANSAÇÃO */}
         <section className={styles.abaSection}>
           <div className={styles.abaHeader}>
             <div className={styles.abaTitle}>
