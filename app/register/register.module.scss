@@ -1,91 +1,142 @@
-/* app/register/register.module.scss */
-.registerContainer {
+/* register.module.scss */
+
+.registerPage {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #004D61 0%, #002d39 100%);
-  padding: 40px 20px;
+  background: #000; // Fundo preto profundo
+  position: relative;
+  overflow: hidden;
 }
 
+/* Efeito de Glow Animado */
+.glowGreen {
+  position: absolute;
+  border-radius: 50%;
+  background: #47A138;
+  filter: blur(120px);
+  mix-blend-mode: screen;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glow1 {
+  @extend .glowGreen;
+  width: 600px;
+  height: 600px;
+  top: -10%;
+  right: -5%;
+  opacity: 0.15;
+  animation: pulseGlow 8s infinite alternate;
+}
+
+.glow2 {
+  @extend .glowGreen;
+  width: 400px;
+  height: 400px;
+  bottom: -10%;
+  left: -5%;
+  opacity: 0.1;
+}
+
+/* Glassmorphism Card */
 .registerCard {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
   width: 100%;
-  max-width: 500px; // Um pouco mais largo que o login
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.logoArea {
-  display: flex;
-  justify-content: center;
-}
-
-.inputGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-
-  @media (min-width: 480px) {
-    grid-template-columns: 1fr 1fr; // Nome e CPF lado a lado em telas maiores
-  }
-}
-
-.fullWidth {
-  grid-column: 1 / -1;
+  max-width: 440px;
+  padding: 40px;
+  background: rgba(17, 24, 39, 0.6); // gray-900 com opacidade
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(31, 41, 55, 1);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 10;
 }
 
 .inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #334155;
-  }
-
-  input {
-    padding: 10px;
-    border: 1px solid #CBD5E1;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    outline-color: #47A138;
-  }
-}
-
-.registerBtn {
-  background-color: #47A138; // Verde para cadastro
-  color: white;
-  padding: 14px;
-  border-radius: 8px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.2s;
-
-  &:hover {
-    background-color: #3e8e32;
-  }
-}
-
-.btnSecondary {
-  background: transparent;
-  border: 1px solid #CBD5E1;
-  color: #64748B;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: 600;
-  text-align: center;
+  margin-bottom: 20px;
   
-  &:hover {
-    background: #F8FAFC;
-    color: #47A138;
+  label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
   }
+
+  .inputWrapper {
+    position: relative;
+    
+    svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #4B5563;
+      transition: color 0.3s;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      background: rgba(3, 7, 18, 0.5);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      color: white;
+      outline: none;
+      transition: all 0.3s;
+
+      &::placeholder { color: #374151; }
+
+      &:focus {
+        border-color: #47A138;
+        box-shadow: 0 0 0 1px #47A138;
+        
+        & + svg { color: #47A138; }
+      }
+    }
+  }
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 16px;
+  background: #47A138;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 10px 15px -3px rgba(71, 161, 56, 0.2);
+
+  &:hover:not(:disabled) {
+    background: #3f9132;
+    transform: translateY(-2px);
+  }
+
+  &:active { transform: scale(0.98); }
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+}
+
+/* Animações */
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 0.15; }
+  100% { transform: scale(1.1); opacity: 0.25; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }

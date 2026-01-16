@@ -1,30 +1,119 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { UserPlus, ArrowLeft, Mail, Lock, User } from 'lucide-react';
 
 export default function RegisterPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui você faria a lógica de salvar o usuário
-    alert("Conta criada com sucesso!");
-    router.push('/dashboard'); // Manda para o dashboard real
+    setIsLoading(true);
+
+    // Simula processamento de cadastro
+    setTimeout(() => {
+      // Cria o cookie de autenticação para permitir entrada direta
+      document.cookie = "auth_token=user_autenticado_bytebank; path=/; max-age=86400; SameSite=Lax";
+      
+      alert("Conta criada com sucesso! Bem-vindo ao Bytebank.");
+      router.push('/dashboard');
+    }, 2000);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleRegister} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-[#47A138]">Criar nova conta</h2>
-        <input type="text" placeholder="Nome completo" className="w-full p-3 border rounded mb-4 outline-none focus:border-[#47A138]" required />
-        <input type="email" placeholder="E-mail" className="w-full p-3 border rounded mb-4 outline-none focus:border-[#47A138]" required />
-        <input type="password" placeholder="Senha" className="w-full p-3 border rounded mb-6 outline-none focus:border-[#47A138]" required />
-        <button type="submit" className="w-full bg-[#47A138] text-white py-3 rounded font-bold hover:brightness-90 transition-all">
-          Cadastrar
-        </button>
-        <Link href="/" className="block text-center mt-4 text-sm text-gray-500 hover:underline">Voltar para o início</Link>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
+      
+      {/* Efeito de Fundo (Glow Verde - Posicionado diferente do login para variação) */}
+      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#47A138] rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-pulse"></div>
+      <div className="absolute top-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#47A138] rounded-full mix-blend-screen filter blur-[100px] opacity-10"></div>
+
+      {/* Botão de Voltar */}
+      <Link href="/login" className="absolute top-8 left-8 text-gray-500 hover:text-white transition-colors flex items-center gap-2 text-sm">
+        <ArrowLeft size={16} /> Voltar para login
+      </Link>
+
+      {/* Card de Cadastro */}
+      <div className="w-full max-w-md p-8 bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-2xl shadow-2xl z-10">
+        
+        {/* Cabeçalho */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-12 h-12 bg-white/5 border border-gray-700 rounded-xl flex items-center justify-center mb-4">
+            <UserPlus className="text-[#47A138]" size={24} />
+          </div>
+          <h2 className="text-2xl font-bold text-white tracking-tight">Abra sua conta</h2>
+          <p className="text-gray-400 text-sm mt-2">Rápido, fácil e totalmente seguro.</p>
+        </div>
+
+        <form onSubmit={handleRegister} className="space-y-4">
+          
+          {/* Nome */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Nome Completo</label>
+            <div className="relative">
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
+              <input 
+                type="text" 
+                placeholder="Como quer ser chamado?" 
+                className="w-full pl-11 p-3.5 bg-gray-950/50 border border-gray-700 rounded-xl text-white outline-none focus:border-[#47A138] focus:ring-1 focus:ring-[#47A138] transition-all placeholder:text-gray-600" 
+                required 
+              />
+            </div>
+          </div>
+
+          {/* E-mail */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">E-mail</label>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
+              <input 
+                type="email" 
+                placeholder="seu@email.com" 
+                className="w-full pl-11 p-3.5 bg-gray-950/50 border border-gray-700 rounded-xl text-white outline-none focus:border-[#47A138] focus:ring-1 focus:ring-[#47A138] transition-all placeholder:text-gray-600" 
+                required 
+              />
+            </div>
+          </div>
+
+          {/* Senha */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Crie uma senha</label>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
+              <input 
+                type="password" 
+                placeholder="No mínimo 6 caracteres" 
+                className="w-full pl-11 p-3.5 bg-gray-950/50 border border-gray-700 rounded-xl text-white outline-none focus:border-[#47A138] focus:ring-1 focus:ring-[#47A138] transition-all placeholder:text-gray-600" 
+                required 
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full bg-[#47A138] hover:bg-[#3f9132] text-white py-4 rounded-xl font-bold transition-all transform active:scale-[0.98] shadow-lg shadow-green-900/20 disabled:opacity-70 flex items-center justify-center gap-2 mt-4"
+          >
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            ) : (
+              'Finalizar Cadastro'
+            )}
+          </button>
+        </form>
+
+        <div className="mt-8 pt-6 border-t border-gray-800 text-center">
+          <p className="text-sm text-gray-500">
+            Já possui conta? <Link href="/login" className="text-[#47A138] font-bold hover:underline ml-1">Fazer Login</Link>
+          </p>
+        </div>
+
+      </div>
+      
+      <div className="absolute bottom-6 text-gray-600 text-xs">
+        Bytebank &copy; 2026 • Secure Registration
+      </div>
     </div>
   );
 }
