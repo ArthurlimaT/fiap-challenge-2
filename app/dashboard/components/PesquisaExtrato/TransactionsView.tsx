@@ -4,7 +4,7 @@ import {
   Search, Filter, ChevronLeft, ChevronRight, 
   Utensils, Car, Home, Heart, GraduationCap, Gift, 
   ShoppingBag, Banknote, Landmark, ArrowRightLeft,
-  Calendar as CalendarIcon, X
+  Calendar as CalendarIcon, X, FileDown, FileSpreadsheet // Ícones novos para PDF e Excel
 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
@@ -40,10 +40,9 @@ export default function TransactionsView() {
   const [isClient, setIsClient] = useState(false);
   const transacoesReais = useSelector((state: RootState) => state.banco.transacoes);
   
-  // Estados de Filtro
   const [searchTerm, setSearchTerm] = useState('');
   const [filterTipo, setFilterTipo] = useState('todos');
-  const [filterData, setFilterData] = useState(''); // Novo estado para data
+  const [filterData, setFilterData] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -84,13 +83,11 @@ export default function TransactionsView() {
     );
   }, [transacoesReais, MOCK_DATA]);
 
-  // --- LÓGICA DE FILTRAGEM ATUALIZADA ---
   const filteredTransactions = useMemo(() => {
     return allTransactions.filter(item => {
       const matchesSearch = item.favorecido.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesTipo = filterTipo === 'todos' || item.tipo === filterTipo;
       
-      // Filtro de Data: Compara apenas a parte YYYY-MM-DD
       const itemDataFormatada = new Date(item.data).toISOString().split('T')[0];
       const matchesData = !filterData || itemDataFormatada === filterData;
 
@@ -101,19 +98,65 @@ export default function TransactionsView() {
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
   const currentItems = filteredTransactions.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  // --- EXPORTAR EXCEL (Melhorado) ---
+  const handleExportExcel = () => {
+    const header = ['Data', 'Favorecido', 'Categoria', 'Tipo', 'Valor'];
+    const csvRows = filteredTransactions.map(item => {
+      const valorFormatado = item.valor.toFixed(2).replace('.', ',');
+      const row = [
+        new Date(item.data).toLocaleDateString('pt-BR'),
+        `"${item.favorecido}"`,
+        `"${item.categoria || '-'}"`,
+        item.tipo.toUpperCase(),
+        `"${valorFormatado}"`
+      ];
+      return row.join(';');
+    });
+
+    const csvString = [header.join(';'), ...csvRows].join('\n');
+    const blob = new Blob(["\uFEFF" + csvString], { type: 'text/csv;charset=utf-8;' });
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `extrato_bytebank_${new Date().toISOString().split('T')[0]}.csv`);
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // --- EXPORTAR PDF (Via navegador formatado) ---
+  const handleExportPDF = () => {
+    // Aciona a impressão nativa que permite "Salvar como PDF"
+    window.print();
+  };
+
   if (!isClient) return null;
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div>
+        <div className={styles.headerTitle}>
           <h2>Extrato</h2>
           <p>Consulte as suas movimentações por período, tipo ou favorecido</p>
+        </div>
+        
+        {/* BOTÕES DE EXPORTAÇÃO */}
+        <div className={styles.actionButtons}>
+          <button className={styles.btnPdf} onClick={handleExportPDF} title="Salvar como PDF">
+            <FileDown size={18} />
+            <span>PDF</span>
+          </button>
+          <button className={styles.btnExcel} onClick={handleExportExcel} title="Baixar Excel">
+            <FileSpreadsheet size={18} />
+            <span>Excel</span>
+          </button>
         </div>
       </header>
 
       <section className={styles.toolbar}>
-        {/* Busca por Nome */}
         <div className={styles.searchBar}>
           <Search size={18} />
           <input 
@@ -125,7 +168,6 @@ export default function TransactionsView() {
         </div>
 
         <div className={styles.filterGroup}>
-          {/* Busca por Data */}
           <div className={styles.dateField}>
             <CalendarIcon size={16} />
             <input 
@@ -140,7 +182,6 @@ export default function TransactionsView() {
             )}
           </div>
 
-          {/* Busca por Tipo */}
           <div className={styles.selectWrapper}>
             <Filter size={16} />
             <select value={filterTipo} onChange={(e) => {setFilterTipo(e.target.value); setCurrentPage(1);}}>

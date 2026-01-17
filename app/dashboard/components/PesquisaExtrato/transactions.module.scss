@@ -1,299 +1,163 @@
+// --- Variáveis e Utilitários ---
+$green: #47a138;
+$dark: #111827;
+$gray: #6b7280;
+$light-bg: #f3f4f6;
+$border: 1px solid #e5e7eb;
+$radius: 12px;
+
+%flex-center { display: flex; align-items: center; }
+%input-reset { border: none; outline: none; background: transparent; width: 100%; }
+%card-style { background: white; border: $border; border-radius: $radius; }
+
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 8px;
+  display: flex; flex-direction: column; gap: 24px; padding: 8px;
   animation: fadeIn 0.3s ease-in-out;
 }
 
 .header {
-  h2 {
-    font-size: 1.5rem;
-    color: #111827;
-    font-weight: 700;
-    margin: 0;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  
+  .headerTitle {
+    h2 { font-size: 1.5rem; color: $dark; font-weight: 700; margin: 0; }
+    p { color: $gray; font-size: 0.9rem; margin-top: 4px; }
   }
-  p {
-    color: #6B7280;
-    font-size: 0.9rem;
-    margin-top: 4px;
+
+  .actionButtons {
+    display: flex; gap: 12px;
+    
+    button {
+      @extend %flex-center; gap: 8px; padding: 10px 18px;
+      border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+      color: white; border: none; cursor: pointer; transition: all 0.2s;
+      
+      span { display: inline; @media (max-width: 600px) { display: none; } }
+      &:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    }
+    .btnPdf { background: #E11D48; box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.2); }
+    .btnExcel { background: #16A34A; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2); }
   }
 }
 
 .toolbar {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  align-items: center;
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center;
 
   .searchBar {
-    flex: 1;
-    min-width: 280px;
-    background: #f3f4f6;
-    padding: 12px 16px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
+    flex: 1; min-width: 280px; @extend %flex-center; gap: 10px;
+    background: $light-bg; padding: 12px 16px; border-radius: $radius;
+    border: 1px solid transparent; transition: all 0.2s;
 
     &:focus-within {
-      border-color: #47a138;
-      background: white;
+      border-color: $green; background: white;
       box-shadow: 0 0 0 4px rgba(71, 161, 56, 0.1);
     }
-
-    input {
-      background: transparent;
-      border: none;
-      outline: none;
-      width: 100%;
-      color: #111827;
-      font-size: 0.95rem;
-
-      &::placeholder {
-        color: #9ca3af;
-      }
-    }
+    input { @extend %input-reset; color: $dark; font-size: 0.95rem; &::placeholder { color: #9ca3af; } }
   }
 
-  .filterGroup {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+  .filterGroup { display: flex; gap: 12px; flex-wrap: wrap; }
 }
 
 .dateField, .selectWrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  padding: 10px 14px;
-  border-radius: 12px;
-  color: #47a138;
-  transition: border-color 0.2s;
+  @extend %flex-center; gap: 8px; @extend %card-style;
+  padding: 10px 14px; color: $green; transition: border-color 0.2s;
+  &:hover { border-color: $green; }
 
-  &:hover {
-    border-color: #47a138;
-  }
-
-  input, select {
-    border: none;
-    outline: none;
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #374151;
-    cursor: pointer;
-    background: transparent;
-  }
+  input, select { @extend %input-reset; font-weight: 600; color: #374151; cursor: pointer; }
 }
 
-.dateField {
-  position: relative;
-
-  .clearDate {
-    background: #f3f4f6;
-    border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #6b7280;
-    margin-left: 4px;
-    transition: background 0.2s;
-
-    &:hover {
-      background: #e11d48;
-      color: white;
-    }
-  }
+.dateField .clearDate {
+  @extend %flex-center; justify-content: center;
+  background: $light-bg; border: none; border-radius: 50%; width: 20px; height: 20px;
+  cursor: pointer; color: $gray; margin-left: 4px; transition: 0.2s;
+  &:hover { background: #e11d48; color: white; }
 }
 
 .tableResponsive {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  overflow-x: auto;
+  @extend %card-style; border-radius: 20px; overflow-x: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 650px;
+  width: 100%; border-collapse: collapse; min-width: 650px;
 
   th {
-    background: #f9faf7;
-    text-align: left;
-    padding: 18px;
-    font-size: 0.75rem;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 700;
+    background: #f9faf7; text-align: left; padding: 18px;
+    font-size: 0.75rem; color: $gray; text-transform: uppercase; font-weight: 700;
   }
-
-  td {
-    padding: 16px 18px;
-    border-bottom: 1px solid #f8f9fa;
-    vertical-align: middle;
-  }
-
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
+  td { padding: 16px 18px; border-bottom: 1px solid #f8f9fa; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
 }
 
 .transactionInfo {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-
+  @extend %flex-center; gap: 14px;
   .iconBox {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    &.iconIn {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    &.iconOut {
-      background: #f3f4f6;
-      color: #374151;
-    }
+    width: 42px; height: 42px; border-radius: 12px;
+    @extend %flex-center; justify-content: center; flex-shrink: 0;
+    &.iconIn { background: #dcfce7; color: #166534; }
+    &.iconOut { background: $light-bg; color: #374151; }
   }
-
-  .title {
-    display: block;
-    font-weight: 700;
-    color: #111827;
-    font-size: 0.95rem;
-  }
-
-  .category {
-    font-size: 0.75rem;
-    color: #9ca3af;
-  }
+  .title { display: block; font-weight: 700; color: $dark; font-size: 0.95rem; }
+  .category { font-size: 0.75rem; color: #9ca3af; }
 }
 
 .methodBadge {
-  background: #eef2ff;
-  color: #4338ca;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  display: inline-block;
+  background: #eef2ff; color: #4338ca; padding: 4px 10px;
+  border-radius: 6px; font-size: 0.7rem; font-weight: 800; display: inline-block;
 }
 
 .dateTime {
-  display: flex;
-  flex-direction: column;
-
-  span {
-    font-size: 0.85rem;
-    color: #374151;
-    font-weight: 600;
-  }
-
-  small {
-    font-size: 0.75rem;
-    color: #9ca3af;
-  }
+  display: flex; flex-direction: column;
+  span { font-size: 0.85rem; color: #374151; font-weight: 600; }
+  small { font-size: 0.75rem; color: #9ca3af; }
 }
 
-.priceIn {
-  color: #166534;
-  font-weight: 800;
-  font-size: 1rem;
-}
+.priceIn, .priceOut { font-weight: 800; font-size: 1rem; }
+.priceIn { color: #166534; }
+.priceOut { color: #b91c1c; }
 
-.priceOut {
-  color: #b91c1c;
-  font-weight: 800;
-  font-size: 1rem;
-}
-
-.noResults {
-  text-align: center;
-  padding: 60px 20px;
-  color: #9ca3af;
-  font-weight: 500;
-}
+.noResults { text-align: center; padding: 60px 20px; color: #9ca3af; font-weight: 500; }
 
 .pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 4px;
-  color: #6b7280;
-  font-size: 0.85rem;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 4px; color: $gray; font-size: 0.85rem;
 
   .pageControls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
+    display: flex; gap: 8px;
     button {
-      padding: 8px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      background: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s;
-
-      &:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-      }
-
-      &:hover:not(:disabled) {
-        border-color: #47a138;
-        color: #47a138;
-        background: #f9faf7;
-      }
+      padding: 8px; border-radius: 10px; border: $border; background: white;
+      cursor: pointer; @extend %flex-center; transition: all 0.2s;
+      &:disabled { opacity: 0.3; cursor: not-allowed; }
+      &:hover:not(:disabled) { border-color: $green; color: $green; background: #f9faf7; }
     }
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-// Responsividade para telas muito pequenas
 @media (max-width: 640px) {
   .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    
-    .searchBar {
-      min-width: 100%;
-    }
-    
-    .filterGroup {
-      width: 100%;
-      justify-content: space-between;
-      
-      .dateField, .selectWrapper {
-        flex: 1;
-      }
-    }
+    flex-direction: column; align-items: stretch;
+    .searchBar { min-width: 100%; }
+    .filterGroup { width: 100%; justify-content: space-between; .dateField, .selectWrapper { flex: 1; } }
+  }
+}
+
+/* --- PRINT / PDF --- */
+@media print {
+  body * { visibility: hidden; }
+  .container, .container * { visibility: visible; }
+  .container { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; border: none; box-shadow: none; }
+  .toolbar, .pagination, .actionButtons { display: none !important; }
+  
+  .header {
+    border-bottom: 2px solid black; margin-bottom: 20px;
+    .headerTitle { h2 { font-size: 22px; color: black; } p { display: none; } }
+  }
+  
+  .tableResponsive { box-shadow: none; border: none; overflow: visible; }
+  .table {
+    border: 1px solid black;
+    th { background: #eee !important; color: black !important; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    td { border: 1px solid black; color: black !important; }
   }
 }
