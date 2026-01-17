@@ -1,77 +1,69 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   AreaChart, Area, XAxis, CartesianGrid, Tooltip, 
   ResponsiveContainer, PieChart, Pie, Cell, Sector, Legend
 } from 'recharts';
-import { TrendingUp, ArrowRightLeft, RefreshCcw } from 'lucide-react';
+import { TrendingUp, ArrowRightLeft, RefreshCcw, Calendar } from 'lucide-react';
 import styles from './investment.module.scss';
 
-// --- MOCK DATA ---
-const evolutionDataMap: any = {
-  'Total': [
-    { month: 'Jan', value: 42000 }, { month: 'Fev', value: 43500 },
-    { month: 'Mar', value: 43100 }, { month: 'Abr', value: 45800 },
-    { month: 'Mai', value: 48000 }, { month: 'Jun', value: 50000 },
-  ],
-  'Tesouro': [
-    { month: 'Jan', value: 15000 }, { month: 'Fev', value: 15200 },
-    { month: 'Mar', value: 15500 }, { month: 'Abr', value: 16000 },
-    { month: 'Mai', value: 16800 }, { month: 'Jun', value: 17500 },
-  ],
-  'Ações': [
-    { month: 'Jan', value: 10000 }, { month: 'Fev', value: 11000 },
-    { month: 'Mar', value: 9500 },  { month: 'Abr', value: 11500 },
-    { month: 'Mai', value: 12000 }, { month: 'Jun', value: 12500 },
-  ],
-  'FIIs': [
-    { month: 'Jan', value: 8000 },  { month: 'Fev', value: 8200 },
-    { month: 'Mar', value: 8500 },  { month: 'Abr', value: 9000 },
-    { month: 'Mai', value: 9500 },  { month: 'Jun', value: 10000 },
-  ],
-  'Cripto': [
-    { month: 'Jan', value: 9000 },  { month: 'Fev', value: 9100 },
-    { month: 'Mar', value: 9600 },  { month: 'Abr', value: 9300 },
-    { month: 'Mai', value: 9700 },  { month: 'Jun', value: 10000 },
-  ]
+// Função para gerar histórico fictício baseado no valor ATUAL (para parecer real e reativo)
+const generateHistory = (portfolio: any[], monthsBack: number) => {
+  const history = [];
+  const today = new Date();
+
+  for (let i = monthsBack - 1; i >= 0; i--) {
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const monthName = date.toLocaleString('pt-BR', { month: 'short' });
+    
+    // Cria um objeto de dados para este mês
+    const monthData: any = { 
+      month: i === 0 ? 'Atual' : monthName, // O último mês é "Atual"
+      originalDate: date 
+    }; 
+
+    // Para cada categoria, gera um valor histórico
+    // Lógica: Mês atual = 100%. Meses anteriores = Variação aleatória decrescente
+    portfolio.forEach((asset) => {
+      if (i === 0) {
+        monthData[asset.name] = asset.amount; // Mês atual é o valor real exato
+      } else {
+        // Simula uma evolução onde no passado tinha menos (crescimento de ~1-2% ao mês)
+        const factor = 1 - (i * 0.015) + (Math.random() * 0.02 - 0.01); 
+        monthData[asset.name] = Math.max(0, asset.amount * factor);
+      }
+    });
+
+    history.push(monthData);
+  }
+  return history;
 };
 
-const flowDataMap: any = {
-  'Total': [
-    { month: 'Jan', aporte: 2500, resgate: 200 },
-    { month: 'Fev', aporte: 1000, resgate: 500 },
-    { month: 'Mar', aporte: 3000, resgate: 100 },
-    { month: 'Abr', aporte: 1500, resgate: 2000 },
-    { month: 'Mai', aporte: 4000, resgate: 300 },
-  ],
-  'Tesouro': [
-    { month: 'Jan', aporte: 1000, resgate: 0 },
-    { month: 'Fev', aporte: 500, resgate: 0 },
-    { month: 'Mar', aporte: 500, resgate: 0 },
-    { month: 'Abr', aporte: 1000, resgate: 0 },
-    { month: 'Mai', aporte: 800, resgate: 0 },
-  ],
-  'Ações': [
-    { month: 'Jan', aporte: 1000, resgate: 0 },
-    { month: 'Fev', aporte: 0, resgate: 500 },
-    { month: 'Mar', aporte: 1000, resgate: 0 },
-    { month: 'Abr', aporte: 500, resgate: 1000 },
-    { month: 'Mai', aporte: 1200, resgate: 0 },
-  ],
-  'FIIs': [
-    { month: 'Jan', aporte: 500, resgate: 0 },
-    { month: 'Fev', aporte: 500, resgate: 0 },
-    { month: 'Mar', aporte: 500, resgate: 0 },
-    { month: 'Abr', aporte: 0, resgate: 200 },
-    { month: 'Mai', aporte: 1000, resgate: 0 },
-  ],
-  'Cripto': [
-    { month: 'Jan', aporte: 0, resgate: 200 },
-    { month: 'Fev', aporte: 0, resgate: 0 },
-    { month: 'Mar', aporte: 1000, resgate: 100 },
-    { month: 'Abr', aporte: 0, resgate: 800 },
-    { month: 'Mai', aporte: 1000, resgate: 300 },
-  ]
+// Mock simples para fluxo (entradas/saidas) também baseado no tempo
+const generateFlowHistory = (monthsBack: number, currentFlow: any) => {
+  const history = [];
+  const today = new Date();
+  
+  for (let i = monthsBack - 1; i >= 0; i--) {
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const monthName = date.toLocaleString('pt-BR', { month: 'short' });
+
+    if (i === 0) {
+       history.push({ 
+         month: 'Atual', 
+         aporte: 2000 + currentFlow.invested, 
+         resgate: 500 + currentFlow.redeemed 
+       });
+    } else {
+       // Mock aleatório para passado
+       history.push({
+         month: monthName,
+         aporte: Math.floor(Math.random() * 3000) + 1000,
+         resgate: Math.random() > 0.7 ? Math.floor(Math.random() * 1000) : 0 // Resgate ocasional
+       });
+    }
+  }
+  return history;
 };
 
 const renderActiveShape = (props: any) => {
@@ -92,7 +84,10 @@ interface Props {
 export default function InvestmentStats({ data, currentSessionFlow }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState('Total');
-  const [chartView, setChartView] = useState<'evolution' | 'flow'>('evolution'); 
+  const [chartView, setChartView] = useState<'evolution' | 'flow'>('evolution');
+  
+  // Novo Estado: Filtro de Tempo (1 Mes, 6 Meses, 1 Ano)
+  const [timeRange, setTimeRange] = useState<'1M' | '6M' | '1Y'>('6M');
 
   const resetView = () => {
     setSelectedCategory('Total');
@@ -110,49 +105,44 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
 
   const onPieEnter = (_: any, index: number) => setActiveIndex(index);
 
-  // --- CORES DINÂMICA ---
+  // --- ORDENAÇÃO DINÂMICA (MAIOR PARA MENOR) ---
+  // Ordenamos o array de dados para que o gráfico desenhe a maior fatia primeiro (base) ou por último
+  // Para Stacked Area, geralmente queremos os maiores na base visualmente.
+  const sortedPortfolio = useMemo(() => {
+    return [...data].sort((a, b) => b.amount - a.amount);
+  }, [data]);
+
+  // --- GERAÇÃO DE DADOS DINÂMICOS ---
+  const monthsToGenerate = timeRange === '1Y' ? 12 : timeRange === '6M' ? 6 : 2; // 1M mostra atual e anterior para ter linha
+  
+  const chartData = useMemo(() => {
+    return generateHistory(data, monthsToGenerate);
+  }, [data, monthsToGenerate]);
+
+  const flowData = useMemo(() => {
+    return generateFlowHistory(monthsToGenerate, currentSessionFlow);
+  }, [monthsToGenerate, currentSessionFlow]);
+
+  // Cor do item selecionado (ou verde padrão)
   const activeItem = data.find(item => item.name === selectedCategory);
   const activeColor = activeItem ? activeItem.color : '#47A138'; 
 
-  const getColorByName = (name: string) => {
-    const item = data.find(d => d.name === name);
-    return item ? item.color : '#9CA3AF';
-  };
-
-  // --- PREPARAÇÃO DOS DADOS ---
-  const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
-  const stackedEvolutionData = months.map((month, index) => {
-    return {
-      month,
-      Tesouro: evolutionDataMap['Tesouro'][index].value,
-      Ações: evolutionDataMap['Ações'][index].value,
-      FIIs: evolutionDataMap['FIIs'][index].value,
-      Cripto: evolutionDataMap['Cripto'][index].value,
-      total: evolutionDataMap['Total'][index].value
-    };
-  });
-
-  const currentEvolutionData = evolutionDataMap[selectedCategory];
-
-  const baseFlowData = flowDataMap[selectedCategory] || flowDataMap['Total'];
-  const currentFlowData = [
-    ...baseFlowData,
-    { 
-      month: 'Atual', 
-      aporte: (selectedCategory === 'Total' ? 2000 : 500) + currentSessionFlow.invested, 
-      resgate: (selectedCategory === 'Total' ? 500 : 0) + currentSessionFlow.redeemed 
-    }
-  ];
+  // Preparar dados para o gráfico de Categoria Única
+  const singleCategoryData = chartData.map(item => ({
+    month: item.month,
+    value: item[selectedCategory] || 0
+  }));
 
   return (
     <div className={styles.statsWrapper}>
       
+      {/* GRÁFICO PRINCIPAL */}
       <div className={styles.mainChart}>
         
         <div className={styles.chartTitleRow}>
           <div className={styles.titleWithReset}>
             <h4 style={{color: selectedCategory === 'Total' ? '#0F172A' : activeColor}}>
-              {selectedCategory === 'Total' ? 'Composição Patrimonial' : selectedCategory}
+              {selectedCategory === 'Total' ? 'Patrimônio' : selectedCategory}
             </h4>
             {selectedCategory !== 'Total' && (
               <button onClick={resetView} className={styles.resetBtn}>
@@ -161,48 +151,78 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
             )}
           </div>
 
-          <div className={styles.tabsContainer}>
-            <button 
-              className={`${styles.chartTab} ${chartView === 'evolution' ? styles.active : ''}`}
-              onClick={() => setChartView('evolution')}
-            >
-              <TrendingUp size={14}/> Evolução
-            </button>
-            <button 
-              className={`${styles.chartTab} ${chartView === 'flow' ? styles.active : ''}`}
-              onClick={() => setChartView('flow')}
-            >
-              <ArrowRightLeft size={14}/> Fluxo
-            </button>
+          {/* Controle de Filtros e Abas */}
+          <div className={styles.controlsGroup}>
+            {/* Filtro de Tempo */}
+            <div className={styles.timeFilter}>
+               <button className={timeRange === '1M' ? styles.activeTime : ''} onClick={() => setTimeRange('1M')}>1M</button>
+               <button className={timeRange === '6M' ? styles.activeTime : ''} onClick={() => setTimeRange('6M')}>6M</button>
+               <button className={timeRange === '1Y' ? styles.activeTime : ''} onClick={() => setTimeRange('1Y')}>1A</button>
+            </div>
+
+            <div className={styles.divider}></div>
+
+            {/* Abas Tipo de Gráfico */}
+            <div className={styles.tabsContainer}>
+              <button 
+                className={`${styles.chartTab} ${chartView === 'evolution' ? styles.active : ''}`}
+                onClick={() => setChartView('evolution')}
+                title="Evolução"
+              >
+                <TrendingUp size={16}/>
+              </button>
+              <button 
+                className={`${styles.chartTab} ${chartView === 'flow' ? styles.active : ''}`}
+                onClick={() => setChartView('flow')}
+                title="Entradas e Saídas"
+              >
+                <ArrowRightLeft size={16}/>
+              </button>
+            </div>
           </div>
         </div>
         
         <ResponsiveContainer width="100%" height={240}> 
           {chartView === 'evolution' ? (
             
-            // --- GRÁFICO DE EVOLUÇÃO ---
             selectedCategory === 'Total' ? (
-              // 1. VISÃO EMPILHADA (TODAS AS CATEGORIAS) - APENAS LINHAS
-              <AreaChart data={stackedEvolutionData}>
+              // --- CENÁRIO 1: TOTAL (EMPILHADO ORDENADO) ---
+              <AreaChart data={chartData}>
+                <defs>
+                  {sortedPortfolio.map(item => (
+                    <linearGradient key={item.id} id={`grad${item.id}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={item.color} stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor={item.color} stopOpacity={0.1}/>
+                    </linearGradient>
+                  ))}
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
                 <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  formatter={(value: any, name: any) => [`R$ ${Number(value).toLocaleString()}`, name]}
+                  formatter={(value: number | undefined, name: string | undefined) => [`R$ ${Number(value || 0).toLocaleString()}`, name || '']}
+                  itemSorter={(item) => -1 * (item.value as number)} // Tooltip também ordena do maior para menor
                 />
                 <Legend iconType="circle" wrapperStyle={{fontSize: '11px', paddingTop: '10px'}}/>
                 
-                {/* MUDANÇA AQUI: fill="transparent" para mostrar apenas as linhas empilhadas */}
-                <Area type="monotone" dataKey="Cripto" stackId="1" stroke={getColorByName('Cripto')} strokeWidth={2} fill="transparent" />
-                <Area type="monotone" dataKey="FIIs" stackId="1" stroke={getColorByName('FIIs')} strokeWidth={2} fill="transparent" />
-                <Area type="monotone" dataKey="Ações" stackId="1" stroke={getColorByName('Ações')} strokeWidth={2} fill="transparent" />
-                <Area type="monotone" dataKey="Tesouro" stackId="1" stroke={getColorByName('Tesouro')} strokeWidth={2} fill="transparent" />
+                {/* Renderizamos as Áreas baseadas no Portfolio ORDENADO */}
+                {sortedPortfolio.map(item => (
+                  <Area 
+                    key={item.id}
+                    type="monotone" 
+                    dataKey={item.name} 
+                    stackId="1" 
+                    stroke={item.color} 
+                    fill={`url(#grad${item.id})`}
+                    animationDuration={500}
+                  />
+                ))}
               </AreaChart>
             ) : (
-              // 2. VISÃO INDIVIDUAL (CATEGORIA SELECIONADA) - COM GRADIENTE
-              <AreaChart data={currentEvolutionData}>
+              // --- CENÁRIO 2: FILTRADO (SINGLE) ---
+              <AreaChart data={singleCategoryData}>
                 <defs>
-                  <linearGradient id="colorEvolution" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="colorFocus" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor={activeColor} stopOpacity={0.3}/>
                     <stop offset="95%" stopColor={activeColor} stopOpacity={0}/>
                   </linearGradient>
@@ -211,7 +231,7 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                 <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  formatter={(value: any) => [`R$ ${Number(value).toLocaleString()}`, 'Patrimônio']}
+                  formatter={(value: any) => [`R$ ${Number(value).toLocaleString()}`, selectedCategory]}
                 />
                 <Area 
                   type="monotone" 
@@ -219,16 +239,16 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                   stroke={activeColor} 
                   strokeWidth={3} 
                   fillOpacity={1} 
-                  fill="url(#colorEvolution)"
-                  animationDuration={800}
+                  fill="url(#colorFocus)" 
+                  animationDuration={500}
                 />
               </AreaChart>
             )
 
           ) : (
 
-            // --- GRÁFICO DE FLUXO (ENTRADAS VS SAÍDAS) ---
-            <AreaChart data={currentFlowData}>
+            // --- GRÁFICO DE FLUXO ---
+            <AreaChart data={flowData}>
               <defs>
                 <linearGradient id="colorAporte" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor={activeColor} stopOpacity={0.4}/>
@@ -241,7 +261,6 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
               <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 11}} />
-              
               <Tooltip 
                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                 formatter={(value: any, name: any) => [
@@ -250,7 +269,6 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                 ]}
               />
               <Legend iconType="circle" wrapperStyle={{fontSize: '12px', paddingTop: '10px'}}/>
-              
               <Area 
                 type="monotone" 
                 dataKey="aporte" 
@@ -259,8 +277,9 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                 strokeWidth={2} 
                 fillOpacity={1} 
                 fill="url(#colorAporte)"
-                animationDuration={800} 
+                animationDuration={500} 
               />
+              {/* Se quiser esconder saídas e mostrar só entradas como pediu numa mensagem anterior, comente o bloco abaixo. Mantive para coerência com 'Fluxo' */}
               <Area 
                 type="monotone" 
                 dataKey="resgate" 
@@ -269,16 +288,17 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                 strokeWidth={2} 
                 fillOpacity={1} 
                 fill="url(#colorResgate)"
-                animationDuration={800} 
+                animationDuration={500} 
               />
             </AreaChart>
           )}
         </ResponsiveContainer>
       </div>
 
+      {/* PAINEL LATERAL (PIZZA) */}
       <div className={styles.interactivePanel}>
         <p className={styles.instruction}>
-          {selectedCategory === 'Total' ? 'Selecionar Categoria' : `Detalhe: ${selectedCategory}`}
+          {selectedCategory === 'Total' ? 'Alocação Geral' : `Detalhe: ${selectedCategory}`}
         </p>
         <div className={styles.pieContainer}>
           <ResponsiveContainer width="100%" height={160}>
@@ -287,7 +307,7 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                 // @ts-ignore
                 activeIndex={activeIndex}
                 activeShape={renderActiveShape}
-                data={data}
+                data={sortedPortfolio} // A Pizza também respeita a ordem do maior para o menor
                 innerRadius={50}
                 outerRadius={65}
                 paddingAngle={4}
@@ -296,7 +316,7 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
                 onMouseEnter={onPieEnter}
                 cursor="pointer"
               >
-                {data.map((entry: any, index: number) => (
+                {sortedPortfolio.map((entry: any, index: number) => (
                   <Cell 
                     key={`cell-${index}`} 
                     fill={entry.color} 
@@ -314,7 +334,7 @@ export default function InvestmentStats({ data, currentSessionFlow }: Props) {
         </div>
         
         <div className={styles.miniLegend}>
-           {data.map((item: any) => (
+           {sortedPortfolio.map((item: any) => (
              <div 
                 key={item.id} 
                 className={styles.legendItem} 

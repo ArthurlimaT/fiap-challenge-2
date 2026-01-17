@@ -307,3 +307,45 @@ $shadow-compact: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     small { font-size: 0.7rem; color: #64748B; }
   }
 }
+
+/* Adicione dentro de .chartTitleRow ou crie .controlsGroup */
+
+.controlsGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timeFilter {
+  display: flex;
+  background: #F8FAFC;
+  border-radius: 8px;
+  padding: 2px;
+  border: 1px solid #E2E8F0;
+
+  button {
+    border: none;
+    background: transparent;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748B;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover { color: #0F172A; }
+    
+    &.activeTime {
+      background: white;
+      color: #0F172A;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: #E2E8F0;
+}
