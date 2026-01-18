@@ -6,7 +6,7 @@ import {
   PieChart, Pie, Cell, AreaChart, Area
 } from 'recharts';
 import { 
-  Download, Target, ArrowUpRight, ArrowDownRight, Loader2, LogOut 
+  Download, Target, ArrowUpRight, ArrowDownRight, Loader2 
 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -56,11 +56,8 @@ export default function DashboardCharts() {
 
   useEffect(() => {
     setIsClient(true);
-    
-    // 1. Verifica se existe um usuário logado no localStorage
     const storedUser = localStorage.getItem('currentUser');
     if (!storedUser) {
-      // Se não houver sessão, manda de volta para o login
       router.push('/login');
     } else {
       const user = JSON.parse(storedUser);
@@ -68,14 +65,6 @@ export default function DashboardCharts() {
     }
   }, [router]);
 
-  // Função para deslogar
-  const handleLogout = () => {
-    localStorage.removeItem('currentUser'); // Apaga apenas a sessão atual
-    document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"; // Limpa cookie
-    router.push('/login');
-  };
-
-  // Seleção de dados conforme o período
   const chartData = useMemo(() => {
     switch (periodo) {
       case '1m': return mockDataMes;
@@ -85,17 +74,19 @@ export default function DashboardCharts() {
     }
   }, [periodo]);
 
-  // Totais dinâmicos
   const totais = useMemo(() => {
     const receitaTotal = chartData.reduce((acc, curr) => acc + curr.receita, 0);
     const despesaTotal = chartData.reduce((acc, curr) => acc + curr.despesa, 0);
     const saldo = receitaTotal - despesaTotal;
-    const metaEconomia = periodo === '1m' ? 1000 : (periodo === '6m' ? 15000 : 30000);
-    const porcentagemEconomia = Math.min(Math.round((saldo / metaEconomia) * 100), 100);
+    
+    const metaValor = periodo === '1m' ? 1000 : (periodo === '6m' ? 15000 : 30000);
+    const porcentagemEconomia = Math.min(Math.round((saldo / metaValor) * 100), 100);
 
     return {
       receita: receitaTotal,
       despesa: despesaTotal,
+      saldoAtual: Math.max(0, saldo),
+      metaValor: metaValor,
       economia: Math.max(0, porcentagemEconomia)
     };
   }, [chartData, periodo]);
@@ -107,37 +98,21 @@ export default function DashboardCharts() {
     }));
   }, [totais.despesa]);
 
-  // Função de Exportação PDF Corrigida
   const handleExportPDF = async () => {
     if (!dashboardRef.current) return;
     setIsExporting(true);
-
-    // Pequena pausa para o Recharts desativar as animações (evita gráfico vazio)
     await new Promise((resolve) => setTimeout(resolve, 600));
 
     try {
-      const element = dashboardRef.current;
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#000000',
-        logging: false,
+      const canvas = await html2canvas(dashboardRef.current, {
+        scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
       });
-
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min((pdfWidth - 20) / imgWidth, (pdfHeight - 20) / imgHeight);
-      
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 10;
-
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-      pdf.save(`relatorio-financeiro-${userName.replace(/\s+/g, '-').toLowerCase()}.pdf`);
+      const ratio = (pdfWidth - 20) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 10, 10, canvas.width * ratio, canvas.height * ratio);
+      pdf.save(`relatorio-financeiro.pdf`);
     } catch (error) {
       console.error("Erro ao gerar PDF:", error);
     } finally {
@@ -166,8 +141,6 @@ export default function DashboardCharts() {
             {isExporting ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />} 
             {isExporting ? ' Gerando...' : ' Exportar PDF'}
           </button>
-
-        
         </div>
       </header>
 
@@ -177,7 +150,7 @@ export default function DashboardCharts() {
             <span>Receita Total</span>
             <div className={`${styles.badge} ${styles.up}`}><ArrowUpRight size={12}/> 12%</div>
           </div>
-          <h4 className={styles.receita}>R$ {totais.receita.toLocaleString()}</h4>
+          <h4 className={styles.receita}>R$ {totais.receita.toLocaleString('pt-BR')}</h4>
           <p className={styles.trendText}>Período: {periodo.toUpperCase()}</p>
         </div>
 
@@ -186,7 +159,7 @@ export default function DashboardCharts() {
             <span>Despesa Total</span>
             <div className={`${styles.badge} ${styles.down}`}><ArrowDownRight size={12}/> 5%</div>
           </div>
-          <h4 className={styles.despesa}>R$ {totais.despesa.toLocaleString()}</h4>
+          <h4 className={styles.despesa}>R$ {totais.despesa.toLocaleString('pt-BR')}</h4>
           <p className={styles.trendText}>Acumulado no gráfico</p>
         </div>
 
@@ -195,18 +168,26 @@ export default function DashboardCharts() {
             <span>Meta de Economia</span>
             <Target size={16} color="#6B7280" />
           </div>
+          
+          <h4 className={styles.saldoDestaque}>R$ {totais.saldoAtual.toLocaleString('pt-BR')}</h4>
+
           <div className={styles.progressWrapper}>
              <div className={styles.progressBar}>
                 <div className={styles.progressFill} style={{ width: `${totais.economia}%` }}></div>
              </div>
              <span className={styles.progressValue}>{totais.economia}%</span>
           </div>
-          <p className={styles.trendText}>Saldo atual vs Meta</p>
+          
+          <div className={styles.metaInfo}>
+            <span>Meta: R$ {totais.metaValor.toLocaleString('pt-BR')}</span>
+            <span className={styles.metaStatus}>
+              {totais.saldoAtual >= totais.metaValor ? 'Concluído!' : `Faltam R$ ${(totais.metaValor - totais.saldoAtual).toLocaleString('pt-BR')}`}
+            </span>
+          </div>
         </div>
       </section>
 
       <div className={styles.chartsGrid}>
-        {/* GRÁFICO DE ÁREA */}
         <div className={styles.chartContainer}>
           <div className={styles.chartHeader}>
             <h3>Fluxo de Caixa</h3>
@@ -223,55 +204,29 @@ export default function DashboardCharts() {
                   <stop offset="95%" stopColor="#47A138" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1f2937" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
               <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} dy={10} />
               <YAxis axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#111827', borderRadius: '12px', border: '1px solid #374151', color: '#fff' }}
-                itemStyle={{ color: '#fff' }}
-                formatter={(value: number | undefined) => value ? `R$ ${value.toLocaleString()}` : 'R$ 0'}
+                contentStyle={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB' }}
+                formatter={(value: any) => `R$ ${Number(value ?? 0).toLocaleString('pt-BR')}`}
               />
-              <Area 
-                type="monotone" 
-                dataKey="receita" 
-                stroke="#47A138" 
-                strokeWidth={3} 
-                fillOpacity={1} 
-                fill="url(#colorRec)" 
-                isAnimationActive={!isExporting} 
-              />
-              <Area 
-                type="monotone" 
-                dataKey="despesa" 
-                stroke="#E11D48" 
-                strokeWidth={3} 
-                fill="transparent" 
-                strokeDasharray="5 5" 
-                isAnimationActive={!isExporting} 
-              />
+              <Area type="monotone" dataKey="receita" stroke="#47A138" strokeWidth={3} fillOpacity={1} fill="url(#colorRec)" isAnimationActive={!isExporting} />
+              <Area type="monotone" dataKey="despesa" stroke="#E11D48" strokeWidth={3} fill="transparent" strokeDasharray="5 5" isAnimationActive={!isExporting} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
-        {/* GRÁFICO DE PIZZA */}
         <div className={styles.chartContainer}>
           <h3>Distribuição de Gastos</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie
-                data={pieData}
-                innerRadius={70}
-                outerRadius={90}
-                paddingAngle={8}
-                dataKey="value"
-                cornerRadius={8}
-                isAnimationActive={!isExporting}
-              >
-                {pieData.map((entry, index) => (
+              <Pie data={pieData} innerRadius={70} outerRadius={90} paddingAngle={8} dataKey="value" cornerRadius={8} isAnimationActive={!isExporting}>
+                {pieData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number | undefined) => value ? `R$ ${value.toLocaleString()}` : 'R$ 0'} />
+              <Tooltip formatter={(value: any) => `R$ ${Number(value ?? 0).toLocaleString('pt-BR')}`} />
             </PieChart>
           </ResponsiveContainer>
           <div className={styles.pieLegend}>
@@ -280,7 +235,7 @@ export default function DashboardCharts() {
                 <span style={{ backgroundColor: COLORS[idx] }}></span>
                 <div className={styles.pieLegendText}>
                    <label>{item.name}</label>
-                   <p>R$ {item.value.toLocaleString()}</p>
+                   <p>R$ {item.value.toLocaleString('pt-BR')}</p>
                 </div>
               </div>
             ))}
