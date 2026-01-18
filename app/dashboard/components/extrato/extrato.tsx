@@ -9,6 +9,9 @@ import { Transacao } from '@/app/store/bancoslice';
 export default function Extrato() {
   const transacoes = useSelector((state: RootState) => state.banco?.transacoes) || [];
 
+  // Filtra as 5 últimas transações (as mais recentes aparecem primeiro)
+  const ultimasTransacoes = [...transacoes].reverse().slice(0, 10);
+
   const handleDownload = (t: Transacao) => {
     const conteudo = `
       COMPROVANTE DE TRANSAÇÃO - BYTEBANK
@@ -34,18 +37,19 @@ export default function Extrato() {
   return (
     <div className={styles.extratoContainer}>
       <div className={styles.header}>
-        <ReceiptText size={20} />
-        <h2>Extrato</h2>
+        <div className={styles.titleGroup}>
+          <ReceiptText size={20} />
+          <h2>Últimas Transações</h2>
+        </div>
       </div>
 
       <div className={styles.lista}>
-        {/* Usamos transacoes?.length para total segurança */}
-        {transacoes.length === 0 ? (
+        {ultimasTransacoes.length === 0 ? (
           <div className={styles.emptyContainer}>
             <p className={styles.empty}>Nenhuma transação realizada ainda.</p>
           </div>
         ) : (
-          transacoes.map((t) => (
+          ultimasTransacoes.map((t) => (
             <div key={t.id} className={styles.itemTransacao}>
               <div className={styles.info}>
                 <span className={styles.data}>{t.data} - {t.hora}</span>
@@ -63,7 +67,7 @@ export default function Extrato() {
                 onClick={() => handleDownload(t)}
                 title="Baixar comprovante"
               >
-                <Download size={18} />
+                <Download size={16} />
               </button>
             </div>
           ))
