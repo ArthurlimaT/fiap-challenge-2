@@ -4,6 +4,7 @@
   gap: 32px;
   max-width: 1440px;
   margin: 0 auto;
+  align-items: start; /* OBRIGATÓRIO para o sticky funcionar */
 }
 
 .mainColumn {
@@ -18,7 +19,7 @@
   .dateText { color: #6B7280; font-size: 0.9rem; font-weight: 500; }
 }
 
-/* ATALHOS RÁPIDOS (ESTILO EXTRATO) */
+/* ATALHOS RÁPIDOS */
 .quickActions {
   display: flex;
   justify-content: space-between;
@@ -41,8 +42,8 @@
   .iconCircle {
     width: 56px; height: 56px; border-radius: 50%; 
     display: flex; align-items: center; justify-content: center;
-    background: #F3F4F6; // Cor de fundo suave igual ao extrato
-    color: #111827;      // Ícone escuro para contraste
+    background: #F3F4F6;
+    color: #111827;
     border: 1px solid #E5E7EB;
     transition: 0.2s;
   }
@@ -69,21 +70,18 @@
     .vencimento { font-size: 0.75rem; color: #6B7280; font-weight: 600; }
   }
   .faturaInfo {
-    display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: flex-end;
     .labelFatura { font-size: 0.8rem; color: #6B7280; margin: 0; }
     .valorFatura { font-size: 1.8rem; font-weight: 800; color: #111827; margin: 4px 0 0; }
-    .faturaBtn { background: #f3f4f6; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+    .faturaBtn { background: #f3f4f6; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; &:hover { background: #e5e7eb; } }
   }
-  .barBackground { height: 8px; background: #F3F4F6; border-radius: 10px; overflow: hidden; margin-bottom: 8px;
-    .barFill { height: 100%; background: #47A138; border-radius: 10px; } }
-  .barLabels { display: flex; justify-content: space-between; span { font-size: 0.7rem; color: #9CA3AF; font-weight: 600; } }
 }
 
-/* WIDGETS E MENU CONFIG (ESTILO ORIGINAL) */
+/* WIDGETS SECTION */
 .abaSection { display: flex; flex-direction: column; gap: 20px; }
 .abaHeader {
   display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px;
-  .abaTitle { display: flex; align-items: center; gap: 10px; h2 { font-size: 1.1rem; font-weight: 700; color: #111827; } .iconVerde { color: #47A138; } }
+  .abaTitle { display: flex; align-items: center; gap: 10px; h2 { font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0; } .iconVerde { color: #47A138; } }
 }
 .personalizarBtn {
   display: flex; align-items: center; gap: 6px; background: #f9fafb; border: 1px solid #E5E7EB; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: #4B5563;
@@ -100,18 +98,93 @@
     }
   }
 }
-.widgetsGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.widgetsGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 .widgetCard {
   background: white; padding: 20px; border-radius: 16px; border: 1px solid #E5E7EB;
-  .cardTop { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; h3 { font-size: 0.85rem; font-weight: 700; color: #374151; } }
+  .cardTop { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; h3 { font-size: 0.85rem; font-weight: 700; color: #374151; margin: 0; } }
   .progressBar { height: 6px; background: #f3f4f6; border-radius: 10px; margin-bottom: 8px; .progressFill { height: 100%; background: #47A138; border-radius: 10px; } }
-  p { font-size: 0.8rem; color: #6B7280; }
+  p { font-size: 0.8rem; color: #6B7280; margin: 0; }
 }
 .alerta { border-left: 4px solid #F59E0B; }
 
-.sideColumn .sticky { position: sticky; top: 24px; }
+/* EMPRÉSTIMO REFINADO */
+.loanPreviewSection {
+  background: white; padding: 24px; border-radius: 16px; border: 1px solid #E5E7EB; cursor: pointer;
+  .loanHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+    .loanTitleGroup { display: flex; align-items: center; gap: 12px; h2 { font-size: 1rem; margin: 0; } p { font-size: 0.75rem; color: #6B7280; margin: 0; } }
+  }
+  .iconCircleLoan { width: 40px; height: 40px; background: #ecfdf5; color: #47A138; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .loanGrid { display: grid; grid-template-columns: 1fr auto 1fr; background: #f9fafb; padding: 16px; border-radius: 12px; align-items: center; }
+  .loanItem { text-align: center; .loanLabel { font-size: 0.7rem; color: #6B7280; display: block; } .loanValue { font-size: 1.1rem; font-weight: 800; } }
+  .loanDivider { width: 1px; height: 30px; background: #E5E7EB; }
+}
 
+//* CONVIDAR AMIGOS PREMIUM */
+.inviteCard {
+  position: relative;
+  overflow: hidden;
+  background: #111827; // Escuro para contraste
+  border-radius: 20px;
+  padding: 24px;
+  color: white;
+
+  .inviteDecor {
+    position: absolute; right: -20px; top: -20px;
+    width: 120px; height: 120px;
+    background: #47A138;
+    filter: blur(50px);
+    opacity: 0.4;
+  }
+
+  .inviteContent {
+    position: relative; z-index: 1;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .inviteText {
+    display: flex; align-items: center; gap: 20px;
+    h3 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+    p { font-size: 0.85rem; color: #9CA3AF; margin: 4px 0 0; max-width: 250px; }
+  }
+
+  .usersIconBg {
+    width: 50px; height: 50px; border-radius: 14px;
+    background: rgba(71, 161, 56, 0.2);
+    color: #47A138;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .inviteBtn {
+    background: white; color: #111827;
+    border: none; padding: 12px 20px; border-radius: 12px;
+    font-size: 0.9rem; font-weight: 800;
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; transition: 0.2s;
+    &:hover { background: #47A138; color: white; transform: scale(1.05); }
+  }
+}
+
+/* SIDEBAR/EXTRATO STICKY - ATUALIZADO PARA FIXAR */
+.sideColumn {
+  height: 100%;
+}
+
+.extratoWrapper {
+  position: sticky;
+  top: 100px; /* Alinha com a altura do seu Header */
+  height: fit-content;
+}
+
+/* RESPONSIVIDADE */
 @media (max-width: 1024px) {
   .dashboardGrid { grid-template-columns: 1fr; }
+  .sideColumn { display: none; }
+}
+
+@media (max-width: 768px) {
   .merchContainer { grid-template-columns: 1fr; }
+  .loanGrid { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .loanDivider { display: none; }
+  .inviteContent { flex-direction: column; gap: 20px; text-align: center; }
+  .inviteText { flex-direction: column; }
 }

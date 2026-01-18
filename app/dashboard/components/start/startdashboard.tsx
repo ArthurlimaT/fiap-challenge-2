@@ -4,12 +4,11 @@ import styles from './start.module.scss';
 import BalanceHero from './balancehero';
 import Extrato from '../extrato/extrato';
 
-
 import { 
   Target, AlertTriangle, Settings2, TrendingUp, ShieldCheck, 
   Plus, Check, LayoutGrid, ArrowRightLeft, Receipt, 
   CreditCard, Smartphone, ShieldAlert, Sparkles, ChevronRight,
-  Banknote, Phone, Box
+  Banknote, Phone, Box, Users
 } from 'lucide-react';
 
 export default function StartDashboard({ setActiveView }: any) {
@@ -29,8 +28,12 @@ export default function StartDashboard({ setActiveView }: any) {
     setMounted(true);
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setUserName(user.name.split(' ')[0]);
+      try {
+        const user = JSON.parse(storedUser);
+        if (user && user.name) {
+          setUserName(user.name.split(' ')[0]);
+        }
+      } catch (e) { console.error(e); }
     }
 
     const agora = new Date();
@@ -52,7 +55,6 @@ export default function StartDashboard({ setActiveView }: any) {
         <header className={styles.headerSimples}>
           <div className={styles.welcomeText}>
             <h1>Olá, {userName || 'Bruna'}! 👋</h1>
-            <p className={styles.dateText}>{dataAtual}</p>
           </div>
         </header>
 
@@ -60,39 +62,33 @@ export default function StartDashboard({ setActiveView }: any) {
           <BalanceHero />
         </section>
 
-        {/* 1. ATALHOS RÁPIDOS - CORES DO EXTRATO + CLIQUES */}
+        {/* 1. ATALHOS RÁPIDOS */}
         <section className={styles.quickActions}>
           <div className={styles.actionItem} onClick={() => setActiveView?.('transfer')}>
             <div className={styles.iconCircle}><ArrowRightLeft size={24} /></div>
             <span>Transferir</span>
           </div>
-
           <div className={styles.actionItem} onClick={() => setActiveView?.('transfer')}>
             <div className={styles.iconCircle}><Receipt size={24} /></div>
             <span>Pagar</span>
           </div>
-
           <div className={styles.actionItem} onClick={() => setActiveView?.('transfer')}>
             <div className={styles.iconCircle}><Plus size={24} /></div>
             <span>Depositar</span>
           </div>
-
-          <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
+          <div className={styles.actionItem} onClick={() => setActiveView?.('services/mycards')}>
             <div className={styles.iconCircle}><Smartphone size={24} /></div>
             <span>Virtual</span>
           </div>
-
           <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
             <div className={styles.iconCircle}><Banknote size={24} /></div>
             <span>Empréstimo</span>
           </div>
-
           <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
             <div className={styles.iconCircle}><Phone size={24} /></div>
             <span>Recarga</span>
           </div>
-
-          <div className={styles.actionItem} onClick={() => setActiveView?.('services')}>
+          <div className={styles.actionItem} onClick={() => setActiveView?.('investments')}>
             <div className={styles.iconCircle}><Box size={24} /></div>
             <span>Caixinha</span>
           </div>
@@ -133,21 +129,12 @@ export default function StartDashboard({ setActiveView }: any) {
                 <p className={styles.labelFatura}>Fatura atual</p>
                 <h2 className={styles.valorFatura}>R$ 1.420,50</h2>
               </div>
-              <button className={styles.faturaBtn} onClick={() => setActiveView?.('services')}>Meus Cartões</button>
-            </div>
-            <div className={styles.limitUsage}>
-              <div className={styles.barBackground}>
-                <div className={styles.barFill} style={{ width: '65%' }}></div>
-              </div>
-              <div className={styles.barLabels}>
-                <span>Limite usado: R$ 1.420</span>
-                <span>Disponível: R$ 850,00</span>
-              </div>
+              <button className={styles.faturaBtn} onClick={() => setActiveView?.('services/mycards')}>Meus Cartões</button>
             </div>
           </div>
         </section>
 
-        {/* 4. MEUS WIDGETS */}
+{/* 4. MEUS WIDGETS */}
         <section className={styles.abaSection}>
           <div className={styles.abaHeader}>
             <div className={styles.abaTitle}>
@@ -166,19 +153,14 @@ export default function StartDashboard({ setActiveView }: any) {
           {showSettings && (
             <div className={styles.menuConfig}>
               <div className={styles.configOptions}>
-                {[
-                  { id: 'metas', label: 'Metas' },
-                  { id: 'gastos', label: 'Limites' },
-                  { id: 'investimentos', label: 'Investimentos' },
-                  { id: 'seguros', label: 'Seguros' },
-                ].map((opt) => (
+                {['metas', 'gastos', 'investimentos', 'seguros'].map((id) => (
                   <button 
-                    key={opt.id}
-                    onClick={() => toggleWidget(opt.id as any)} 
-                    className={activeWidgets[opt.id as keyof typeof activeWidgets] ? styles.optAtiva : ''}
+                    key={id}
+                    onClick={() => toggleWidget(id as any)} 
+                    className={activeWidgets[id as keyof typeof activeWidgets] ? styles.optAtiva : ''}
                   >
-                    {activeWidgets[opt.id as keyof typeof activeWidgets] ? <Check size={14} /> : <Plus size={14} />}
-                    {opt.label}
+                    {activeWidgets[id as keyof typeof activeWidgets] ? <Check size={14} /> : <Plus size={14} />}
+                    {id.charAt(0).toUpperCase() + id.slice(1)}
                   </button>
                 ))}
               </div>
@@ -193,51 +175,72 @@ export default function StartDashboard({ setActiveView }: any) {
                   <h3>Meta de Reserva</h3>
                 </div>
                 <div className={styles.widgetBody}>
-                  <div className={styles.progressBar}>
-                    <div className={styles.progressFill} style={{ width: '45%' }}></div>
-                  </div>
+                  <div className={styles.progressBar}><div className={styles.progressFill} style={{ width: '45%' }}></div></div>
                   <p>R$ 2.250 de R$ 5.000</p>
                 </div>
               </div>
             )}
-
             {activeWidgets.gastos && (
               <div className={`${styles.widgetCard} ${styles.alerta}`}>
-                <div className={styles.cardTop}>
-                  <AlertTriangle size={18} color="#F59E0B" />
-                  <h3>Limite de Gastos</h3>
-                </div>
+                <div className={styles.cardTop}><AlertTriangle size={18} color="#F59E0B" /><h3>Limite de Gastos</h3></div>
                 <p>Lazer: 85% do limite atingido.</p>
               </div>
             )}
-            
             {activeWidgets.investimentos && (
               <div className={styles.widgetCard}>
-                <div className={styles.cardTop}>
-                  <TrendingUp size={18} color="#47A138" />
-                  <h3>Investimentos</h3>
-                </div>
-                <p>Rendimento de +1.25% este mês.</p>
+                <div className={styles.cardTop}><TrendingUp size={16} color="#47A138" /><h3>Rendimento</h3></div>
+                <p>+1.25% este mês.</p>
               </div>
             )}
-
             {activeWidgets.seguros && (
               <div className={styles.widgetCard}>
-                <div className={styles.cardTop}>
-                  <ShieldCheck size={18} color="#47A138" />
-                  <h3>Seguros</h3>
-                </div>
-                <p>Sua conta e cartões estão protegidos.</p>
+                <div className={styles.cardTop}><ShieldCheck size={16} color="#47A138" /><h3>Seguros</h3></div>
+                <p>Sua conta está protegida.</p>
               </div>
             )}
           </div>
         </section>
+
+{/* EMPRÉSTIMO */}
+        <section className={styles.loanPreviewSection} onClick={() => setActiveView?.('services')}>
+          <div className={styles.loanHeader}>
+            <div className={styles.loanTitleGroup}>
+              <div className={styles.iconCircleLoan}><Banknote size={20} /></div>
+              <div><h2>Empréstimo</h2><p>Valor disponível para você</p></div>
+            </div>
+            <ChevronRight size={18} />
+          </div>
+          <div className={styles.loanGrid}>
+            <div className={styles.loanItem}><span className={styles.loanLabel}>Crédito Pessoal</span><span className={styles.loanValue}>R$ 15.000</span></div>
+            <div className={styles.loanDivider}></div>
+            <div className={styles.loanItem}><span className={styles.loanLabel}>Empréstimo FGTS</span><span className={styles.loanValue}>R$ 4.500</span></div>
+          </div>
+        </section>
+
+ {/* 6. CARD CONVIDAR AMIGOS (ESTILIZADO) */}
+        <section className={styles.inviteCard}>
+          <div className={styles.inviteDecor}></div>
+          <div className={styles.inviteContent}>
+            <div className={styles.inviteText}>
+              <div className={styles.usersIconBg}>
+                <Users size={24} />
+              </div>
+              <div>
+                <h3>Indique e Ganhe</h3>
+                <p>Convide amigos para o Bytebank e desbloqueie recompensas.</p>
+              </div>
+            </div>
+            <button className={styles.inviteBtn}>
+              Convidar
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </section>
       </main>
 
+      {/* Coluna Lateral */}
       <aside className={styles.sideColumn}>
-        <div className={styles.sticky}>
           <Extrato />
-        </div>
       </aside>
     </div>
   );
