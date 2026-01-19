@@ -3,17 +3,27 @@ import React, { useState, useEffect } from 'react';
 import styles from './start.module.scss'; 
 import BalanceHero from './balancehero';
 import Extrato from '../extrato/extrato';
+// Importação do Recharts para os gráficos
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 
 import { 
   Target, AlertTriangle, Settings2, TrendingUp, ShieldCheck, 
   Plus, Check, LayoutGrid, ArrowRightLeft, Receipt, 
   CreditCard, Smartphone, ShieldAlert, Sparkles, ChevronRight,
-  Banknote, Phone, Box, Users
+  Banknote, Phone, Box, Users, PieChart, ArrowUpCircle, ArrowDownCircle
 } from 'lucide-react';
+
+// Dados fictícios para o gráfico
+const financialData = [
+  { name: 'Set', entradas: 4000, saidas: 2400 },
+  { name: 'Out', entradas: 3000, saidas: 1398 },
+  { name: 'Nov', entradas: 2000, saidas: 3800 },
+  { name: 'Dez', entradas: 2780, saidas: 3908 },
+  { name: 'Jan', entradas: 4890, saidas: 2800 },
+];
 
 export default function StartDashboard({ setActiveView }: any) {
   const [mounted, setMounted] = useState(false);
-  const [dataAtual, setDataAtual] = useState('');
   const [userName, setUserName] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   
@@ -30,16 +40,9 @@ export default function StartDashboard({ setActiveView }: any) {
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
-        if (user && user.name) {
-          setUserName(user.name.split(' ')[0]);
-        }
+        if (user && user.name) setUserName(user.name.split(' ')[0]);
       } catch (e) { console.error(e); }
     }
-
-    const agora = new Date();
-    setDataAtual(agora.toLocaleDateString('pt-BR', {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    }));
   }, []);
 
   const toggleWidget = (name: keyof typeof activeWidgets) => {
@@ -94,27 +97,7 @@ export default function StartDashboard({ setActiveView }: any) {
           </div>
         </section>
 
-        {/* 2. CAMPANHAS DE SEGURO */}
-        <section className={styles.merchContainer}>
-          <div className={`${styles.merchCard} ${styles.bgGradientGreen}`} onClick={() => setActiveView?.('services')}>
-            <div className={styles.merchInfo}>
-              <div className={styles.merchBadge}><Sparkles size={12} /> Sugestão</div>
-              <h4>Seguro Vida Byte</h4>
-              <p>Proteção por R$ 9,90/mês.</p>
-            </div>
-            <ChevronRight size={20} />
-          </div>
-          <div className={`${styles.merchCard} ${styles.bgGradientDark}`} onClick={() => setActiveView?.('services')}>
-            <div className={styles.merchInfo}>
-              <div className={styles.merchBadge}><ShieldAlert size={12} /> Segurança</div>
-              <h4>Seguro Transações</h4>
-              <p>Proteja seu Pix e cartões.</p>
-            </div>
-            <ChevronRight size={20} />
-          </div>
-        </section>
-
-        {/* 3. CARTÃO DE CRÉDITO */}
+        {/* 2. CARTÃO DE CRÉDITO */}
         <section className={styles.creditInfoCard}>
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>
@@ -130,6 +113,74 @@ export default function StartDashboard({ setActiveView }: any) {
                 <h2 className={styles.valorFatura}>R$ 1.420,50</h2>
               </div>
               <button className={styles.faturaBtn} onClick={() => setActiveView?.('services/mycards')}>Meus Cartões</button>
+            </div>
+          </div>
+        </section>
+
+        {/* 3. EMPRÉSTIMO */}
+        <section className={styles.loanPreviewSection} onClick={() => setActiveView?.('services')}>
+          <div className={styles.loanHeader}>
+            <div className={styles.loanTitleGroup}>
+              <div className={styles.iconCircleLoan}><Banknote size={20} /></div>
+              <div><h2>Empréstimo</h2><p>Valor disponível para você</p></div>
+            </div>
+            <ChevronRight size={18} />
+          </div>
+          <div className={styles.loanGrid}>
+            <div className={styles.loanItem}><span className={styles.loanLabel}>Crédito Pessoal</span><span className={styles.loanValue}>R$ 15.000</span></div>
+            <div className={styles.loanDivider}></div>
+            <div className={styles.loanItem}><span className={styles.loanLabel}>Empréstimo FGTS</span><span className={styles.loanValue}>R$ 4.500</span></div>
+          </div>
+        </section>
+
+        {/* 4. ANÁLISE FINANCEIRA (NOVA SEÇÃO) */}
+        <section className={styles.analysisSection}>
+          <div className={styles.abaHeader}>
+            <div className={styles.abaTitle}>
+              <PieChart size={20} className={styles.iconVerde} />
+              <h2>Análise de Saúde Financeira</h2>
+            </div>
+            <button className={styles.detalhesBtn} onClick={() => setActiveView?.('investments')}>
+              Ver relatório <ChevronRight size={14} />
+            </button>
+          </div>
+
+          <div className={styles.analysisContent}>
+            {/* Gráfico Simples */}
+            <div className={styles.chartWrapper}>
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={financialData}>
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#666'}} />
+                  <Tooltip 
+                    cursor={{fill: 'transparent'}}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  />
+                  <Bar dataKey="entradas" fill="#47A138" radius={[4, 4, 0, 0]} barSize={12} />
+                  <Bar dataKey="saidas" fill="#E5E7EB" radius={[4, 4, 0, 0]} barSize={12} />
+                </BarChart>
+              </ResponsiveContainer>
+              <div className={styles.chartLegend}>
+                <span><span className={styles.dotVerde}></span> Entradas</span>
+                <span><span className={styles.dotCinza}></span> Saídas</span>
+              </div>
+            </div>
+
+            {/* Insights Rápidos */}
+            <div className={styles.insightsGrid}>
+              <div className={styles.insightItem}>
+                <ArrowUpCircle size={16} color="#47A138" />
+                <div>
+                  <span>Economia</span>
+                  <strong>+12% que mês passado</strong>
+                </div>
+              </div>
+              <div className={styles.insightItem}>
+                <ArrowDownCircle size={16} color="#F59E0B" />
+                <div>
+                  <span>Dívidas</span>
+                  <strong>Redução de R$ 450,00</strong>
+                </div>
+              </div>
             </div>
           </div>
         </section>
